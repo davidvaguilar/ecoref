@@ -1,0 +1,11 @@
+php artisan -V    // ver version laravel
+php -v   / ver version php
+composer self-update    //actualizar composer
+
+
+Spatie\Permission\PermissionServiceProvider::class,  //laravel -Permission
+
+php artisan vendor:publish --provider="Spatie\Permission\PermissionServiceProvider" --tag="migrations"
+
+
+composer require barryvdh/laravel-debugbar --dev INSTALAR BARRA PARA MONITOR DESARROLLO
