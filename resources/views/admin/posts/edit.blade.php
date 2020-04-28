@@ -50,8 +50,9 @@
                             </form>
                         @endforeach
                         @if ($post->signature_id != null )
-                        <!-- falta definir signature.destroy -->
-                            <form method="POST" action="{{ route('admin.signature.destroy', $post->signature_id) }}">
+                        <!-- falta definir signature.destroy  
+                    action="{{ route('admin.signature.destroy', $post->signature_id) }}"-->
+                            <form method="POST">
                                 {{ csrf_field() }}
                                 {{ method_field('DELETE') }}
                                 <div class="col-md-2">
