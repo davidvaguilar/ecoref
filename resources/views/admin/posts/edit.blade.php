@@ -50,18 +50,14 @@
                             </form>
                         @endforeach
                         @if ($post->signature_id != null )
-                        <!-- falta definir signature.destroy  
-                    action="{{ route('admin.signature.destroy', $post->signature_id) }}"-->
-                            <form method="POST">
-                                {{ csrf_field() }}
-                                {{ method_field('DELETE') }}
+                 
                                 <div class="col-md-2">
                                     <button class="btn btn-danger btn-xs" style="position:absolute">
                                         <i class="fa fa-remove"></i>
                                     </button>
                                     <img src="{{ url($post->signature->url) }}" class="img-responsive" width="100px"  >
                                 </div>
-                            </form>
+                            
                         @endif
                     </div>
                 </div>
