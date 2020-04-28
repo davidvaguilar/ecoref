@@ -181,7 +181,7 @@ class PostsController extends Controller
         //$post->photos->each->delete();
 
         $this->authorize('delete', $post);
-        $post->delete();  //Elimina toda las relaciones
+        $post->delete();
         return redirect()
             ->route('admin.posts.index')
             ->with('flash', 'La publicación ha sido eliminada.');

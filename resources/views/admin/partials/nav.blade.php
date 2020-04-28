@@ -12,10 +12,10 @@
 <!-- Nuevo OT -->
     <li class="{{ setActiveRoute('admin.posts.index') }}">
         <a href="{{ route('admin.posts.index') }}">
-            <i class="fa fa-wrench"></i> <span>Orden de Trabajo</span>
+            <i class="fa fa-wrench"></i> <span>Ordenes de Trabajo</span>
         </a>
     </li>
-<!-- Nuevo OT -->
+<!-- Nuevo OT 
     <li class="treeview {{ setActiveRoute('admin.posts.index') }}">
         <a href="#"><i class="fa fa-bars"></i> <span>Blog</span>
         <span class="pull-right-container">
@@ -79,5 +79,5 @@
                 <i class="fa fa-pencil"></i> <span>Permisos</span>
             </a>
         </li>
-    @endcan
+    @endcan -->
 </ul>

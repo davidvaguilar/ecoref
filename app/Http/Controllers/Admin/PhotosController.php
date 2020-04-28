@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Post;
 use App\Photo;
+Use Image;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
@@ -24,12 +25,16 @@ class PhotosController extends Controller
 
     public function store(Request $request, $id){
         //dd($id);
-        $file = $request->file('photo');
+        $this->validate($request, [
+            'title' => 'required',
+            'photo' => 'required|image'
+        ]); 
+
+       /* $file = $request->file('photo');
         $path = public_path().'/img/posts';
         $fileName = uniqid().$file->getClientOriginalName();
         $moved = $file->move($path, $fileName);
   
-        // crear 1 registro en la tabla product_image
         if ($moved) {
           $photo = new Photo();
           $photo->url = '/img/posts/'.$fileName;
@@ -37,8 +42,25 @@ class PhotosController extends Controller
           $photo->post_id = $id;
           $photo->save();
         }
+        return back();*/
+
+        /*Image::make($request->file('photo'))
+            ->resize(500, 500)
+            ->save('img/orders/'.$file_name);  */
+
+        $file = $request->file('photo');
+        $image_name = uniqid().'.'.$file->getClientOriginalExtension();
+        $image = Image::make($file);
+        $image->resize(600, 600);
+        $image->save('img/orders/'.$image_name);
+
+        $photo = new Photo();
+        $photo->url = '/img/orders/'.$image_name;
+        $photo->title = $request->get('title');
+        $photo->post_id = $id;
+        $photo->save();
         return back();
-      }
+    }
 
 
 

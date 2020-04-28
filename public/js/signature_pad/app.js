@@ -4,7 +4,7 @@ var clearButton = document.getElementById("signature-clear");
 //var changeColorButton = wrapper.querySelector("[data-action=change-color]");
 //var undoButton = wrapper.querySelector("[data-action=undo]");
 //var savePNGButton = wrapper.querySelector("[data-action=save-png]");
-var savePNGButton = document.getElementById("signature-png")
+var savePNGButton = document.getElementById("signature-button")
 //var saveJPGButton = wrapper.querySelector("[data-action=save-jpg]");
 //var saveSVGButton = wrapper.querySelector("[data-action=save-svg]");
 var canvas = wrapper.querySelector("canvas");
@@ -76,33 +76,45 @@ clearButton.addEventListener("click", function (event) {
   signaturePad.clear();
 });
 
-
-document.getElementById('form').addEventListener("submit", function(){
+/*
+document.getElementById('signature-form').addEventListener("submit", function(){
+  
   var canvas = document.getElementById("signature");
+  alert(canvas.isEmpty())
   if (canvas.isEmpty()) {
     alert("Por favor, proporcione una firma primero..");
   } else {
-
     var image = canvas.toDataURL(); // data:image/png....
+  
     document.getElementById("base64").value = image;
   }
-},false);
-/*
+});
+*/
+
+function insertSignature() {
+  var canvas = document.getElementById("signature");
+  alert(document.getElementById("signature"))
+  if (canvas.isEmpty()) {
+    alert("Por favor, proporcione una firma primero..");
+  } else {
+    var image = canvas.toDataURL(); // data:image/png....
+    document.getElementById("base64").value = image;
+    var form = document.getElementById('signature-form');
+    form.submit();
+  }
+}
+
+
+
 savePNGButton.addEventListener("click", function (event) {
   if (signaturePad.isEmpty()) {
     alert("Por favor, proporcione una firma primero..");
   } else {
-    var dataURL = signaturePad.toDataURL();
-    document.getElementById("preview").src = dataURL;*/
-    //download(dataURL, "signature.png");
-  // alert( dataURL.length );
-/*   let file  = dataURL;
-      let reader = new FileReader();
-      reader.onloadend = (file) => {            
-        console.log('RESULT', reader.result)
-    }*/
-    
-/*
+    var image = signaturePad.toDataURL();
+    document.getElementById("base64").value = image;
+    var form = document.getElementById('signature-form');
+    form.submit();
+
   }
-});*/
+});
 

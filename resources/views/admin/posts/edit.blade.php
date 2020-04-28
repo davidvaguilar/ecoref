@@ -5,24 +5,34 @@
         Orden de Trabajo Folio N° {{ $post->title }}
         <!-- <small>Crear publicación</small>-->
     </h1>
-    <ol class="breadcrumb">
-    <li>
-        <a href="{{ route('dashboard') }}">
-            <i class="fa fa-dashboard"></i> Inicio
-        </a>
-    </li>
-    <li class="active">
-        <a href="{{ route('admin.posts.index') }}">
-            <i class="fa fa-list"></i> Trabajos
-        </a>
-    </li>
-    <li class="active">Crear</li>
-    </ol>
+    <!--<ol class="breadcrumb">
+        <li>
+            <a href="{{ route('dashboard') }}">
+                <i class="fa fa-dashboard"></i> Inicio
+            </a>
+        </li>
+        <li class="active">
+            <a href="{{ route('admin.posts.index') }}">
+                <i class="fa fa-list"></i> Trabajos
+            </a>
+        </li>
+        <li class="active">Crear</li>
+    </ol>-->
 @stop
 
 @section('content')
+<div id="error-div">
+    @if( $errors->any() )
+        @foreach( $errors->all() as $error )
+        <div class="alert alert-danger alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <span>{{ $error }}</span>
+        </div>
+        @endforeach
+    @endif
+</div>
 <div class="row">
-    @if ($post->photos->count())
+    @if ($post->photos->count() || $post->signature_id != null )
         <div class="col-md-12">
             <div class="box box-primary">
                 <div class="box-body">
@@ -39,11 +49,26 @@
                                 </div>
                             </form>
                         @endforeach
+                        @if ($post->signature_id != null )
+                        <!-- falta definir signature.destroy -->
+                            <form method="POST" action="{{ route('admin.signature.destroy', $post->signature_id) }}">
+                                {{ csrf_field() }}
+                                {{ method_field('DELETE') }}
+                                <div class="col-md-2">
+                                    <button class="btn btn-danger btn-xs" style="position:absolute">
+                                        <i class="fa fa-remove"></i>
+                                    </button>
+                                    <img src="{{ url($post->signature->url) }}" class="img-responsive" width="100px"  >
+                                </div>
+                            </form>
+                        @endif
                     </div>
                 </div>
             </div>
         </div>
     @endif
+
+
 
     <div class="col-md-12">
         <!-- Custom Tabs -->
@@ -340,29 +365,28 @@
             <!-- /.tab-pane -->
             <div class="tab-pane" id="tab_material">
             
-                <form class="form-horizontal">
-                    <!-- <div class="box-body"> -->
+                <div class="form-horizontal">              
                     <div class="form-group">
-                        <label for="inputEmail3" class="col-sm-2 control-label">Cantidad</label>
-                        <div class="col-sm-2">
+                        <label for="quantity" class="col-sm-2 control-label">Cantidad</label>
+                        <div id="quantity-div" class="col-sm-2">
                             <input name="quantity"  
                                 type="number" 
                                 class="form-control pull-right">
                         </div>
 
-                        <label for="inputEmail3" class="col-sm-2 control-label">Material</label>
-                        <div class="col-sm-4">
+                        <label for="detail" class="col-sm-2 control-label">Material</label>
+                        <div id="detail-div" class="col-sm-4">
                             <input name="detail" 
                                 type="text" 
                                 class="form-control">   
                         </div>
 
                         <div class="col-sm-2">
-                            <button id="btn_material" type="button" class="btn btn-success btn-block">Agregar</button>    
+                            <button onclick="addMaterial()" type="button" class="btn btn-success btn-block">Agregar</button>    
                         </div>
                     </div>
-                </form>
-                <table id="material-table" class="table table-bordered table-striped">
+                </div>
+                <table id="material-table" class="table table-bordered table-striped text-center">
                     <thead>
                         <tr>
                             <th>Cantidad</th>
@@ -371,13 +395,23 @@
                         </tr>
                     </thead>
                     <tbody id="material-body">
-                        <tr> 
-                            <td colspan="3">No hay materiales seleccionados</td>
-                        </tr>
+                        @if ($post->materials->count())
+                            @foreach ($post->materials as $material)
+                                <tr>
+                                    <td>{{ $material->quantity }}</td>
+                                    <td>{{ $material->detail }}</td>
+                                    <td>{{ $material->price }}</td>
+                                </tr>        
+                            @endforeach
+                        @else
+                            <tr> 
+                                <td colspan="3">No hay materiales seleccionados</td>
+                            </tr>
+                        @endif
                     </tbody>
                 </table>
 
-                <form class="form-horizontal">
+                <div class="form-horizontal">
                     <div class="form-group">
                         <label for="observation" class="col-sm-2 control-label">Observaciones</label>
                         <div class="col-sm-9">
@@ -397,8 +431,9 @@
                                 class="form-control">   
                         </div>
                     </div>
-                </form>
-                <button id="confirm-button" type="button" class="btn btn-primary btn-block">Guardar y Autorizar</button>
+
+                    <button id="confirm-button" type="button" class="btn btn-primary btn-block">Guardar y Autorizar</button>
+                </div>
             </div>
             <!-- /.tab-pane -->
           </div>
@@ -419,15 +454,23 @@
                 <h4 class="modal-title" id="exampleModalLabel">Cliente</h4>
             </div>
             <form method="post" class="form-horizontal" action="{{ route('admin.posts.photos.store', $post->id) }}" enctype="multipart/form-data">
-                {{ csrf_field() }}   
+                {{ csrf_field() }} 
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="inputEmail3" class="col-sm-3 control-label">Codigo Cliente</label>
                         <div class="col-sm-9">
-                            <!-- <input name="tecnico" type="text" class="form-control"> -->
                             <input name="client_id" type="text" class="form-control">
                         </div>
                     </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary pull-left" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Buscar Cliente</button>
+                </div>
+            </form>
+            <form method="post" class="form-horizontal" action="{{ route('admin.posts.photos.store', $post->id) }}" enctype="multipart/form-data">
+                {{ csrf_field() }} 
+                <div class="modal-body">
                     <div class="form-group">
                         <label for="inputEmail3" class="col-sm-3 control-label">Empresa</label>
                         <div class="col-sm-9">
@@ -454,8 +497,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary pull-left" data-dismiss="modal">Cerrar</button>
-                    <button type="submit" class="btn btn-primary">Grabar Cliente</button>
+                    <button type="button" class="btn btn-secondary pull-left" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Grabar y Seleccionar Cliente</button>
                 </div>
             </form>
         </div>
@@ -506,14 +549,14 @@
                     </div>
                 <div>
             </div>
-            <form id="form" method="post" action="{{ route('admin.posts.signature.store', $post->id) }}" > <!-- /admin/products/4/images --><!-- admin/posts/{post}/photos -->
+            <form id="signature-form" method="post" action="{{ route('admin.posts.signature.store', $post->id) }}" > <!-- /admin/products/4/images --><!-- admin/posts/{post}/photos -->
                 {{ csrf_field() }}  
-                <input type="text" name="signature-title" value="" id="signature-title" >
+                <input type="hidden" name="signature-title" value="" id="signature-title">
                 <input type="hidden" name="base64" value="" id="base64">
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary pull-left" data-dismiss="modal">Cancelar</button>
-                    <button id="signature-clear" type="button" class="btn btn-info pull-left">Limpiar</button>   <!--  data-action="clear"-->              
-                    <button  type="submit" class="btn btn-primary">Firmar y Finalizar</button> <!-- id="signature-png" data-action="save-png"-->
+                    <button type="button" class="btn btn-secondary pull-left" data-dismiss="modal">Cerrar</button>
+                    <button id="signature-clear" type="button" class="btn btn-info pull-left">Borrar</button>   <!--  data-action="clear"-->              
+                    <button id="signature-button" type="button" class="btn btn-primary">Firmar y Finalizar</button> <!-- id="signature-png" data-action="save-png"-->
                 </div>
             </form>
         </div>
@@ -574,16 +617,18 @@
                 })
             });    */
 
+
             document.getElementById("confirm-button").addEventListener("click", function (event) {
                 document.getElementById("client").classList.remove("has-error");
                 var name = document.getElementsByName("client")[0].value;
                 document.getElementById("client-title").innerHTML = name;
                 document.getElementById("signature-title").value = name;
                 
-                if( name.length > 1 ){
-                    $('#confirm-modal').modal('show');
+                if( name.length > 1 ){                    
                     document.getElementById("signature").height = "200"
-                    document.getElementById("signature").width = "200";
+                    document.getElementById("signature").width = "350";
+
+                    $('#confirm-modal').modal('show');
                 } else {
                     document.getElementById("client").classList.add("has-error");
                 }
@@ -634,7 +679,7 @@
             }, false);
 
 
-            document.getElementById("btn_material").addEventListener("click", function (event) {
+            /*document.getElementById("btn_material").addEventListener("click", function (event) {
                 var quantity = document.getElementsByName("quantity")[0].value;
                 var detail = document.getElementsByName("detail")[0].value;
                 var url = "{{ route('admin.materials.store') }}"
@@ -649,10 +694,50 @@
                 .catch(function (error){
                     console.log(error);        
                 });
-
-            }, false);
+            }, false);*/
 
         });
+
+        
+ 
+        function addMaterial(){
+            document.getElementById('error-div').innerHTML= "";
+            document.getElementById("quantity-div").classList.remove("has-error");            
+            document.getElementById("detail-div").classList.remove("has-error");
+            var quantity = document.getElementsByName("quantity")[0].value;
+            var detail = document.getElementsByName("detail")[0].value;
+            var bandera = true;
+            if( quantity.length == 0 ){
+                bandera = false;
+                document.getElementById("quantity-div").classList.add("has-error")
+            }
+            if( detail.length == 0 ){
+                bandera = false;
+                document.getElementById("detail-div").classList.add("has-error")
+            }
+            if( bandera ){
+                var url = "{{ route('admin.materials.store') }}"
+                axios.post(url, {
+                        'post_id': '{{ $post->id }}',
+                        'quantity': quantity,
+                        'detail': detail
+                }).then(function(response){
+                    listarMaterial("{{ $post->id }}");
+                    console.log(response.data);
+                })
+                .catch(function (error){
+                    var div = document.createElement('div');
+                    div.classList.add('alert');
+                    div.classList.add('alert-danger');
+                    div.classList.add('alert-dismissible');
+                    var span = document.createElement('span');
+                    span.innerHTML = "Error, al ingresar material";
+                    div.appendChild(span);
+                    document.getElementById('error-div').appendChild(div);
+                    console.log(typeof(error.response.data.errors.quantity[0]) !== 'undefined'); 
+                });
+            }
+        }
 
         function listarMaterial(id) {
             var post = id;
