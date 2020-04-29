@@ -14,7 +14,8 @@ echo 'display_errors = ' . ini_get('display_errors') . "<br>";
 echo 'register_globals = ' . ini_get('register_globals') . "<br>";
 echo 'post_max_size = ' . ini_get('post_max_size') . "<br>";
 echo 'post_max_size+1 = ' . ((int)ini_get('post_max_size')+1) . "<br>";
-echo 'post_max_size in bytes = ' . return_bytes(ini_get('post_max_size'));
+echo 'post_max_size in bytes = ' . return_bytes(ini_get('post_max_size')). "<br>";
+echo 'upload_max_filesize = ' . ini_get('upload_max_filesize');
 
 function return_bytes($val) {
     $val = (int)trim($val);
