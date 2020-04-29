@@ -47,18 +47,20 @@ class PhotosController extends Controller
         /*Image::make($request->file('photo'))
             ->resize(500, 500)
             ->save('img/orders/'.$file_name);  */
-
+        ini_set('memory_limit','256M');  // Temporalmente aumento de memoria
         $file = $request->file('photo');
         $image_name = uniqid().'.'.$file->getClientOriginalExtension();
         $image = Image::make($file);
         $image->resize(600, 600);
         $image->save('img/orders/'.$image_name);
-
+     
         $photo = new Photo();
         $photo->url = '/img/orders/'.$image_name;
         $photo->title = $request->get('title');
+        
         $photo->post_id = $id;
         $photo->save();
+      
         return back();
     }
 

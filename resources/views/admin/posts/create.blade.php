@@ -34,15 +34,15 @@
     <script>
         console.log(window.location.hash)
         if(window.location.hash == '#create'){
-        $('#exampleModal').modal('show');
+            $('#exampleModal').modal('show');
         }
         $('#exampleModal').on('hide.bs.modal', function(){
-        window.location.hash = '#'; 
+            window.location.hash = '#'; 
         });
 
         $('#exampleModal').on('shown.bs.modal', function(){
         $('#post-title').focus();
-        window.location.hash = '#create'; 
+            window.location.hash = '#create'; 
         });
     </script>
 @endpush

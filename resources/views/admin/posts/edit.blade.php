@@ -596,24 +596,6 @@
     
         $(document).ready(function(){
             
-            /*$('#alias').keyup(function(){
-                alias=$(this).val();
-                var urlComprobarAlias = '/comprobar-alias-js/' + alias;
-                axios.get(urlComprobarAlias)
-                .then(response => {
-                    coincidenciaAlias = response.data;
-                    if(coincidenciaAlias){
-                        $('#alias-alert').show('slow');
-                    } else {
-                        $('#alias-alert').hide('slow');
-                    }
-                })
-                .catch(e => {
-                    // Podemos mostrar los errores en la consola
-                    console.log(e);
-                })
-            });    */
-
 
             document.getElementById("confirm-button").addEventListener("click", function (event) {
                 document.getElementById("client").classList.remove("has-error");
@@ -675,27 +657,7 @@
                 });
             }, false);
 
-
-            /*document.getElementById("btn_material").addEventListener("click", function (event) {
-                var quantity = document.getElementsByName("quantity")[0].value;
-                var detail = document.getElementsByName("detail")[0].value;
-                var url = "{{ route('admin.materials.store') }}"
-                axios.post(url, {
-                        'post_id': '{{ $post->id }}',
-                        'quantity': quantity,
-                        'detail': detail
-                }).then(function(response){
-                    listarMaterial("{{ $post->id }}");
-                    console.log(response.data);
-                })
-                .catch(function (error){
-                    console.log(error);        
-                });
-            }, false);*/
-
         });
-
-        
  
         function addMaterial(){
             document.getElementById('error-div').innerHTML= "";
@@ -767,8 +729,6 @@
 
                     body.appendChild(fila);
                 }
-               // console.log(response.data);
-              //  console.log(response.data.materials[0].detail);
             })
                 .catch(function (error){
                 console.log(error);
