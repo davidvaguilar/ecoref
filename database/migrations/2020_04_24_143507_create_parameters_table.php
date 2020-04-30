@@ -15,13 +15,14 @@ class CreateParametersTable extends Migration
     {
         Schema::create('parameters', function (Blueprint $table) {
             $table->increments('id');            
-            $table->string('tipo', 2);        
-            $table->string('temperatura', 2)->nullable();
-            $table->unsignedInteger('presion_baja')->nullable();
-            $table->unsignedInteger('presion_alta')->nullable();
-            //falta un tipo tag de refrigerantes.
-            $table->string('refrigerante', 10)->nullable();
-            $table->string('aceite', 10)->nullable();
+            $table->string('type', 10)->nullable();       
+            $table->string('temperature', 2)->nullable();
+            $table->unsignedInteger('pressure_low')->nullable();
+            $table->unsignedInteger('pressure_high')->nullable();
+            //refrigerant van en tabla aparte;
+            $table->string('refrigerant', 10)->nullable();
+            $table->string('oil', 10)->nullable();
+            
             $table->timestamps();
         });
     }

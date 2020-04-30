@@ -6,13 +6,15 @@ use App\Post;
 use App\Category;
 use App\Tag;
 use App\Material;
+use App\Refrigerant;
 use App\Problem;
 use App\Type;
+use App\Parameter;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StorePostRequest;
-
+use Barryvdh\DomPDF\Facade as PDF;
 
 class PostsController extends Controller
 {
@@ -30,23 +32,21 @@ class PostsController extends Controller
         return view('admin.posts.create', compact('categories', 'tags'));
     }*/
 
-    public function create(){
-        dd("sdasd");
-    }
-
     public function store(Request $request){
-      //dd($request->get('fecha'));
-     return json_encode("ok2");
-       /* $this->authorize('create', new Post);
-        $this->validate($request, ['title' => 'required|min:3']);
-
+        $this->authorize('create', new Post);
+        $this->validate($request, ['title' => 'required|min:3'] );
 
         $post = Post::create([
             'title' => $request->get('title'),
-            'user_id' => auth()->id()
+            'user_id' => auth()->id(),
+            'published_at' => Carbon::now()
         ]);
-      
-        return redirect()->route('admin.posts.edit', $post); */
+
+        $parameter = new Parameter();
+        $parameter->save();
+        $post->parameter_id = $parameter->id;
+        $post->save();
+        return redirect()->route('admin.posts.edit', $post);
     }
 
     public function show($id){
@@ -63,17 +63,34 @@ class PostsController extends Controller
        // return "show";
     }
 
+    
+    public function selectClient(Post $post, $id){
+        dd($id);
+        //dd("sdasd");
+        /*$role = auth()->user()->role;
+        return view( 'appointments.show', compact('appointment', 'role') );*/
+        
+        $materials = Material::where('post_id', '=', $id)->get();
+      //  $materials = Material::find($id);
+//dd( $materials );
+        return[
+            'materials' => $materials
+        ];
+       // return "show";
+    }
+
     public function edit(Post $post){
-       // dd($post);
         $this->authorize('update', $post);
 
         $categories = Category::all();
         $tags = Tag::all();
-
+        $refrigerants = Refrigerant::all();
         $problems = Problem::all();
         $types = Type::all();
+      
+       //dd($post->parameter->refrigerants()->pluck('refrigerant_id'));
 
-        return view('admin.posts.edit', compact('categories', 'tags', 'post', 'problems', 'types'));
+        return view('admin.posts.edit', compact('categories', 'tags', 'post', 'problems', 'types', 'refrigerants'));
         
         /*return view('admin.posts.edit', [
             'categories' => Category::all(),
@@ -84,11 +101,9 @@ class PostsController extends Controller
     
     public function update( Post $post, Request $request ){    //Post $post,  StorePostRequest $request
         if( !$request->ajax()) return redirect('/');
-      // dd($request);
-//dd($post);
 
        // $post->arrival_at = $request->get('arrival_at');
-       // $post->goes_at = $request->get('goes_at');
+       // $post->goes_at = $request->get('goes_at');  // esto es cuando firman
 
         $post->type_id = $request->get('type_id');
         $post->type_other = $request->get('type_other');
@@ -114,8 +129,6 @@ class PostsController extends Controller
         /*$post->title = $request->get('title');
         $post->url = str_slug($request->get('title'));
         $post->body = $request->get('body');
-        $post->iframe = $request->get('iframe');
-        $post->excerpt = $request->get('excerpt');
         $post->published_at = $request->get('published_at');  //hacia un accesor
         $post->category_id = $request->get('category_id');
         $post->save();*/
@@ -164,9 +177,13 @@ class PostsController extends Controller
       //  $pdf->setPaper('A4', 'landscape');
       //  return $pdf->stream('productos.pdf'); //->stream('productos.pdf');
       
-        $pdf = \PDF::loadView('pdf.order', ['post'=> $post]);
-      //  $pdf->setPaper('A4', 'landscape');
-        return $pdf->stream('ordentrabajo-'.$post->id.'.pdf'); 
+       $pdf = PDF::loadView('pdf.order', ['post'=> $post]);    
+       // return $pdf->stream('ordentrabajo-'.$post->id.'.pdf'); 
+        $pdf->save('pdf/order/'. 'ordentrabajo-'.$post->id.'-'.Carbon::now()->format('dmYHis').'.pdf');
+        return $pdf->stream('ordentrabajo-'.$post->id.'-'.Carbon::now()->format('dmYHis').'.pdf'); 
+       // $pdf = PDF::loadView('pdf.order', ['post'=> $post]);    
+       // return $pdf->stream('ordentrabajo-'.$post->id.'.pdf'); 
+       // return $pdf->save('pdf/order/'. 'ordentrabajo-'.$post->id.'.pdf');
     }
 
     public function destroy(Post $post){
@@ -186,4 +203,6 @@ class PostsController extends Controller
             ->route('admin.posts.index')
             ->with('flash', 'La publicación ha sido eliminada.');
     }
+
+
 }

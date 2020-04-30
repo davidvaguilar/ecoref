@@ -3,21 +3,7 @@
 @section('header')
     <h1>
         Orden de Trabajo Folio N° {{ $post->title }}
-        <!-- <small>Crear publicación</small>-->
     </h1>
-    <!--<ol class="breadcrumb">
-        <li>
-            <a href="{{ route('dashboard') }}">
-                <i class="fa fa-dashboard"></i> Inicio
-            </a>
-        </li>
-        <li class="active">
-            <a href="{{ route('admin.posts.index') }}">
-                <i class="fa fa-list"></i> Trabajos
-            </a>
-        </li>
-        <li class="active">Crear</li>
-    </ol>-->
 @stop
 
 @section('content')
@@ -65,8 +51,6 @@
         </div>
     @endif
 
-
-
     <div class="col-md-12">
         <!-- Custom Tabs -->
         <div class="nav-tabs-custom">
@@ -80,41 +64,41 @@
 
                 <form class="form-horizontal">
                     <div class="form-group">
-                        <label for="arrival_date_at" class="col-sm-2 control-label">Fecha</label>
+                        <label for="started_date_at" class="col-sm-2 control-label">Fecha</label>
                         <div class="col-sm-2">
-                            <input name="arrival_date_at"  
+                            <input name="started_date_at"  
                                     type="text" 
                                     class="form-control pull-right datepicker" 
-                                    value="{{ old('arrival_at', $post->arrival_at ? $post->arrival_at->format('d/m/Y') : null) }}">
+                                    value="{{ old('started_at', $post->started_at ? $post->started_at->format('d/m/Y') : null) }}">
                         </div>
-                        <label for="arrival_hour_at" class="col-sm-2 control-label">Hora Llegada</label>
+                        <label for="started_hour_at" class="col-sm-2 control-label">Hora Llegada</label>
+                        
                         <div class="col-sm-2">
-                            <input name="arrival_hour_at" 
+                            <input name="started_hour_at" 
                                     type="text" 
                                     class="form-control timepicker"
-                                    value="{{ old('arrival_at', $post->arrival_at ? $post->arrival_at->format('H:m') : null) }}">   
+                                    value="{{ old('started_at', $post->started_at ? $post->started_at->format('H:i') : null) }}">   
                         </div>
-                        <label for="goes_hour_at" class="col-sm-2 control-label">Hora Retiro</label>
+                        <label for="finished_hour_at" class="col-sm-2 control-label">Hora Retiro</label>
                         <div class="col-sm-2">
-                            <input name="goes_hour_at" 
+                            <input name="finished_hour_at" 
                                     type="text" 
                                     class="form-control timepicker"
-                                    value="{{ old('goes_at', $post->goes_at ? $post->goes_at->format('H:m') : null) }}"> 
+                                    value="{{ old('finished_at', $post->finished_at ? $post->finished_at->format('H:i') : null) }}"> 
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="inputEmail3" class="col-sm-2 control-label">Empresa</label>
+                        <label for="client" class="col-sm-2 control-label">Empresa</label>
                         <div class="col-sm-7">
-                            <span>{{ $post->client->name }}</span>
+                            <span>{{  isset($post->client->id) ? $post->client->name : '' }}</span>
                         </div>
                         <div class="col-sm-3">
                             <button id="client-button" type="button" class="btn btn-info btn-block">CLIENTE</button>                     
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="inputEmail3" class="col-sm-2 control-label">Tecnico Responsable</label>
+                        <label for="technical" class="col-sm-2 control-label">Tecnico Responsable</label>
                         <div class="col-sm-7">
-                            <!-- <input name="tecnico" type="text" class="form-control"> -->
                             <span>{{ $post->owner->name }}</span>
                         </div>
                         <div class="col-sm-3">
@@ -123,7 +107,7 @@
                     </div>
 
                     <div class="form-group {{ $errors->has('type_id') ? 'has-error' : '' }}">
-                        <label for="inputEmail3" class="col-sm-2 control-label">Tipo de Orden</label>
+                        <label for="type_id" class="col-sm-2 control-label">Tipo de Orden</label>
                         <div class="col-sm-4">
                             <select name="type_id" class="form-control">
                                 <option value="">Seleccione un Tipo</option>
@@ -164,7 +148,7 @@
                     </div>
 
                     <div class="form-group {{ $errors->has('problem_id') ? 'has-error' : '' }}">
-                        <label for="inputEmail3" class="col-sm-2 control-label">Problema</label>
+                        <label for="problem_id" class="col-sm-2 control-label">Problema</label>
                         <div class="col-sm-4">
                             <select name="problem_id" class="form-control">
                                 <option value="">Seleccione un Problema</option>
@@ -179,7 +163,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="inputEmail3" class="col-sm-3 control-label">Trabajo Realizado</label>
+                        <label for="job" class="col-sm-3 control-label">Trabajo Realizado</label>
                         <div class="col-sm-9">
                             <textarea name="job" 
                                 class="form-control" 
@@ -195,45 +179,54 @@
                 <form class="form-horizontal">
                     <div class="box-body">
 
-                        <div class=" col-sm-6">
+                        <div class=" col-sm-12">
                             <div class="box box-info">
                                 <div class="box-header with-border">
-                                    <h3 class="box-title">PARAMETROS/MEDICIONES/NIVELES BT°</h3>
+                                    <h3 class="box-title">PARAMETROS/MEDICIONES/NIVELES</h3>
                                 </div>
                                 <div class="box-body">
                                     <div class="form-group">
-                                        <label for="inputEmail3" class="col-sm-2 control-label">Temperatura</label>
+                                        <label for="inputPassword3" class="col-sm-2 control-label">Tipo</label>
+                                        <div class="col-sm-10">
+                                            <select name="type" class="form-control">
+                                                <option value="BAJA" {{ isset($post->parameter->id) && $post->parameter->type == 'BAJA' ? 'selected' : '' }}>BAJA Temperatura</option>
+                                                <option value="MEDIA" {{ isset($post->parameter->id) && $post->parameter->type == 'MEDIA' ? 'selected' : '' }}>MEDIA Temperatura</option>
+                                            </select>                        
+                                            {!! $errors->first('tags', '<span class="help-block">:message</span>' ) !!} 
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="temperature" class="col-sm-2 control-label">Temperatura</label>
                                         <div class="col-sm-10 text-center">
                                             <label class="checkbox-inline">
-                                                <input type="radio" name="temperatura_bt" value="S" checked> SI
+                                                <input type="radio" name="temperature" value="SI" {{ isset($post->parameter->id) && $post->parameter->temperature == 'SI' ? 'checked' : '' }}> SI
                                             </label>
                                             <label class="checkbox-inline">
-                                                <input type="radio" name="temperatura_bt" value="N"> NO
+                                                <input type="radio" name="temperature" value="NO" {{ isset($post->parameter->id) && $post->parameter->temperature == 'NO' ? 'checked' : '' }}> NO
                                             </label>                          
                                         </div>
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="inputPassword3" class="col-sm-2 control-label">Presion</label>
+                                        <label for="pressure" class="col-sm-2 control-label">Presion</label>
                                         <div class="col-sm-5">
-                                            <input name="presion_alta_bt" type="number" class="form-control" placeholder="BAJA">
+                                            <input name="pressure_low" type="number" class="form-control" placeholder="BAJA" value="{{ isset($post->parameter->id) ? $post->parameter->pressure_low : '' }}">
                                         </div>
                                         <div class="col-sm-5">
-                                            <input name="presion_alta_bt" type="number" class="form-control" placeholder="ALTA">
+                                            <input name="pressure_high" type="number" class="form-control" placeholder="ALTA" value="{{ isset($post->parameter->id) ? $post->parameter->pressure_high : '' }}">
                                         </div>
                                     </div>
-
                                     <div class="form-group">
-                                        <label for="inputPassword3" class="col-sm-3 control-label">Refrigerante</label>
+                                        <label for="refrigerants" class="col-sm-3 control-label">Refrigerante</label>
                                         <div class="col-sm-9">
-                                            <select name="refrigerantes_bt[]" class="form-control select2" 
+                                            <select id="refrigerants" class="form-control select2" 
                                                     multiple="multiple" 
                                                     data-placeholder="Seleccione una o mas etiquetas" 
                                                     style="width: 100%;">
-                                                @foreach ($tags as $tag)
-                                                    <option {{ collect(old('tags', $post->tags->pluck('id') ))->contains($tag->id) ? 'selected' : '' }} 
-                                                            value="{{ $tag->id }}"
-                                                        >{{ $tag->name }}</option>
+                                                @foreach ($refrigerants as $refrigerant)
+                                                    <option {{ collect(old('refrigerants', $post->parameter->refrigerants->pluck('id') ))->contains($refrigerant->id) ? 'selected' : '' }} 
+                                                            value="{{ $refrigerant->id }}"
+                                                        >{{ $refrigerant->name }}</option>
                                                 @endforeach
                                             </select>                        
                                             {!! $errors->first('tags', '<span class="help-block">:message</span>' ) !!} 
@@ -244,119 +237,36 @@
                                         <label for="inputPassword3" class="col-sm-3 control-label">Refrigerante</label>
                                         <div class="col-sm-9 text-center">
                                             <label class="checkbox-inline">
-                                                <input type="radio" name="refrigerante_bt" value="A" checked> ALTA
+                                                <input type="radio" name="refrigerant" value="ALTA" {{ isset($post->parameter->id) && $post->parameter->refrigerant == 'ALTA' ? 'checked' : '' }}> ALTA
                                             </label>
                                             <label class="checkbox-inline">
-                                                <input type="radio" name="refrigerante_bt" value="M"> MEDIA
+                                                <input type="radio" name="refrigerant" value="MEDIA" {{ isset($post->parameter->id) && $post->parameter->refrigerant == 'MEDIA' ? 'checked' : '' }}> MEDIA
                                             </label> 
                                             <label class="checkbox-inline">
-                                                <input type="radio" name="refrigerante_bt" value="B"> BAJA
+                                                <input type="radio" name="refrigerant" value="BAJA" {{  isset($post->parameter->id) && $post->parameter->refrigerant == 'BAJA' ? 'checked' : '' }}> BAJA
                                             </label>
                                         </div>
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="inputPassword3" class="col-sm-3 control-label">Aceite</label>
+                                        <label for="oil" class="col-sm-3 control-label">Aceite</label>
                                         <div class="col-sm-9  text-center">
                                             <label class="checkbox-inline">
-                                                <input type="radio" name="aceite_bt" value="A" checked> ALTA
+                                                <input type="radio" name="oil" value="ALTA" {{ isset($post->parameter->id) && $post->parameter->oil == 'ALTA' ? 'checked' : '' }}> ALTA
                                             </label>
                                             <label class="checkbox-inline">
-                                                <input type="radio" name="aceite_bt" value="M"> MEDIA
+                                                <input type="radio" name="oil" value="MEDIA" {{ isset($post->parameter->id) && $post->parameter->oil == 'MEDIA' ? 'checked' : '' }}> MEDIA
                                             </label> 
                                             <label class="checkbox-inline">
-                                                <input type="radio" name="aceite_bt" value="B"> BAJA
+                                                <input type="radio" name="oil" value="BAJA" {{ isset($post->parameter->id) && $post->parameter->oil == 'BAJA' ? 'checked' : '' }}> BAJA
                                             </label>
                                         </div>
                                     </div>
                                 </div>
-                                <!-- /.box-body -->
                             </div>
                         </div>
-
-                        <div class="col-sm-6">
-                            <div class="box box-success">
-                                <div class="box-header with-border">
-                                    <h3 class="box-title">PARAMETROS/MEDICIONES/NIVELES MT°</h3>
-                                </div>
-                            
-                                <div class="box-body">
-                                    <div class="form-group">
-                                        <label for="inputEmail3" class="col-sm-2 control-label">Temperatura</label>
-                                        <div class="col-sm-10 text-center">
-                                            <label class="checkbox-inline">
-                                                <input type="radio" name="temperatura_mt" value="SI" checked> SI
-                                            </label>
-                                            <label class="checkbox-inline">
-                                                <input type="radio" name="temperatura_mt" value="NO"> NO
-                                            </label>                          
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="inputPassword3" class="col-sm-2 control-label">Presion</label>
-                                        <div class="col-sm-5">
-                                            <input name="presion_baja_mt" type="number" class="form-control" placeholder="BAJA">
-                                        </div>
-                                        <div class="col-sm-5">
-                                            <input name="presion_alta_mt" type="number" class="form-control" placeholder="ALTA">
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="inputPassword3" class="col-sm-3 control-label">Refrigerante</label>
-                                        <div class="col-sm-9">
-                                            <select name="refrigerantes_mt[]" class="form-control select2" 
-                                                    multiple="multiple" 
-                                                    data-placeholder="Seleccione una o mas etiquetas" 
-                                                    style="width: 100%;">
-                                                @foreach ($tags as $tag)
-                                                    <option {{ collect(old('tags', $post->tags->pluck('id') ))->contains($tag->id) ? 'selected' : '' }} 
-                                                            value="{{ $tag->id }}"
-                                                        >{{ $tag->name }}</option>
-                                                @endforeach
-                                            </select>                        
-                                            {!! $errors->first('tags', '<span class="help-block">:message</span>' ) !!} 
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="inputPassword3" class="col-sm-3 control-label">Refrigerante</label>
-                                        <div class="col-sm-9 text-center">
-                                            <label class="checkbox-inline">
-                                                <input type="radio" name="refrigerante_mt" value="A" checked> ALTA
-                                            </label>
-                                            <label class="checkbox-inline">
-                                                <input type="radio" name="refrigerante_mt" value="M"> MEDIA
-                                            </label> 
-                                            <label class="checkbox-inline">
-                                                <input type="radio" name="refrigerante_mt" value="B"> BAJA
-                                            </label>
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="inputPassword3" class="col-sm-3 control-label">Aceite</label>
-                                        <div class="col-sm-9  text-center">
-                                            <label class="checkbox-inline">
-                                                <input type="radio" name="aceite_mt" value="A" checked> ALTA
-                                            </label>
-                                            <label class="checkbox-inline">
-                                                <input type="radio" name="aceite_mt" value="M"> MEDIA
-                                            </label> 
-                                            <label class="checkbox-inline">
-                                                <input type="radio" name="aceite_mt" value="B"> BAJA
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- /.box-body -->
-                            </div>
-                        </div>
+                        <button id="parameter-button" type="button" class="btn btn-primary btn-block">Guardar y Siguiente</button>
                     </div>
-
-                    <button id="btn_medicion" type="button" class="btn btn-primary btn-block">Guardar y Siguiente</button>
-                    <!-- /.box-body -->
                 </form>            
             </div>
             <!-- /.tab-pane -->
@@ -410,17 +320,23 @@
 
                 <div class="form-horizontal">
                     <div class="form-group">
-                        <label for="observation" class="col-sm-2 control-label">Observaciones</label>
+                        <label class="col-sm-2 control-label">Observaciones</label>
                         <div class="col-sm-9">
-                            <textarea name="observation" 
+                            <textarea id="observation-order" 
                                 class="form-control" 
                                 placeholder="Ingresa una observacion">{{ old('observation', $post->observation) }}</textarea>
                             {!! $errors->first('observation', '<span class="help-block">:message</span>' ) !!}   
                         </div>
                     </div>
 
-
-                    <div id="client" class="form-group">
+                    <div id="email-div" class="form-group">
+                        <label class="col-sm-2 control-label">Correo Electronico del Cliente</label>
+                        <div class="col-sm-8">
+                            <input id="email-order" 
+                                    type="email" class="form-control">   
+                        </div>
+                    </div>
+                    <div id="client-div" class="form-group">
                         <label class="col-sm-2 control-label">Cliente</label>
                         <div class="col-sm-8">
                             <input name="client" 
@@ -452,9 +368,10 @@
             </div>
             <form method="post" class="form-horizontal" action="{{ route('admin.posts.photos.store', $post->id) }}" enctype="multipart/form-data">
                 {{ csrf_field() }} 
+                <input name="post_id" type="hidden" value="{{ $post->id }}">
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="inputEmail3" class="col-sm-3 control-label">Codigo Cliente</label>
+                        <label for="client_id" class="col-sm-3 control-label">Codigo Cliente</label>
                         <div class="col-sm-9">
                             <input name="client_id" type="text" class="form-control">
                         </div>
@@ -465,19 +382,20 @@
                     <button type="submit" class="btn btn-primary">Buscar Cliente</button>
                 </div>
             </form>
-            <form method="post" class="form-horizontal" action="{{ route('admin.posts.photos.store', $post->id) }}" enctype="multipart/form-data">
+            <form method="POST" class="form-horizontal" action="{{ route('admin.clients.store') }}">
                 {{ csrf_field() }} 
+                <input name="post_id" type="hidden" value="{{ $post->id }}">
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="inputEmail3" class="col-sm-3 control-label">Empresa</label>
+                        <label for="name" class="col-sm-3 control-label">Empresa</label>
                         <div class="col-sm-9">
-                            <input name="empresa" type="text" class="form-control">
+                            <input name="name" type="text" class="form-control">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="inputEmail3" class="col-sm-3 control-label">Local</label>
+                        <label for="title" class="col-sm-3 control-label">Local</label>
                         <div class="col-sm-9">
-                            <input name="local" type="text" class="form-control">
+                            <input name="title" type="text" class="form-control">
                         </div>
                     </div>
                     <div class="form-group">
@@ -547,9 +465,11 @@
                 <div>
             </div>
             <form id="signature-form" method="post" action="{{ route('admin.posts.signature.store', $post->id) }}" > <!-- /admin/products/4/images --><!-- admin/posts/{post}/photos -->
-                {{ csrf_field() }}  
-                <input type="hidden" name="signature-title" value="" id="signature-title">
-                <input type="hidden" name="base64" value="" id="base64">
+                {{ csrf_field() }}
+                <input type="text" name="observation" id="observation">
+                <input type="text" name="email" id="email">
+                <input type="text" name="signature-title" id="signature-title">
+                <input type="hidden" name="base64" id="base64">
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary pull-left" data-dismiss="modal">Cerrar</button>
                     <button id="signature-clear" type="button" class="btn btn-info pull-left">Borrar</button>   <!--  data-action="clear"-->              
@@ -569,11 +489,7 @@
     <!-- Select2 -->
     <link rel="stylesheet" href="{{ asset('adminlte/bower_components/select2/dist/css/select2.min.css') }}">
     <!-- Bootstrap time Picker -->
-    <link rel="stylesheet" href="{{ asset('adminlte/plugins/timepicker/bootstrap-timepicker.min.css') }}">
-
-
-  <!--  <link rel="stylesheet" href="{{ asset('css/signature_pad/signature-pad.css') }}">-->
-  
+    <link rel="stylesheet" href="{{ asset('adminlte/plugins/timepicker/bootstrap-timepicker.min.css') }}">  
 @endpush
 
 @push('scripts')
@@ -584,32 +500,41 @@
     <script src="{{ asset('adminlte/bower_components/ckeditor/ckeditor.js') }}"></script>
     <!-- Select2 -->
     <script src="{{ asset('adminlte/bower_components/select2/dist/js/select2.full.min.js') }}"></script>
-
     <!-- bootstrap time picker -->
     <script src="{{ asset('adminlte/plugins/timepicker/bootstrap-timepicker.min.js') }}"></script>
-
     <!-- Signature Pad -->
     <script src="{{ asset('js/signature_pad/signature_pad.js') }}"></script>
     <script src="{{ asset('js/signature_pad/app.js') }}"></script>
 
     <script>
-    
         $(document).ready(function(){
             
-
             document.getElementById("confirm-button").addEventListener("click", function (event) {
-                document.getElementById("client").classList.remove("has-error");
-                var name = document.getElementsByName("client")[0].value;
-                document.getElementById("client-title").innerHTML = name;
-                document.getElementById("signature-title").value = name;
-                
-                if( name.length > 1 ){                    
-                    document.getElementById("signature").height = "200"
-                    document.getElementById("signature").width = "350";
+                document.getElementById("client-div").classList.remove("has-error");
+                document.getElementById("email-div").classList.remove("has-error");
 
+                var name = document.getElementsByName("client")[0].value;
+                var email = document.getElementById("email-order").value; 
+                var observation = document.getElementById("observation-order").value; 
+                var flag = true;
+                
+                if( name.length == 0 ){                    
+                    document.getElementById("client-div").classList.add("has-error");
+                    flag = false; 
+                } 
+                if( email.length == 0 ){                    
+                    document.getElementById("email-div").classList.add("has-error");
+                    flag = false; 
+                } 
+                if( flag ){
+                    document.getElementById("client-title").innerHTML = name;
+                    document.getElementById("signature-title").value = name;
+                    document.getElementById("email").innerHTML = email;
+                    document.getElementById("observation").innerHTML = observation;
+
+                    document.getElementById("signature").height = "200"
+                    document.getElementById("signature").width = "300";
                     $('#confirm-modal').modal('show');
-                } else {
-                    document.getElementById("client").classList.add("has-error");
                 }
             }, false);
 
@@ -622,8 +547,8 @@
             }, false);
 
             document.getElementById("btn_order").addEventListener("click", function (event) {
-                var arrival_at = document.getElementsByName("arrival_date_at")[0].value+" "+document.getElementsByName("arrival_hour_at")[0].value;;
-                var goes_at = document.getElementsByName("arrival_date_at")[0].value+" "+document.getElementsByName("goes_hour_at")[0].value;;
+                var started_at = document.getElementsByName("started_date_at")[0].value+" "+document.getElementsByName("started_hour_at")[0].value;;
+                var finished_at = document.getElementsByName("started_date_at")[0].value+" "+document.getElementsByName("finished_hour_at")[0].value;;
 
                 var type_id = document.getElementsByName("type_id")[0].value;
                 var type_other = document.getElementsByName("type_other")[0].value;
@@ -633,11 +558,10 @@
                 var problem_id = document.getElementsByName("problem_id")[0].value;
                 var job = document.getElementsByName("job")[0].value;
 
-            //    alert(arrival_at);
                 var url = "{{ route('admin.posts.update', $post) }}"
                 axios.put(url, {
-                        'arrival_at': arrival_at,
-                        'goes_at': goes_at,
+                        'started_at': started_at,
+                        'finished_at': finished_at,
                         'type_id': type_id,
                         'type_other': type_other,
                         'model': model,
@@ -651,6 +575,61 @@
                     
                     document.getElementById('tab_order').classList.remove("active");
                     document.getElementById('tab_parameter').classList.add("active");
+                })
+                .catch(function (error){
+                    console.log(error);        
+                });
+            }, false);
+
+            document.getElementById("parameter-button").addEventListener("click", function (event) {
+                var refrigerant_select = document.getElementById("refrigerants");
+                var refrigerants = [];
+                for (var i=0; i < refrigerant_select.options.length; i++) {
+                    if (refrigerant_select.options[i].selected) {
+                        refrigerants.push(refrigerant_select.options[i].value);
+                    }
+                }
+            
+                var type = document.getElementsByName("type")[0].value;
+                var temperature_radio = document.getElementsByName("temperature");
+                var temperature = "";
+                for(var i=0; i<temperature_radio.length; i= i+1){
+                    if(temperature_radio[i].checked)
+                        temperature = temperature_radio[i].value;
+                }
+                var pressure_high = document.getElementsByName("pressure_high")[0].value;                
+                var pressure_low = document.getElementsByName("pressure_low")[0].value;
+                
+                var refrigerant_radio = document.getElementsByName("refrigerant");  
+                var refrigerant = "";
+                for(var i=0; i<refrigerant_radio.length; i= i+1){
+                    if(refrigerant_radio[i].checked)
+                        refrigerant = refrigerant_radio[i].value;
+                }
+                var oil_radio = document.getElementsByName("oil");  
+                var oil = "";
+                for(var i=0; i<oil_radio.length; i= i+1){
+                    if(oil_radio[i].checked)
+                        oil = oil_radio[i].value;
+                }
+
+              //  var url = "{{ route('admin.posts.parameter.store', $post->id) }}"
+                var url = "{{ route('admin.parameters.update', $post->parameter->id) }}"
+                axios.put(url, {
+                        'type': type,
+                        'temperature': temperature,
+                        'pressure_high': pressure_high,
+                        'pressure_low': pressure_low,
+                        'refrigerants': refrigerants,
+                        'refrigerant': refrigerant,
+                        'oil': oil
+                }).then(function(response){
+                    console.log(response.data);
+                    document.getElementById('li_parameter').classList.remove("active");
+                    document.getElementById('li_material').classList.add("active");
+                    
+                    document.getElementById('tab_parameter').classList.remove("active");
+                    document.getElementById('tab_material').classList.add("active");
                 })
                 .catch(function (error){
                     console.log(error);        

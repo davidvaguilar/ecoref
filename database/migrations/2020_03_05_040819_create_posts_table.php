@@ -23,8 +23,8 @@ class CreatePostsTable extends Migration
             $table->timestamp('published_at')->nullable();
             $table->unsignedInteger('category_id')->nullable(); 
 
-            $table->dateTime('arrival_at')->nullable();
-            $table->dateTime('goes_at')->nullable();
+            $table->dateTime('started_at')->nullable();
+            $table->dateTime('finished_at')->nullable();
                 $table->unsignedInteger('type_id')->nullable(); 
             $table->string('type_other')->nullable();
             $table->string('equipment')->nullable();
@@ -33,12 +33,16 @@ class CreatePostsTable extends Migration
                 $table->unsignedInteger('problem_id')->nullable(); 
             $table->text('job')->nullable();
 
+            $table->unsignedInteger('parameter_id')->nullable();
+
             $table->unsignedInteger('client_id')->nullable();
+            $table->unsignedInteger('vehicule_id')->nullable();
           //  $table->string('patent', 10)->nullable();
           //  $table->integer('kilometer_of')->nullable();
           //  $table->integer('kilometer_to')->nullable();
 
             $table->text('observation')->nullable();
+            $table->string('email', 70)->nullable();
             $table->string('signature_id')->nullable();
 
             $table->unsignedInteger('user_id');

@@ -12,29 +12,29 @@
     <table class="table table-bordered text-center">
       <tbody>
         <tr>
-          <td rowspan="3" width="110px"><img src="img/logo.png"></td>
+          <td rowspan="2" width="110px"><img src="img/logo.png"></td>
           <td colspan="3">REPORTE DE TRABAJO</td>
           <td>FOLIO N°<br>{{ $post->id }}</td>
         </tr>
         <tr>
-          <td width="120px">FECHA LLEGADA</td>
-          <td width="120px">HORA LLEGADA<br>sa</td>
-          <td width="120px">HORA RETIRO</td>
-          <td rowspan="2" width="120px">TECNICO RESPONSABLE</td>
+          <td width="120px">FECHA LLEGADA<br>{{ $post->started_at }}</td>
+          <td width="120px">HORA LLEGADA<br>{{ $post->started_at }}</td>
+          <td width="120px">HORA RETIRO<br>{{ $post->finished_at }}</td>
+          <td  width="120px">TECNICO RESPONSABLE</td> <!-- rowspan="2"-->
         </tr>
-        <tr>
+      <!-- <tr>
           <td>VEHICULO/PATENTE</td>
           <td>KM INICIO</td>          
           <td>KM TERMINO</td>
-        </tr>
+        </tr>-->
       </tbody>
     </table>
     <h5>IDENTIFICACION CLIENTE</h5>
     <table class="table table-bordered">
       <tbody>
         <tr>
-          <td width="50%">EMPRESA: {{ $post->client->name }}</td>
-          <td width="50%">LOCAL: {{ $post->client->title }}</td>
+          <td width="50%">EMPRESA: {{ isset($post->client->id) ? $post->client->name : '' }}</td>
+          <td width="50%">LOCAL: {{ isset($post->client->id) ? $post->client->title : '' }}</td>
         </tr>
         <tr>
           <td>DIRECCION: {{ $post->client->adress }}</td>
@@ -166,11 +166,11 @@
       <tbody>
         <tr>
           <td width="50%"></td>
-          <td width="50%"><img src="{{ substr($post->signature->url, 1) }}">  </td>
+          <td width="50%"><img src="{{ isset($post->signature->id) ? substr($post->signature->url, 1) : '' }}">  </td>
         </tr>
         <tr>
           <td>FIRMA TECNICO</td>
-          <td>{{ $post->signature->title }}</td>
+          <td>{{ isset($post->signature->id) ? $post->signature->title : '' }}</td>
         </tr>
       </tbody>
     </table>

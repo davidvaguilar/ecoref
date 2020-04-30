@@ -84,6 +84,11 @@ function(){
     Route::delete('posts/{post}', 'PostsController@destroy')->name('admin.posts.destroy');*/
 
     Route::post('posts/{post}/photos', 'PhotosController@store')->name('admin.posts.photos.store');
+    Route::post('posts/{post}/parameter', 'ParametersController@store')->name('admin.posts.parameter.store');
+    
+    //nuevo
+    Route::put('parameters/{parameter}', 'ParametersController@update')->name('admin.parameters.update');
+
     Route::post('posts/{post}/signature', 'SignatureController@store')->name('admin.posts.signature.store');
 
     Route::get('posts/{post}/report', 'PostsController@report')->name('productos_pdf');

@@ -65,6 +65,10 @@
                                         class="btn btn-xs btn-danger"
                                     ><i class="fa fa-times"></i></button>
                                 </form>
+                                <button type="submit"
+                                        onclick="return confirm('¿Estas seguro de querer volver a enviar este reporte?')"
+                                        class="btn btn-xs btn-success"
+                                    ><i class="fa fa-envelope-o"></i></button>
                             </td>
                         </tr>
                     @endforeach

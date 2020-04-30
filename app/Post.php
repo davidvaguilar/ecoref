@@ -9,10 +9,10 @@ class Post extends Model
 {
     protected $fillable = [ 
         'title', 'url','body', 'iframe', 'excerpt', 'published_at', 'category_id', 'user_id', 
-        'arrival_at', 'goes_at'
+        'started_at', 'finished_at'
     ];
 
-    protected $dates = ['published_at', 'arrival_at', 'goes_at'];  // Instancia de Carbon
+    protected $dates = ['published_at', 'started_at', 'finished_at'];  // Instancia de Carbon
 //    protected $dates = ['published_at'];  // Instancia de Carbon
 
     //protected $with = (['category', 'tags', 'owner', 'photos']);   CUIDADO YA QUE CARGA pede formar loop
@@ -39,6 +39,10 @@ class Post extends Model
 
     public function problem(){  
         return $this->belongsTo(Problem::class);
+    }
+
+    public function parameter(){  
+        return $this->belongsTo(Parameter::class);
     }
 
     public function signature(){  

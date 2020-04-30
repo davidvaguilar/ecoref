@@ -47,6 +47,8 @@ class PhotosController extends Controller
         /*Image::make($request->file('photo'))
             ->resize(500, 500)
             ->save('img/orders/'.$file_name);  */
+        // no sirve   ini_set('post_max_size', '40M');  
+        // no sirve  ini_set('upload_max_filesize', '20M');  //Temporalmente  post_max_size = 10M
         ini_set('memory_limit','256M');  // Temporalmente aumento de memoria
         $file = $request->file('photo');
         $image_name = uniqid().'.'.$file->getClientOriginalExtension();
