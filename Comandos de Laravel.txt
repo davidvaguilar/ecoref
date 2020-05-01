@@ -7,5 +7,7 @@ Spatie\Permission\PermissionServiceProvider::class,  //laravel -Permission
 
 php artisan vendor:publish --provider="Spatie\Permission\PermissionServiceProvider" --tag="migrations"
 
+CUANDO SE TRABA
+composer dump-autoload
 
 composer require barryvdh/laravel-debugbar --dev INSTALAR BARRA PARA MONITOR DESARROLLO
