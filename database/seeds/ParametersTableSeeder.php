@@ -4,7 +4,7 @@ use App\Parameter;
 use Illuminate\Database\Seeder;
 
 class ParametersTableSeeder extends Seeder
-{
+{ 
     /**
      * Run the database seeds.
      *
