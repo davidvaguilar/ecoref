@@ -39,7 +39,7 @@ class PostsController extends Controller
         $post = Post::create([
             'title' => $request->get('title'),
             'user_id' => auth()->id(),
-            'published_at' => Carbon::now()
+            'started_at' => Carbon::now()
         ]);
 
         $parameter = new Parameter();
@@ -64,49 +64,32 @@ class PostsController extends Controller
     }
 
     
-    public function selectClient(Post $post, $id){
-        dd($id);
-        //dd("sdasd");
-        /*$role = auth()->user()->role;
-        return view( 'appointments.show', compact('appointment', 'role') );*/
-        
-        $materials = Material::where('post_id', '=', $id)->get();
-      //  $materials = Material::find($id);
-//dd( $materials );
-        return[
-            'materials' => $materials
-        ];
-       // return "show";
+    public function selectClient(Request $request, $id){
+        $post = Post::find($id);
+
+        $post->client_id = $request->client_id;
+        $post->save();
+        return back();
     }
 
     public function edit(Post $post){
         $this->authorize('update', $post);
 
-        $categories = Category::all();
-        $tags = Tag::all();
         $refrigerants = Refrigerant::all();
         $problems = Problem::all();
         $types = Type::all();
       
-       //dd($post->parameter->refrigerants()->pluck('refrigerant_id'));
-
-        return view('admin.posts.edit', compact('categories', 'tags', 'post', 'problems', 'types', 'refrigerants'));
-        
-        /*return view('admin.posts.edit', [
-            'categories' => Category::all(),
-            'tags' => Tag::all(),
-            'post' => $post
-        ]);*/
+        return view('admin.posts.edit', compact('post', 'problems', 'types', 'refrigerants'));
     }
     
     public function update( Post $post, Request $request ){    //Post $post,  StorePostRequest $request
         if( !$request->ajax()) return redirect('/');
-
-       // $post->arrival_at = $request->get('arrival_at');
-       // $post->goes_at = $request->get('goes_at');  // esto es cuando firman
+//dd($request->get('started_at'));
+        $post->started_at = $request->get('started_at');
 
         $post->type_id = $request->get('type_id');
         $post->type_other = $request->get('type_other');
+        $post->equipment = $request->get('equipment');
         $post->model = $request->get('model');
         $post->serie = $request->get('serie');
         $post->problem_id = $request->get('problem_id');

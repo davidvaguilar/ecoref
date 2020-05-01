@@ -86,11 +86,11 @@ function(){
     Route::post('posts/{post}/photos', 'PhotosController@store')->name('admin.posts.photos.store');
     Route::post('posts/{post}/parameter', 'ParametersController@store')->name('admin.posts.parameter.store');
     
+    Route::put('posts/{post}/client', 'PostsController@selectClient')->name('admin.posts.selectClient');
+
     //nuevo
     Route::put('parameters/{parameter}', 'ParametersController@update')->name('admin.parameters.update');
-
     Route::post('posts/{post}/signature', 'SignatureController@store')->name('admin.posts.signature.store');
-
     Route::get('posts/{post}/report', 'PostsController@report')->name('productos_pdf');
 
     Route::delete('photos/{photo}', 'PhotosController@destroy')->name('admin.photos.destroy');

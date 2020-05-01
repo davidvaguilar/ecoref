@@ -132,16 +132,18 @@ class Post extends Model
                                 : null;
     }
 
-    public function setArrivalAtAttribute($arrival_at){
-        $this->attributes['arrival_at'] = $arrival_at 
-                                ? Carbon::parse($arrival_at)
+    public function setStartedAtAttribute($started_at){
+        $this->attributes['started_at'] = $started_at 
+                                ? Carbon::parse($started_at) 
                                 : null;
     }
-    public function setGoesAtAttribute($goes_at){
-        $this->attributes['goes_at'] = $goes_at 
-                                ? Carbon::parse($goes_at)
+
+    public function setFinishedAtAttribute($finished_at){
+        $this->attributes['finished_at'] = $finished_at 
+                                ? Carbon::parse($finished_at) 
                                 : null;
     }
+
 
     public function setCategoryIdAttribute($category){
         $this->attributes['category_id'] = Category::find($category)

@@ -3,10 +3,14 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Post;
+use Mail;
 use App\Client;
 use App\Signature;
+use Carbon\Carbon;
+use App\Mail\WorkOrder;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade as PDF;
 
 class SignatureController extends Controller
 {
@@ -26,10 +30,30 @@ class SignatureController extends Controller
             $signature->save();
 
             $post = Post::find($id);
+            $pdf = PDF::loadView('pdf.order', ['post'=> $post]);   
+
+            $url = 'pdf/order/ordentrabajo-'.$post->id.'-'.Carbon::now()->format('dmYHis').'.pdf';
+            $pdf->save($url);
+
+            $post->finished_at = Carbon::now();
+            $post->observation = $request->observation;
             $post->signature_id = $signature->id;
+            $post->email = $request->email;
+            $post->file = $url;
             $post->save();
 
-            return back();
+        /*    Mail::send('emails/word-order', $post, function ($mail) use ($pdf) {
+                  $mail->from('david.aguilar@msn.com', 'David Doe');
+                  $mail->to('david.villegas.aguilar@gmail.com');
+                  $mail->attachData($pdf->output(), 'test.pdf');
+              });
+*/
 
+            Mail::to($post->email)->send(new WorkOrder($post))->attachData($pdf->output(), 'test.pdf');;
+
+            //return back();
+            return redirect()
+                  ->route('admin.posts.index')
+                  ->with('flash', 'Reporte de trabajo ha sido enviado al correo.');
       }
 }

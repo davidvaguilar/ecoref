@@ -43,8 +43,6 @@ class PostsTableSeeder extends Seeder
         $post = new Post;
         $post->title = "1017";
         $post->url = str_slug("1017");
-        $post->excerpt = "Extracto de mi tercer post";
-        $post->body = "<p>Contenido de mi tercer post </p>";
         $post->started_at = Carbon::now()->subDays(7);
         $post->type_id = 3;
         $post->problem_id = 4;

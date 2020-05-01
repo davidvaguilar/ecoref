@@ -69,7 +69,7 @@
                             <input name="started_date_at"  
                                     type="text" 
                                     class="form-control pull-right datepicker" 
-                                    value="{{ old('started_at', $post->started_at ? $post->started_at->format('d/m/Y') : null) }}">
+                                    value="{{ old('started_at', $post->started_at ? $post->started_at->format('m/d/Y') : null) }}">
                         </div>
                         <label for="started_hour_at" class="col-sm-2 control-label">Hora Llegada</label>
                         
@@ -79,21 +79,13 @@
                                     class="form-control timepicker"
                                     value="{{ old('started_at', $post->started_at ? $post->started_at->format('H:i') : null) }}">   
                         </div>
-                        <label for="finished_hour_at" class="col-sm-2 control-label">Hora Retiro</label>
-                        <div class="col-sm-2">
-                            <input name="finished_hour_at" 
-                                    type="text" 
-                                    class="form-control timepicker"
-                                    value="{{ old('finished_at', $post->finished_at ? $post->finished_at->format('H:i') : null) }}"> 
-                        </div>
+                  
                     </div>
                     <div class="form-group">
-                        <label for="client" class="col-sm-2 control-label">Empresa</label>
-                        <div class="col-sm-7">
-                            <span>{{  isset($post->client->id) ? $post->client->name : '' }}</span>
-                        </div>
-                        <div class="col-sm-3">
-                            <button id="client-button" type="button" class="btn btn-info btn-block">CLIENTE</button>                     
+                        <label class="col-sm-4 control-label">Empresa: {{  isset($post->client->id) ? $post->client->name : '' }}</label>
+                        <label class="col-sm-4 control-label">Direccion: {{  isset($post->client->id) ? $post->client->adress : '' }}</label>
+                        <div class="col-sm-3 pull-right">
+                            <button id="client-button" type="button" class="btn btn-success btn-block">SELECCIONAR CLIENTE</button>                     
                         </div>
                     </div>
                     <div class="form-group">
@@ -188,9 +180,9 @@
                                     <div class="form-group">
                                         <label for="inputPassword3" class="col-sm-2 control-label">Tipo</label>
                                         <div class="col-sm-10">
-                                            <select name="type" class="form-control">
-                                                <option value="BAJA" {{ isset($post->parameter->id) && $post->parameter->type == 'BAJA' ? 'selected' : '' }}>BAJA Temperatura</option>
-                                                <option value="MEDIA" {{ isset($post->parameter->id) && $post->parameter->type == 'MEDIA' ? 'selected' : '' }}>MEDIA Temperatura</option>
+                                            <select name="type" class="form-control" style="font-weight: bold;">
+                                                <option value="BAJA" {{ isset($post->parameter->id) && $post->parameter->type == 'BAJA' ? 'selected' : '' }}>BAJA TEMPERATURA</option>
+                                                <option value="MEDIA" {{ isset($post->parameter->id) && $post->parameter->type == 'MEDIA' ? 'selected' : '' }}>MEDIA TEMPERATURA</option>
                                             </select>                        
                                             {!! $errors->first('tags', '<span class="help-block">:message</span>' ) !!} 
                                         </div>
@@ -278,9 +270,8 @@
                         <div id="quantity-div" class="col-sm-2">
                             <input name="quantity"  
                                 type="number" 
-                                class="form-control pull-right">
+                                class="form-control" value="1">
                         </div>
-
                         <label for="detail" class="col-sm-2 control-label">Material</label>
                         <div id="detail-div" class="col-sm-4">
                             <input name="detail" 
@@ -293,31 +284,43 @@
                         </div>
                     </div>
                 </div>
-                <table id="material-table" class="table table-bordered table-striped text-center">
-                    <thead>
-                        <tr>
-                            <th>Cantidad</th>
-                            <th>Detalle</th>
-                            <th>Valorizador</th>
-                        </tr>
-                    </thead>
-                    <tbody id="material-body">
-                        @if ($post->materials->count())
-                            @foreach ($post->materials as $material)
-                                <tr>
-                                    <td>{{ $material->quantity }}</td>
-                                    <td>{{ $material->detail }}</td>
-                                    <td>{{ $material->price }}</td>
-                                </tr>        
-                            @endforeach
-                        @else
-                            <tr> 
-                                <td colspan="3">No hay materiales seleccionados</td>
+                <div class="table-responsive">
+                    <table id="material-table" class="table table-bordered table-striped text-center">
+                        <thead>
+                            <tr>
+                                <th>Cantidad</th>
+                                <th>Detalle</th>
+                                <th>Acciones</th>
                             </tr>
-                        @endif
-                    </tbody>
-                </table>
-
+                        </thead>
+                        <tbody id="material-body">
+                            @if ($post->materials->count())
+                                @foreach ($post->materials as $material)
+                                    <tr>
+                                        <td>{{ $material->quantity }}</td>
+                                        <td>{{ $material->detail }}</td>
+                                        <td>
+                                            <form method="POST" 
+                                                action="{{ route('admin.materials.destroy', $material) }}" 
+                                                style="display: inline">
+                                                {{ csrf_field() }}
+                                                {{ method_field('DELETE') }}
+                                                <button type="submit" 
+                                                    onclick="return confirm('¿Estas seguro de querer eliminar este material?')"
+                                                    class="btn btn-danger"
+                                                ><i class="fa fa-times"></i></button>
+                                            </form>
+                                        </td>
+                                    </tr>        
+                                @endforeach
+                            @else
+                                <tr> 
+                                    <td colspan="3">No hay materiales seleccionados</td>
+                                </tr>
+                            @endif
+                        </tbody>
+                    </table>
+                </div>
                 <div class="form-horizontal">
                     <div class="form-group">
                         <label class="col-sm-2 control-label">Observaciones</label>
@@ -333,18 +336,18 @@
                         <label class="col-sm-2 control-label">Correo Electronico del Cliente</label>
                         <div class="col-sm-8">
                             <input id="email-order" 
-                                    type="email" class="form-control">   
+                                    type="email" 
+                                    class="form-control" value="{{ old('email', $post->email) }}">   
                         </div>
                     </div>
                     <div id="client-div" class="form-group">
-                        <label class="col-sm-2 control-label">Cliente</label>
+                        <label class="col-sm-2 control-label">Nombre Persona que firma</label>
                         <div class="col-sm-8">
                             <input name="client" 
                                 type="text" 
-                                class="form-control">   
+                                class="form-control" value="{{ isset($post->signature->id) ? $post->signature->title : '' }}">   
                         </div>
                     </div>
-
                     <button id="confirm-button" type="button" class="btn btn-primary btn-block">Guardar y Autorizar</button>
                 </div>
             </div>
@@ -366,14 +369,14 @@
                 </button>
                 <h4 class="modal-title" id="exampleModalLabel">Cliente</h4>
             </div>
-            <form method="post" class="form-horizontal" action="{{ route('admin.posts.photos.store', $post->id) }}" enctype="multipart/form-data">
+            <form method="post" class="form-horizontal" action="{{ route('admin.posts.selectClient', $post->id) }}">
                 {{ csrf_field() }} 
-                <input name="post_id" type="hidden" value="{{ $post->id }}">
+                {{ method_field('PUT') }}
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="client_id" class="col-sm-3 control-label">Codigo Cliente</label>
                         <div class="col-sm-9">
-                            <input name="client_id" type="text" class="form-control">
+                            <input name="client_id" type="text" class="form-control" required>
                         </div>
                     </div>
                 </div>
@@ -529,8 +532,8 @@
                 if( flag ){
                     document.getElementById("client-title").innerHTML = name;
                     document.getElementById("signature-title").value = name;
-                    document.getElementById("email").innerHTML = email;
-                    document.getElementById("observation").innerHTML = observation;
+                    document.getElementById("email").value = email;
+                    document.getElementById("observation").value = observation;
 
                     document.getElementById("signature").height = "200"
                     document.getElementById("signature").width = "300";
@@ -548,11 +551,11 @@
 
             document.getElementById("btn_order").addEventListener("click", function (event) {
                 var started_at = document.getElementsByName("started_date_at")[0].value+" "+document.getElementsByName("started_hour_at")[0].value;;
-                var finished_at = document.getElementsByName("started_date_at")[0].value+" "+document.getElementsByName("finished_hour_at")[0].value;;
 
                 var type_id = document.getElementsByName("type_id")[0].value;
                 var type_other = document.getElementsByName("type_other")[0].value;
 //FALTA EQUIPO
+                var equipment = document.getElementsByName("equipment")[0].value;
                 var model = document.getElementsByName("model")[0].value;
                 var serie = document.getElementsByName("serie")[0].value;
                 var problem_id = document.getElementsByName("problem_id")[0].value;
@@ -561,9 +564,9 @@
                 var url = "{{ route('admin.posts.update', $post) }}"
                 axios.put(url, {
                         'started_at': started_at,
-                        'finished_at': finished_at,
                         'type_id': type_id,
                         'type_other': type_other,
+                        'equipment': equipment,
                         'model': model,
                         'serie': serie,
                         'problem_id': problem_id,
@@ -589,7 +592,6 @@
                         refrigerants.push(refrigerant_select.options[i].value);
                     }
                 }
-            
                 var type = document.getElementsByName("type")[0].value;
                 var temperature_radio = document.getElementsByName("temperature");
                 var temperature = "";
@@ -637,6 +639,16 @@
             }, false);
 
         });
+
+      /*  function destroyMaterial(id){
+            var url = "{{ route('admin.materials.destroy', "+id+") }}"
+            axios.delete(url).then(function(response){
+                console.log(response.data);
+            })
+            .catch(function (error){
+                console.log(error);        
+            });
+        }*/
  
         function addMaterial(){
             document.getElementById('error-div').innerHTML= "";
@@ -660,6 +672,8 @@
                         'quantity': quantity,
                         'detail': detail
                 }).then(function(response){
+                    document.getElementsByName("quantity")[0].value = 1;
+                    document.getElementsByName("detail")[0].value = "";
                     listarMaterial("{{ $post->id }}");
                     console.log(response.data);
                 })
@@ -716,6 +730,7 @@
 
         $('.datepicker').datepicker({
             autoclose: true,
+            setDate: new Date(),
        //     format: 'dd/mm/yyyy' 
         })
     
@@ -724,11 +739,10 @@
         });
 
         $('.timepicker').timepicker({
-        showInputs: false,
-        showMeridian: false,
-        minuteStep: 5,
-        defaultTime: 'current',
-       
+            showInputs: false,
+            showMeridian: false,
+            minuteStep: 5,
+            defaultTime: 'current',
         })
     </script>
 @endpush
