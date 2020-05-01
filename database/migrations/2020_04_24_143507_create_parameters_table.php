@@ -19,10 +19,8 @@ class CreateParametersTable extends Migration
             $table->string('temperature', 2)->nullable();
             $table->unsignedInteger('pressure_low')->nullable();
             $table->unsignedInteger('pressure_high')->nullable();
-            //refrigerant van en tabla aparte;
             $table->string('refrigerant', 10)->nullable();
             $table->string('oil', 10)->nullable();
-            
             $table->timestamps();
         });
     }
