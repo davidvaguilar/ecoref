@@ -15,7 +15,7 @@ use Barryvdh\DomPDF\Facade as PDF;
 class SignatureController extends Controller
 {
       public function store(Request $request, $id){
-                  //dd($request->get('client-name'));  // no nul
+                // dd($request->get('client-name'));
             $base64 = $request->get('base64');
             $path = public_path().'/img/signatures/';
             $image = str_replace('data:image/png;base64,', '', $base64);
@@ -42,14 +42,19 @@ class SignatureController extends Controller
             $post->file = $url;
             $post->save();
 
-        /*    Mail::send('emails/word-order', $post, function ($mail) use ($pdf) {
+    /*        Mail::send('emails/work-order', $post, function ($mail) use ($pdf) {
                   $mail->from('david.aguilar@msn.com', 'David Doe');
                   $mail->to('david.villegas.aguilar@gmail.com');
                   $mail->attachData($pdf->output(), 'test.pdf');
               });
 */
-
-            Mail::to($post->email)->send(new WorkOrder($post))->attachData($pdf->output(), 'test.pdf');;
+            $email = $post->email;
+            $data = ['nombre' => $signature->title];
+            Mail::send('emails.work-order', $data, function ($message) use ($pdf, $email) {
+                  $message->from('david.aguilar@msn.com', 'Ecoref Chile');
+                  $message->to($email);
+                  $message->attachData($pdf->output(), 'test.pdf');
+            });
 
             //return back();
             return redirect()
