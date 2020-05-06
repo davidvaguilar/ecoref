@@ -8,7 +8,7 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-                <h5 class="modal-title" id="exampleModalLabel">Titulo de la publicacion</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Ingrese nuevo numero de Folio</h5>
             </div>
             <div class="modal-body">
                 <div class="form-group {{ $errors->has('title') ? 'has-error' : '' }}">
@@ -16,14 +16,14 @@
                     <input id="post-title"
                         name="title" 
                         class="form-control" 
-                        placeholder="Ingresa aqui el titulo de la publicación" 
-                        value="{{ old('title') }}" autofocus required>  <!-- -->
+                        placeholder="Ingresa aqui un nuevo numero de folio" 
+                        value="{{ old('title') }}" autofocus required>
                     {!! $errors->first('title', '<span class="help-block">:message</span>' ) !!}                        
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary">Crear publicación</button>
+                <button type="button" class="btn btn-secondary pull-left" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Crear Orden de Trabajo</button>
             </div>
             </div>
         </div>

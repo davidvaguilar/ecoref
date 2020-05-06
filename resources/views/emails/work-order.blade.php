@@ -22,14 +22,14 @@
                                         <tbody>
                                             <tr>
                                                 <td class="content-cell" style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; padding: 35px;">
-                                                    <h1 style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; color: #2F3133; font-size: 19px; font-weight: bold; margin-top: 0; text-align: left;">Tus credenciales para acceder a {{ config('app.name') }}</h1>
-                                                    <p style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; color: #74787E; font-size: 16px; line-height: 1.5em; margin-top: 0; text-align: left;">Utiliza estas credenciales para acceder al sistema.</p>
+                                                    <h1 style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; color: #2F3133; font-size: 19px; font-weight: bold; margin-top: 0; text-align: left;">Nueva orden de trabajo de {{ config('app.name') }}</h1>
+                                                    <p style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; color: #74787E; font-size: 16px; line-height: 1.5em; margin-top: 0; text-align: left;">Se ha generado una nueva orden de trabajo a noche de {{ nombre }} </p>
                                                     <div class="table" style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box;">
-                                                        Adjunto PDF con Orden de Trabajo
+                                                        Se adjunta Orden de Trabajo en formato PDF.
                                                     </div>
                                                 
                                                     <p style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; color: #74787E; font-size: 16px; line-height: 1.5em; margin-top: 0; text-align: left;">
-                                                        Gracias,<br> {{ config('app.name') }}</p>
+                                                        Gracias.</p>
                                                 </td>
                                             </tr>
                                         </tbody>
