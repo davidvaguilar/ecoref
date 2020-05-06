@@ -469,14 +469,14 @@
             </div>
             <form id="signature-form" method="post" action="{{ route('admin.posts.signature.store', $post->id) }}" > <!-- /admin/products/4/images --><!-- admin/posts/{post}/photos -->
                 {{ csrf_field() }}
-                <input type="text" name="observation" id="observation">
-                <input type="text" name="email" id="email">
-                <input type="text" name="signature-title" id="signature-title">
+                <input type="hidden" name="observation" id="observation">
+                <input type="hidden" name="email" id="email">
+                <input type="hidden" name="signature-title" id="signature-title">
                 <input type="hidden" name="base64" id="base64">
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary pull-left" data-dismiss="modal">Cerrar</button>
                     <button id="signature-clear" type="button" class="btn btn-info pull-left">Borrar</button>   <!--  data-action="clear"-->              
-                    <button id="signature-button" type="button" class="btn btn-primary">Firmar y Finalizar</button> <!-- id="signature-png" data-action="save-png"-->
+                    <button id="signature-button" type="button" class="btn btn-primary">Finalizar</button> <!-- id="signature-png" data-action="save-png"-->
                 </div>
             </form>
         </div>
