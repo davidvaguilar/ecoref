@@ -36,8 +36,10 @@ function return_bytes($val) {
 ?>
 	<div class="wrapper">
 	
-		<canvas id="signature-pad" class="signature-pad" width=400 height=200></canvas>
-
+		<canvas id="signature-pad" class="signature-pad"  style="border: 2px dashed #ccc" width=400 height=200></canvas>
+		<button id="save-png">Save as PNG</button>
+		
+<button id="clear">Clear</button>
     </div>
     
 @stop
@@ -48,25 +50,63 @@ function return_bytes($val) {
     <script>
 		var canvas = document.querySelector("canvas");
 
-		var signaturePad = new SignaturePad(canvas, {
-			backgroundColor: 'rgb(255, 255, 255)',
-    penColor: "rgb(0, 0, 0)"
+var signaturePad = new SignaturePad(canvas);
+      
+window.resizeCanvas = function () {
+            var ratio =  window.devicePixelRatio || 1;
+            canvas.width = canvas.offsetWidth * ratio;
+            canvas.height = canvas.offsetHeight * ratio;
+            canvas.getContext("2d").scale(ratio, ratio);
+        }
+
+		document.getElementById('save-png').addEventListener('click', function () {
+			if (signaturePad.isEmpty()) {
+				alert("Please provide a signature first.");
+			} else {
+				var dataURL = signaturePad.toDataURL();
+				download(dataURL, "signature.png");
+			}
+		});
+
+		function download(dataURL, filename) {
+			if (navigator.userAgent.indexOf("Safari") > -1 && navigator.userAgent.indexOf("Chrome") === -1) {
+				window.open(dataURL);
+			} else {
+				var blob = dataURLToBlob(dataURL);
+				var url = window.URL.createObjectURL(blob);
+
+				var a = document.createElement("a");
+				a.style = "display: none";
+				a.href = url;
+				a.download = filename;
+
+				document.body.appendChild(a);
+				a.click();
+
+				window.URL.revokeObjectURL(url);
+			}
+		}
+
+		function dataURLToBlob(dataURL) {
+			// Code taken from https://github.com/ebidel/filer.js
+			var parts = dataURL.split(';base64,');
+			var contentType = parts[0].split(":")[1];
+			var raw = window.atob(parts[1]);
+			var rawLength = raw.length;
+			var uInt8Array = new Uint8Array(rawLength);
+
+			for (var i = 0; i < rawLength; ++i) {
+				uInt8Array[i] = raw.charCodeAt(i);
+			}
+
+			return new Blob([uInt8Array], { type: contentType });
+		}
+
+document.getElementById('clear').addEventListener('click', function () {
+  signaturePad.clear();
 });
-        /*var signaturePad = new SignaturePad(document.getElementById('signature-pad'), {
-			backgroundColor: 'rgba(255, 255, 255, 0)',
-			penColor: 'rgb(0, 0, 0)'
-		});*/
-		function resizeCanvas() {
-			var ratio =  Math.max(window.devicePixelRatio || 1, 1);
-    canvas.width = canvas.offsetWidth * ratio;
-    canvas.height = canvas.offsetHeight * ratio;
-    canvas.getContext("2d").scale(ratio, ratio);
-    //signaturePad.clear(); // otherwise isEmpty() might return incorrect value
-}
 
-
-//window.addEventListener("resize", resizeCanvas);
-resizeCanvas();
+        resizeCanvas();
     </script>
 
 @endpush
