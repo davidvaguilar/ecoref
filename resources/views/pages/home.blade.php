@@ -34,10 +34,39 @@ function return_bytes($val) {
 }
 
 ?>
-	<section class="container">
+	<div class="wrapper">
 	
+		<canvas id="signature-pad" class="signature-pad" width=400 height=200></canvas>
 
-
-    </section>
+    </div>
     
 @stop
+
+
+@push('scripts')
+	<script src="https://cdn.jsdelivr.net/npm/signature_pad@2.3.2/dist/signature_pad.min.js"></script>
+    <script>
+		var canvas = document.querySelector("canvas");
+
+		var signaturePad = new SignaturePad(canvas, {
+			backgroundColor: 'rgb(255, 255, 255)',
+    penColor: "rgb(0, 0, 0)"
+});
+        /*var signaturePad = new SignaturePad(document.getElementById('signature-pad'), {
+			backgroundColor: 'rgba(255, 255, 255, 0)',
+			penColor: 'rgb(0, 0, 0)'
+		});*/
+		function resizeCanvas() {
+			var ratio =  Math.max(window.devicePixelRatio || 1, 1);
+    canvas.width = canvas.offsetWidth * ratio;
+    canvas.height = canvas.offsetHeight * ratio;
+    canvas.getContext("2d").scale(ratio, ratio);
+    //signaturePad.clear(); // otherwise isEmpty() might return incorrect value
+}
+
+
+//window.addEventListener("resize", resizeCanvas);
+resizeCanvas();
+    </script>
+
+@endpush

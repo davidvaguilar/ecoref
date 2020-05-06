@@ -18,7 +18,7 @@ class PagesController extends Controller
                 ->get();  */        
             
         //$query = Post::published();
-        $query = Post::with(['category', 'tags', 'owner', 'photos'])->published();
+      /*  $query = Post::with(['category', 'tags', 'owner', 'photos'])->published();
 
         if(request('month')){
             $query->whereMonth('published_at', request('month'));
@@ -27,10 +27,10 @@ class PagesController extends Controller
             $query->whereYear('published_at', request('year'));
         }
         
-        $posts = $query->paginate();
+        $posts = $query->paginate();*/
         //$posts = Post::published()->paginate();
         //$posts = Post::published()->simplePaginate(1);  //ANTERIOR y siguiente
-        return view('pages.home', compact('posts')); 
+        return view('pages.home'); 
     }
 
     public function about(){
