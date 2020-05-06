@@ -10,7 +10,8 @@ class UsersPermissionsController extends Controller
 {
     public function update(Request $request, User $user)
     {   
-        $user->permissions()->detach();
+        //dd($request->permissions);
+       $user->permissions()->detach();
         if($request->filled('permissions')){
             $user->syncPermissions($request->permissions);
         }

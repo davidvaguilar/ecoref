@@ -40,7 +40,7 @@
                 </li>
             @endcan
         </ul>   
-    </li>
+    </li>-->
     @can('view', new App\User)
     <li class="treeview {{ setActiveRoute(['admin.users.index', 'admin.users.create']) }}">
         <a href="#"><i class="fa fa-users"></i> <span>Usuarios</span>

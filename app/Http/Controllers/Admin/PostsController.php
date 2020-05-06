@@ -53,7 +53,7 @@ class PostsController extends Controller
         //dd("sdasd");
         /*$role = auth()->user()->role;
         return view( 'appointments.show', compact('appointment', 'role') );*/
-        
+
         $materials = Material::where('post_id', '=', $id)->get();
       //  $materials = Material::find($id);
 //dd( $materials );

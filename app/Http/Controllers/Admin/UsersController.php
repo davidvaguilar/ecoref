@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\User;
 use Mail;
+Use Image;
 use App\Mail\LoginCredentials;
 use Illuminate\Http\Request;
 use App\Events\UserWasCreated;
@@ -36,7 +37,8 @@ class UsersController extends Controller
     {
         $user = new User;
         $roles = Role::with('permissions')->get();
-        $permissions = Permission::pluck('name','id');
+        //$permissions = Permission::pluck('name','id');
+        $permissions = Permission::all();
         return view('admin.users.create', compact('user', 'roles', 'permissions'));
     }
 
@@ -95,7 +97,8 @@ class UsersController extends Controller
         $this->authorize('update', $user);
         //$roles = Role::pluck('name','id');
         $roles = Role::with('permissions')->get();
-        $permissions = Permission::pluck('name','id');
+        //$permissions = Permission::pluck('id', 'display_name','name');
+        $permissions = Permission::all();
         return view('admin.users.edit', compact('user', 'roles', 'permissions'));
     }
 
@@ -122,6 +125,24 @@ class UsersController extends Controller
         $data = $request->validated();
         $user->update($data);
         return redirect()->route('admin.users.edit', $user)->withFlash('Usuario actualizado');
+    }
+
+    public function signature(Request $request, User $user){
+        $this->validate($request, [
+            'signature' => 'required|image'
+        ]); 
+        $this->authorize('update', $user);
+
+        $file = $request->file('signature');
+        $image_name = uniqid().'.'.$file->getClientOriginalExtension();
+        $image = Image::make($file);
+        $image->save('img/users/'.$image_name);
+
+        $user->url = '/img/users/'.$image_name;
+        $user->save();
+
+        return back()->withFlash('Se le ha asignado una firma');
+       // dd($request);
     }
 
     /**

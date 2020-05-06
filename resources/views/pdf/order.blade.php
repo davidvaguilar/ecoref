@@ -13,14 +13,13 @@
       <tbody>
         <tr>
           <td rowspan="2" width="110px"><img src="img/logo.png"></td>
-          <td colspan="3">REPORTE DE TRABAJO</td>
+          <td colspan="2">REPORTE DE TRABAJO</td>
           <td>FOLIO N°<br>{{ $post->id }}</td>
         </tr>
         <tr>
           <td width="120px">FECHA LLEGADA<br>{{ $post->started_at }}</td>
-          <td width="120px">HORA LLEGADA<br>{{ $post->started_at }}</td>
-          <td width="120px">HORA RETIRO<br>{{ $post->finished_at }}</td>
-          <td  width="120px">TECNICO RESPONSABLE</td> <!-- rowspan="2"-->
+          <td width="120px">FECHA RETIRO<br>{{ $post->started_at }}</td>
+          <td  width="120px">TECNICO RESPONSABLE<br>Cod. {{ $post->owner->id }}</td> <!-- rowspan="2"-->
         </tr>
       <!-- <tr>
           <td>VEHICULO/PATENTE</td>
@@ -70,38 +69,11 @@
       <thead>
         <tr>
           <th width="50%">PARAMETROS/MEDICIONES/NIVELES BT°</th>
-          <th width="50%">PARAMETROS/MEDICIONES/NIVELES MT°</th>
+          <th width="50%">MATERIALES</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td>
-
-            <table class="table" >
-              <tbody>
-                <tr>
-                  <td width="25%">TEMPERATURA</td>
-                  <td width="25%">PRESIONES</td>                  
-                  <td width="50%">REFRIGERANTE</td>
-                </tr>
-                <tr>
-                  <td rowspan="2">SI CUMPLE</td>    
-                  <td>ALTA: 200</td>      
-                  <td rowspan="2">R</td>        
-                </tr>
-                <tr>
-                  <td>BAJA: 200</td>            
-                </tr>
-                <tr>
-                  <td colspan="3">REFRIGERANTE: asdasd adas das </td>            
-                </tr>
-                <tr>
-                  <td colspan="3">ACEITE: </td>            
-                </tr>
-              </tbody>
-            </table>
-            
-          </td>
           <td>
 
             <table class="table">
@@ -112,48 +84,48 @@
                   <td width="50%">REFRIGERANTE</td>
                 </tr>
                 <tr>
-                  <td rowspan="2">SI CUMPLE</td>    
-                  <td>ALTA: 200</td>      
-                  <td rowspan="2">R</td>        
+                  <td rowspan="2">{{ $post->parameter->temperature }} CUMPLE</td>    
+                  <td>ALTA: {{ $post->parameter->pressure_high }}</td>      
+                  <td rowspan="2">{{ collect( $post->parameter->refrigerants->pluck('name') ) }}</td>        
                 </tr>
                 <tr>
-                  <td>BAJA: 200</td>            
+                  <td>BAJA: {{ $post->parameter->pressure_low }}</td>            
                 </tr>
                 <tr>
-                  <td colspan="3">REFRIGERANTE: asdasd adas das </td>            
+                  <td colspan="3">REFRIGERANTE: {{ $post->parameter->refrigerant }} </td>            
                 </tr>
                 <tr>
-                  <td colspan="3">ACEITE: </td>            
+                  <td colspan="3">ACEITE: {{ $post->parameter->oil }}</td>            
                 </tr>
               </tbody>
-            </table> 
+            </table>
+            
+          </td>
+          <td>
+
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>DETALLE</th>
+                </tr>
+              </thead>
+              <tbody>
+              @if ($post->materials->count())
+                @foreach ($post->materials as $material)
+                <tr>
+                  <td>{{ $material->quantity }}</td>
+                  <td>{{ $material->detail }}</td>
+                </tr>        
+                @endforeach
+              @endif
+              </tbody>
+            </table>
           </td>
         </tr>
       </tbody>
     </table>
     
-    <h5>MATERIALES</h5>
-    <table class="table table-bordered">
-      <thead>
-        <tr>
-          <th>CANTIDAD</th>
-          <th>DETALLE</th>
-          <th>VALORIZADO</th>
-        </tr>
-      </thead>
-      <tbody>
-      @if ($post->materials->count())
-        @foreach ($post->materials as $material)
-        <tr>
-          <td>{{ $material->quantity }}</td>
-          <td>{{ $material->detail }}</td>
-          <td>{{ $material->price }}</td>
-        </tr>        
-        @endforeach
-      @endif
-      </tbody>
-    </table>
-
     <table class="table table-bordered">
       <tbody>
         <tr>
@@ -161,22 +133,32 @@
         </tr>
       </tbody>
     </table>
-
+   
     <table class=" text-center" style="width:100%;">
       <tbody>
         <tr>
-          <td width="50%"></td>
-          <td width="50%"><img src="{{ isset($post->signature->id) ? substr($post->signature->url, 1) : '' }}">  </td>
+          <td width="50%"><img src="{{ isset($post->owner->url) ? substr($post->owner->url, 1) : '' }}" width="150"> </td>
+          <td width="50%"><img src="{{ isset($post->signature->id) ? substr($post->signature->url, 1) : '' }}" width="150"> </td>
         </tr>
         <tr>
-          <td>FIRMA TECNICO</td>
+          <td>{{ $post->owner->name }}</td>
           <td>{{ isset($post->signature->id) ? $post->signature->title : '' }}</td>
         </tr>
       </tbody>
     </table>
 
+    <div style="page-break-after:always;"></div>
+
+    
 
     @if ($post->photos->count())
+      <table class="table table-bordered">
+        <tbody>
+          <tr>
+            <td width="100%">{{ $post->id }}{{ isset($post->client->id) ? $post->client->title : '' }}{{ $post->owner->name }}{{ $post->started_at }}</td>
+          </tr>
+        </tbody>
+      </table>
       <table class="text-center">
         <tbody>
         <tr>
@@ -190,10 +172,8 @@
               <br>
               {{ $photo->title }}              
             </td>    
-          
           @endforeach
           </tr>  
-
         </tbody>
       </table>
     @endif

@@ -6,7 +6,7 @@
       <div class="box box-primary">
         <div class="box-body box-profile">
           <img class="profile-user-img img-responsive img-circle" 
-                src=" {{ asset('adminlte/img/user4-128x128.jpg') }}" 
+                src="{{ $user->url }}" 
                 alt="{{ $user->name }}">
           <h3 class="profile-username text-center">{{ $user->name }}</h3>
           <p class="text-muted text-center">{{ $user->getRoleNames()->implode(', ') }}</p>
@@ -31,21 +31,21 @@
     <div class="col-md-3">
       <div class="box box-primary">
         <div class="box-header with-border">
-            <h3 class="box-title">Publicaciones</h3>
+            <h3 class="box-title">Ordenes de Trabajo</h3>
         </div>
         <div class="box-body">
-          @forelse ($user->posts as $post)
+          @forelse ($user->posts as $post) 
               <a href="{{ route('posts.show', $post) }}" target="_blank">
-                  <strong>{{ $post->title }}</strong>
+                  <strong>Folio N° {{ $post->title }}</strong>
               </a>
               <br>
-              <small class="text-muted">Publicado el {{ $post->published_at->format('d/m/Y') }} </small>
-              <p class="text-muted">{{ $post->excerpt }}</p>
+              <small class="text-muted">Generado el {{ $post->started_at->format('d/m/Y') }} </small>
+              <p class="text-muted">Cliente {{ $post->client->name }}</p>
               @unless($loop->last)
                   <hr>
               @endunless
           @empty
-              <small class="text-muted">No tiene ninguna publicación</small>
+              <small class="text-muted">No tiene ninguna orden</small>
           @endforelse
         </div>
       </div>
@@ -57,11 +57,11 @@
         </div>
         <div class="box-body">
           @forelse ($user->roles as $role)
-              <strong>{{ $role->name }}</strong>
+              <strong>{{ $role->display_name }}</strong>
               @if ( $role->permissions->count() )
                   <br>
                   <small class="text-muted">
-                      Permisos: {{ $role->permissions->pluck('name')->implode(', ') }}
+                      Permisos: {{ $role->permissions->pluck('display_name')->implode(', ') }}
                   </small>                            
               @endif
               @unless($loop->last)
@@ -80,7 +80,7 @@
         </div>
         <div class="box-body">
             @forelse ($user->permissions as $permission)
-                <strong>{{ $permission->name }}</strong>
+                <strong>{{ $permission->display_name }}</strong>
                 @unless($loop->last)
                     <hr>
                 @endunless

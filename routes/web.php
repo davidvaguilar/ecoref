@@ -57,6 +57,8 @@ function(){
 
     Route::resource('posts', 'PostsController', ['as' => 'admin']);
 
+    //Route::resource('dashboards', 'DashboardsController', ['as' => 'admin']);
+
     Route::resource('clients', 'ClientsController', ['as' => 'admin']);
 
     Route::resource('users', 'UsersController', ['as' => 'admin']);
@@ -87,6 +89,8 @@ function(){
     Route::post('posts/{post}/parameter', 'ParametersController@store')->name('admin.posts.parameter.store');
     
     Route::put('posts/{post}/client', 'PostsController@selectClient')->name('admin.posts.selectClient');
+
+    Route::put('users/{user}/signature', 'UsersController@signature')->name('admin.users.signature'); //ULTIMO
 
     //nuevo
     Route::put('parameters/{parameter}', 'ParametersController@update')->name('admin.parameters.update');

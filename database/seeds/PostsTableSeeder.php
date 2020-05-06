@@ -49,7 +49,7 @@ class PostsTableSeeder extends Seeder
         $post->client_id = 4;
         
         $post->parameter_id = 3;
-        $post->user_id = 2;
+        $post->user_id = 1;
         $post->save();
 
         $post = new Post;
