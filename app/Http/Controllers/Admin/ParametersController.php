@@ -38,8 +38,10 @@ class ParametersController extends Controller
         $parameter->pressure_high = $request->pressure_high;
         $parameter->refrigerant = $request->refrigerant;
         $parameter->oil = $request->oil;
+
+        $parameter->refrigerant_id = $request->refrigerant_id;
         $parameter->save();
-        $parameter->syncRefrigerants($request->get('refrigerants'));
+                //$parameter->syncRefrigerants($request->get('refrigerants'));
         return json_encode("ok update");
     }
 }

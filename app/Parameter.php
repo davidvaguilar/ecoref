@@ -6,8 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Parameter extends Model
 {
-    public function refrigerants(){ 
+   /* public function refrigerants(){ 
         return $this->belongsToMany(Refrigerant::class);
+    }*/
+
+    public function refrigerants(){  
+        return $this->belongsTo(Refrigerant::class);
     }
 
     public function syncRefrigerants($refrigerants){

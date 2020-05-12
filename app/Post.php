@@ -4,12 +4,13 @@ namespace App;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Post extends Model
 {
     protected $fillable = [ 
         'title', 'url','body', 'iframe', 'excerpt', 'published_at', 'category_id', 'user_id', 
-        'started_at', 'finished_at'
+        'started_at', 'finished_at', 'client_id'
     ];
 
     protected $dates = ['published_at', 'started_at', 'finished_at'];  // Instancia de Carbon

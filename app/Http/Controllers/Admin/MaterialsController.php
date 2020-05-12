@@ -38,8 +38,7 @@ class MaterialsController extends Controller
 
     public function destroy(Material $material){
         $material->delete();
-        return back()
-            ->with('flash', 'El material ha sido eliminada.');
+        return back()->with('flash', 'El material ha sido eliminada.');
     }
 
 }

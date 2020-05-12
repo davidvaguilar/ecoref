@@ -9,7 +9,17 @@ use Illuminate\Http\Request;
 
 class ClientsController extends Controller
 {
-    public function store(Request $request){
+    public function index()
+    {
+        
+        $clients = Client::all();
+     
+        return view('admin.clients.index', compact('clients'));
+    }
+
+
+
+    /*public function store(Request $request){
         $data = $request->validate([
             'name' => 'required',
             'title' => 'required',
@@ -31,5 +41,20 @@ class ClientsController extends Controller
             $post->save();
         };
         return back();
+    }*/
+
+    public function store(Request $request){
+        $data = $request->validate([
+            'name' => 'required',
+        ]);
+
+        $client = new Client();
+        $client->name = $request->name;
+        $client->save();
+        return redirect()->route('admin.clients.edit', $client);
+    }
+
+    public function edit(Client $client){
+        return view('admin.clients.edit', compact('client'));
     }
 }

@@ -16,10 +16,7 @@ class CreatePostsTable extends Migration
         Schema::create('posts', function (Blueprint $table) {
             $table->increments('id');
             $table->string('title', 80);
-            $table->string('url', 80)->unique()->nullable();
-
-     //       $table->timestamp('published_at')->nullable();
-           
+            $table->string('url', 80)->unique()->nullable();           
             $table->dateTime('started_at')->nullable();
             $table->dateTime('finished_at')->nullable();
                 $table->unsignedInteger('type_id')->nullable(); 
@@ -44,6 +41,7 @@ class CreatePostsTable extends Migration
             $table->unsignedInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

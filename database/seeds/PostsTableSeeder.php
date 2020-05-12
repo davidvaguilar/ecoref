@@ -32,7 +32,7 @@ class PostsTableSeeder extends Seeder
         $post = new Post;
         $post->title = "1016";
         $post->url = str_slug("1016");
-        $post->started_at = Carbon::now()->subDays(7);
+        $post->started_at = Carbon::now()->subDays(2);
         $post->type_id = 3;
         $post->problem_id = 3;
         $post->client_id = 3;
@@ -55,7 +55,7 @@ class PostsTableSeeder extends Seeder
         $post = new Post;
         $post->title = "1018";
         $post->url = str_slug("1018");
-        $post->started_at = Carbon::now()->subDays(7);
+        $post->started_at = Carbon::now()->subDays(1);
         $post->type_id = 3;
         $post->problem_id = 1;
         $post->client_id = 1;

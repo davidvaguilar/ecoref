@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Post;
+use App\Client;
 use App\Category;
 use App\Tag;
 use App\Material;
@@ -22,7 +23,7 @@ class PostsController extends Controller
         //$posts = Post::all();   //$posts = Post::where('user_id', auth()->id())->get();
         //$posts = auth()->user()->posts;
         
-        $posts = Post::allowed()->get();
+        $posts = Post::allowed()->orderBy('started_at', 'desc')->get();
         return view('admin.posts.index', compact('posts'));
     }
 
@@ -34,10 +35,19 @@ class PostsController extends Controller
 
     public function store(Request $request){
         $this->authorize('create', new Post);
-        $this->validate($request, ['title' => 'required|min:3'] );
+        $code = $request->get('code');
+        $client_id = Client::where('code', $code)->get()->pluck('id')->first();
 
+        if($client_id == NULL){
+            return back()->with('flash', 'Cliente no existe');
+        }
+        $this->validate($request, [
+            'title' => 'required|min:3',
+            'code' => 'required'
+        ]);
         $post = Post::create([
-            'title' => $request->get('title'),
+            'title' => $request->get('title'),  
+            'client_id' => $client_id,  
             'user_id' => auth()->id(),
             'started_at' => Carbon::now()
         ]);
@@ -49,44 +59,62 @@ class PostsController extends Controller
         return redirect()->route('admin.posts.edit', $post);
     }
 
-    public function show($id){
-        //dd("sdasd");
-        /*$role = auth()->user()->role;
-        return view( 'appointments.show', compact('appointment', 'role') );*/
-
+    /*public function show($id){
         $materials = Material::where('post_id', '=', $id)->get();
-      //  $materials = Material::find($id);
-//dd( $materials );
         return[
             'materials' => $materials
         ];
-       // return "show";
+    }*/
+
+    public function show($id){
+        $post = Post::find($id);
+        return[
+            'post' => $post
+        ];
     }
 
-    
     public function selectClient(Request $request, $id){
         $post = Post::find($id);
-
-        $post->client_id = $request->client_id;
+        $client_id = Client::where('code', $request->client_id)->get()->pluck('id')->first();
+        if($client_id == NULL){
+            return back()->with('flash', 'Cliente no existe');
+        }
+    
+        $post->client_id = $client_id;
         $post->save();
         return back();
     }
 
     public function edit(Post $post){
         $this->authorize('update', $post);
-
         $refrigerants = Refrigerant::all();
         $problems = Problem::all();
         $types = Type::all();
-      
         return view('admin.posts.edit', compact('post', 'problems', 'types', 'refrigerants'));
     }
-    
-    public function update( Post $post, Request $request ){    //Post $post,  StorePostRequest $request
-        if( !$request->ajax()) return redirect('/');
-//dd($request->get('started_at'));
-        $post->started_at = $request->get('started_at');
 
+    public function updateTitle( Post $post, Request $request ){
+       
+        $this->validate($request, [
+            'title' => 'required',
+        ]);
+       
+        $post->title = $request->get('title');
+        $post->save();
+        return back()->with('flash', 'Folio cambiado');
+    }
+
+    public function updateFinished( Post $post ){
+        $post->finished_at = Carbon::now();
+        $post->save();
+        return redirect()
+                ->route('admin.posts.index')
+                ->with('flash', 'Orden de trabajo ha finalizado.');
+    }
+    
+    public function update( Post $post, Request $request ){
+        if( !$request->ajax()) return redirect('/');
+       
         $post->type_id = $request->get('type_id');
         $post->type_other = $request->get('type_other');
         $post->equipment = $request->get('equipment');
@@ -98,20 +126,11 @@ class PostsController extends Controller
         $post->save();
 
         return json_encode("ok2");
-        //validacion
+    
         //dd($request->filled('published_at'));
-        /*$this->validate($request,[
-            'title' => 'required',
-            'body' => 'required',
-            'category' => 'required',
-            'tags' => 'required',
-            'excerpt' => 'required'
-        ]);*/
         //$this->validatePost($request);
 
         /*$post->title = $request->get('title');
-        $post->url = str_slug($request->get('title'));
-        $post->body = $request->get('body');
         $post->published_at = $request->get('published_at');  //hacia un accesor
         $post->category_id = $request->get('category_id');
         $post->save();*/
@@ -139,6 +158,14 @@ class PostsController extends Controller
 //return redirect()->route('admin.posts.edit', $post)->with('flash', 'La publicacion ha sido guardada');
         //return back()->with('flash', 'Tu publicacion ha sido guardada');
     }
+
+  /*  public function update_folio( Post $post, Request $request ){
+       
+        $post->title = $request->get('title');
+        $post->save();
+
+        return back();
+    }**/
 
     /*public function validatePost($request){
         return $this->validate($request, [
@@ -186,6 +213,5 @@ class PostsController extends Controller
             ->route('admin.posts.index')
             ->with('flash', 'La publicación ha sido eliminada.');
     }
-
 
 }

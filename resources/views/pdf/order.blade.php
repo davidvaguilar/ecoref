@@ -19,7 +19,7 @@
         <tr>
           <td width="120px">FECHA LLEGADA<br>{{ $post->started_at }}</td>
           <td width="120px">FECHA RETIRO<br>{{ $post->started_at }}</td>
-          <td  width="120px">TECNICO RESPONSABLE<br>Cod. {{ $post->owner->id }}</td> <!-- rowspan="2"-->
+          <td  width="120px">TECNICO RESPONSABLE<br>Cod. {{ $post->owner->id }}</td>
         </tr>
       <!-- <tr>
           <td>VEHICULO/PATENTE</td>
@@ -86,7 +86,15 @@
                 <tr>
                   <td rowspan="2">{{ $post->parameter->temperature }} CUMPLE</td>    
                   <td>ALTA: {{ $post->parameter->pressure_high }}</td>      
-                  <td rowspan="2">{{ collect( $post->parameter->refrigerants->pluck('name') ) }}</td>        
+                  <td rowspan="2">@if( isset($post->parameter->refrigerant_id) ) 
+                                    @foreach ($refrigerants as $refrigerant)
+                                        @if( $post->parameter->refrigerant_id == $refrigerant->id ) 
+                                           {{ $refrigerant->name }}
+                                        @endif
+                                    @endforeach   
+                                @else 
+                                    {{ '' }}
+                                @endif </td>        
                 </tr>
                 <tr>
                   <td>BAJA: {{ $post->parameter->pressure_low }}</td>            

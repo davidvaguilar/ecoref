@@ -56,9 +56,6 @@ function(){
     Route::get('/', 'AdminController@index')->name('dashboard');
 
     Route::resource('posts', 'PostsController', ['as' => 'admin']);
-
-    //Route::resource('dashboards', 'DashboardsController', ['as' => 'admin']);
-
     Route::resource('clients', 'ClientsController', ['as' => 'admin']);
 
     Route::resource('users', 'UsersController', ['as' => 'admin']);
@@ -66,7 +63,9 @@ function(){
     Route::resource('permissions', 'PermissionsController', ['only' => ['index', 'edit', 'update'], 'as' => 'admin']);
 
     Route::resource('materials', 'MaterialsController', ['as' => 'admin']);
-
+    Route::resource('types', 'TypesController', ['as' => 'admin']);
+    Route::resource('problems', 'ProblemsController', ['as' => 'admin']);    
+    Route::resource('refrigerants', 'RefrigerantsController', ['as' => 'admin']);
 
     //Route::put('users/{user}/roles', 'UsersRolesController@update')->name('admin.users.roles.update');
     Route::middleware('role:Admin')
@@ -89,6 +88,8 @@ function(){
     Route::post('posts/{post}/parameter', 'ParametersController@store')->name('admin.posts.parameter.store');
     
     Route::put('posts/{post}/client', 'PostsController@selectClient')->name('admin.posts.selectClient');
+    Route::put('posts/{post}/title', 'PostsController@updateTitle')->name('admin.posts.updateTitle');
+    Route::put('posts/{post}/finished', 'PostsController@updateFinished')->name('admin.posts.updateFinished');
 
     Route::put('users/{user}/signature', 'UsersController@signature')->name('admin.users.signature'); //ULTIMO
 

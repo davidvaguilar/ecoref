@@ -2,7 +2,7 @@
 
 @section('header')
     <h1>
-        Orden de Trabajo Folio N° {{ $post->title }}
+        Orden de Trabajo Folio N° <button type="button" data-toggle="modal" data-target="#order-modal" class="btn btn-primary">{{ $post->title }}</button>
     </h1>
 @stop
 
@@ -24,26 +24,24 @@
                 <div class="box-body">
                     <div class="row">
                         @foreach ($post->photos as $photo)
-                            <form method="POST" action="{{ route('admin.photos.destroy', $photo) }}">
+                            <form method="POST" action="{{ route('admin.photos.destroy', $photo) }}" style="display: inline">
                                 {{ csrf_field() }}
                                 {{ method_field('DELETE') }}
-                                <div class="col-md-2">
-                                    <button class="btn btn-danger btn-xs" style="position:absolute">
+                                <div class="col-xs-4">
+                                    <button class="btn btn-danger" style="position:absolute">
                                         <i class="fa fa-remove"></i>
                                     </button>
-                                    <img src="{{ url($photo->url) }}" class="img-responsive" width="100px"  >
+                                    <img src="{{ url($photo->url) }}" class="img-responsive" width="100px">
                                 </div>
                             </form>
                         @endforeach
                         @if ($post->signature_id != null )
-                 
-                                <div class="col-md-2">
-                                    <button class="btn btn-danger btn-xs" style="position:absolute">
-                                        <i class="fa fa-remove"></i>
-                                    </button>
-                                    <img src="{{ url($post->signature->url) }}" class="img-responsive" width="100px"  >
-                                </div>
-                            
+                            <div class="col-md-2">
+                                <button class="btn btn-danger btn-xs" style="position:absolute">
+                                    <i class="fa fa-remove"></i>
+                                </button>
+                                <img src="{{ url($post->signature->url) }}" class="img-responsive" width="100px"/>
+                            </div>
                         @endif
                     </div>
                 </div>
@@ -57,51 +55,34 @@
           <ul class="nav nav-tabs nav-justified">
             <li id="li_order" class="active"><a href="#tab_order" data-toggle="tab">ANTECEDENTES</a></li>
             <li id="li_parameter"><a href="#tab_parameter" data-toggle="tab">MEDICIONES</a></li>
-            <li id="li_material" ><a href="#tab_material" data-toggle="tab">MATERIALES</a></li>
+            <li id="li_material"><a href="#tab_material" data-toggle="tab">MATERIALES</a></li>
+            <li id="li_photo"><button id="photo-button" data-toggle="modal" data-target="#photo-modal" type="button" class="btn btn-link btn-block">FOTOGRAFIAS</button></li>
+            <li id="li_signature" onclick="selectSignature();"><a href="#tab_signature" data-toggle="tab">FIRMA</a></li>
           </ul>
           <div class="tab-content">
             <div class="tab-pane active" id="tab_order">
 
                 <form class="form-horizontal">
                     <div class="form-group">
-                        <label for="started_date_at" class="col-sm-2 control-label">Fecha</label>
-                        <div class="col-sm-2">
-                            <input name="started_date_at"  
-                                    type="text" 
-                                    class="form-control pull-right datepicker" 
-                                    value="{{ old('started_at', $post->started_at ? $post->started_at->format('m/d/Y') : null) }}">
-                        </div>
-                        <label for="started_hour_at" class="col-sm-2 control-label">Hora Llegada</label>
-                        
-                        <div class="col-sm-2">
-                            <input name="started_hour_at" 
-                                    type="text" 
-                                    class="form-control timepicker"
-                                    value="{{ old('started_at', $post->started_at ? $post->started_at->format('H:i') : null) }}">   
-                        </div>
-                  
+                        <label for="started_date_at" class="col-sm-4 control-label">Fecha Llegada: {{ $post->started_at->format('d/m/Y  H:i') }}</label>
+                        <label for="technical" class="col-sm-6 control-label">Tecnico Responsable: {{ $post->owner->name }}</label>
+                       
                     </div>
                     <div class="form-group">
-                        <label class="col-sm-4 control-label">Empresa: {{  isset($post->client->id) ? $post->client->name : '' }}</label>
-                        <label class="col-sm-4 control-label">Direccion: {{  isset($post->client->id) ? $post->client->adress : '' }}</label>
-                        <div class="col-sm-3 pull-right">
-                            <button id="client-button" type="button" class="btn btn-success btn-block">SELECCIONAR CLIENTE</button>                     
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="technical" class="col-sm-2 control-label">Tecnico Responsable</label>
-                        <div class="col-sm-7">
-                            <span>{{ $post->owner->name }}</span>
-                        </div>
-                        <div class="col-sm-3">
-                            <button id="photo-button" type="button" class="btn btn-info btn-block">FOTOGRAFIAS</button>                     
-                        </div>
+                        <label class="col-sm-4 control-label">Empresa: <button id="client-button" type="button" class="btn btn-success">{{  isset($post->client->id) ? $post->client->name : '' }}</button> </label>
+                        <label class="col-sm-4 control-label">Local: {{  isset($post->client->id) ? $post->client->title : '' }}</label>
+                        <!--<label class="col-sm-4 control-label">Direccion: {{--  isset($post->client->id) ? $post->client->adress : '' --}}</label>-->
+                        <!--<div class="col-sm-3 pull-right">
+                            <button id="client-button" type="button" class="btn btn-success">{{--  isset($post->client->id) ? $post->client->name : '' --}}</button>                     
+                        </div>-->
                     </div>
 
-                    <div class="form-group {{ $errors->has('type_id') ? 'has-error' : '' }}">
-                        <label for="type_id" class="col-sm-2 control-label">Tipo de Orden</label>
-                        <div class="col-sm-4">
-                            <select name="type_id" class="form-control">
+                    <div id="type_div" class="form-group {{ $errors->has('type_id') ? 'has-error' : '' }}">
+                        <label for="type_id" class="col-xs-4 control-label">Tipo de Orden</label>
+                        <div class="col-xs-8">
+                            <select id="type_id"
+                                    name="type_id" 
+                                    class="form-control">
                                 <option value="">Seleccione un Tipo</option>
                                 @foreach ($types as $type)
                                     <option value="{{ $type->id }}"                              
@@ -109,11 +90,17 @@
                                         >{{ $type->name }}</option>
                                 @endforeach
                             </select>
-                            {!! $errors->first('category_id', '<span class="help-block">:message</span>' ) !!}   
                         </div>
-                        <label for="type_other" class="col-sm-2 control-label">Otro Tipo</label>
-                        <div class="col-sm-4">
-                            <input name="type_other" type="text" class="form-control" value="{{ old('type_other', $post->type_other) }}">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="type_other" class="col-xs-4 control-label">Detalle de Orden</label>
+                        <div class="col-xs-8">
+                            <input id="type_other" 
+                                    name="type_other" 
+                                    type="text" 
+                                    class="form-control" 
+                                    value="{{ old('type_other', $post->type_other) }}">
                             {!! $errors->first('type_other', '<span class="help-block">:message</span>' ) !!}  
                         </div>
                     </div>
@@ -121,45 +108,46 @@
                     <div class="form-group">
                         <label for="equipment" class="col-sm-2 control-label">Equipo Intervenido</label>
                         <div class="col-sm-10">
-                            <input name="equipment" type="text" class="form-control" value="{{ old('equipment', $post->equipment) }}">
-                            {!! $errors->first('equipment', '<span class="help-block">:message</span>' ) !!}  
+                            <input id="equipment" name="equipment" type="text" class="form-control" value="{{ old('equipment', $post->equipment) }}">
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label for="model" class="col-sm-2 control-label">Modelo</label>        
                         <div class="col-sm-4">
-                            <input name="model" type="text" class="form-control" value="{{ old('model', $post->model) }}">
-                            {!! $errors->first('model', '<span class="help-block">:message</span>' ) !!}  
+                            <input id="model" name="model" type="text" class="form-control" value="{{ old('model', $post->model) }}">
                         </div>
                         <label for="serie" class="col-sm-2 control-label">Serie</label>        
                         <div class="col-sm-4">
-                            <input name="serie" type="text" class="form-control" value="{{ old('serie', $post->serie) }}">
-                            {!! $errors->first('serie', '<span class="help-block">:message</span>' ) !!}  
+                            <input id="serie" name="serie" type="text" class="form-control" value="{{ old('serie', $post->serie) }}">
                         </div>
                     </div>
 
-                    <div class="form-group {{ $errors->has('problem_id') ? 'has-error' : '' }}">
-                        <label for="problem_id" class="col-sm-2 control-label">Problema</label>
-                        <div class="col-sm-4">
-                            <select name="problem_id" class="form-control">
+                    <div id="problem_div" class="form-group {{ $errors->has('problem_id') ? 'has-error' : '' }}">
+                        <label for="problem_id" class="col-xs-2 control-label">Problema</label>
+                        <div class="col-xs-10">
+                            <select id="problem_id" 
+                                    name="problem_id" 
+                                    class="form-control">
                                 <option value="">Seleccione un Problema</option>
                                @foreach ($problems as $problem)
                                     <option value="{{ $problem->id }}"                              
-                                        {{ old('problem_id', $post->problem_id) == $problem->id ? 'selected' : '' }} 
-                                        >{{ $problem->name }}</option>
+                                            {{ old('problem_id', $post->problem_id) == $problem->id ? 'selected' : '' }}>
+                                        {{ $problem->name }}
+                                    </option>
                                 @endforeach  
-                            </select>
-                            {!! $errors->first('problem_id', '<span class="help-block">:message</span>' ) !!}  
+                            </select> 
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="job" class="col-sm-3 control-label">Trabajo Realizado</label>
-                        <div class="col-sm-9">
-                            <textarea name="job" 
-                                class="form-control" 
-                                placeholder="Ingresa un extracto de la publicación">{{ old('job', $post->job) }}</textarea>
+                        <label for="job" class="col-xs-2 control-label">Trabajo Realizado</label>
+                        <div class="col-xs-10">
+                            <textarea id="job" 
+                                    name="job" 
+                                    maxlength="5"
+                                    class="form-control"
+                                    placeholder="Ingresa maximo 140 caracteres">{{ old('job', $post->job) }}</textarea>
                             {!! $errors->first('job', '<span class="help-block">:message</span>' ) !!}   
                         </div>
                     </div>
@@ -178,79 +166,133 @@
                                 </div>
                                 <div class="box-body">
                                     <div class="form-group">
-                                        <label for="inputPassword3" class="col-sm-2 control-label">Tipo</label>
-                                        <div class="col-sm-10">
-                                            <select name="type" class="form-control" style="font-weight: bold;">
-                                                <option value="BAJA" {{ isset($post->parameter->id) && $post->parameter->type == 'BAJA' ? 'selected' : '' }}>BAJA TEMPERATURA</option>
-                                                <option value="MEDIA" {{ isset($post->parameter->id) && $post->parameter->type == 'MEDIA' ? 'selected' : '' }}>MEDIA TEMPERATURA</option>
-                                            </select>                        
-                                            {!! $errors->first('tags', '<span class="help-block">:message</span>' ) !!} 
+                                        <label for="type" class="col-xs-2 control-label">Tipo</label>
+                                        <div class="col-xs-10">
+                                            <select id="type"
+                                                    name="type" 
+                                                    class="form-control" 
+                                                    style="font-weight: bold;">
+                                                <option value="BAJA" {{ isset($post->parameter->id) && $post->parameter->type == 'BAJA' ? 'selected' : '' }}>
+                                                        BAJA TEMPERATURA
+                                                </option>
+                                                <option value="MEDIA" {{ isset($post->parameter->id) && $post->parameter->type == 'MEDIA' ? 'selected' : '' }}>
+                                                        MEDIA TEMPERATURA
+                                                </option>
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="temperature" class="col-sm-2 control-label">Temperatura</label>
-                                        <div class="col-sm-10 text-center">
+                                        <label class="col-xs-2 control-label">Temperatura</label>
+                                        <div class="col-xs-10 text-center">
                                             <label class="checkbox-inline">
-                                                <input type="radio" name="temperature" value="SI" {{ isset($post->parameter->id) && $post->parameter->temperature == 'SI' ? 'checked' : '' }}> SI
+                                                <input type="radio" 
+                                                        name="temperature" 
+                                                        value="SI" 
+                                                        {{ isset($post->parameter->id) && $post->parameter->temperature == 'SI' ? 'checked' : '' }}> SI CUMPLE
                                             </label>
                                             <label class="checkbox-inline">
-                                                <input type="radio" name="temperature" value="NO" {{ isset($post->parameter->id) && $post->parameter->temperature == 'NO' ? 'checked' : '' }}> NO
+                                                <input type="radio" 
+                                                        name="temperature" 
+                                                        value="NO" 
+                                                        {{ isset($post->parameter->id) && $post->parameter->temperature == 'NO' ? 'checked' : '' }}> NO CUMPLE
                                             </label>                          
                                         </div>
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="pressure" class="col-sm-2 control-label">Presion</label>
-                                        <div class="col-sm-5">
-                                            <input name="pressure_low" type="number" class="form-control" placeholder="BAJA" value="{{ isset($post->parameter->id) ? $post->parameter->pressure_low : '' }}">
+                                        <label for="pressure_low" class="col-xs-2 control-label">Presion</label>
+                                        <div id="pressure_low-div" class="col-xs-5">
+                                            <input id="pressure_low"
+                                                    name="pressure_low" 
+                                                    type="number" 
+                                                    class="form-control" 
+                                                    placeholder="BAJA"
+                                                    min="0"
+                                                    value="{{ isset($post->parameter->id) ? $post->parameter->pressure_low : '' }}">
                                         </div>
-                                        <div class="col-sm-5">
-                                            <input name="pressure_high" type="number" class="form-control" placeholder="ALTA" value="{{ isset($post->parameter->id) ? $post->parameter->pressure_high : '' }}">
+                                        <div id="pressure_high-div" class="col-xs-5">
+                                            <input id="pressure_high"
+                                                    name="pressure_high" 
+                                                    type="number" 
+                                                    class="form-control" 
+                                                    placeholder="ALTA" 
+                                                    min="0"
+                                                    value="{{ isset($post->parameter->id) ? $post->parameter->pressure_high : '' }}">
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="refrigerants" class="col-sm-3 control-label">Refrigerante</label>
-                                        <div class="col-sm-9">
-                                            <select id="refrigerants" class="form-control select2" 
+                                        <label for="refrigerant_id" class="col-xs-3 control-label">Refrigerante</label>
+                                        <div class="col-xs-9">
+                                            <select id="refrigerant_id" 
+                                                    name="refrigerant_id" 
+                                                    class="form-control"
+                                                    style="font-weight: bold;">
+                                                <option value="">Seleccione refrigerante</option>
+                                                @foreach ($refrigerants as $refrigerant)
+                                                    <option value="{{ $refrigerant->id }}"                              
+                                                            {{ old('refrigerant_id', $post->parameter->refrigerant_id) == $refrigerant->id ? 'selected' : '' }}>
+                                                        {{ $refrigerant->name }}
+                                                    </option>
+                                                @endforeach  
+                                            </select> 
+                                            <!-- <select id="refrigerants" 
+                                                    class="form-control select2" 
                                                     multiple="multiple" 
                                                     data-placeholder="Seleccione una o mas etiquetas" 
                                                     style="width: 100%;">
                                                 @foreach ($refrigerants as $refrigerant)
-                                                    <option {{ collect(old('refrigerants', $post->parameter->refrigerants->pluck('id') ))->contains($refrigerant->id) ? 'selected' : '' }} 
+                                                    <option {{-- collect(old('refrigerants', $post->parameter->refrigerants->pluck('id') ))->contains($refrigerant->id) ? 'selected' : '' -}} 
                                                             value="{{ $refrigerant->id }}"
-                                                        >{{ $refrigerant->name }}</option>
+                                                        >{{-- $refrigerant->name --}}</option>
                                                 @endforeach
-                                            </select>                        
-                                            {!! $errors->first('tags', '<span class="help-block">:message</span>' ) !!} 
+                                            </select>     -->              
                                         </div>
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="inputPassword3" class="col-sm-3 control-label">Refrigerante</label>
-                                        <div class="col-sm-9 text-center">
+                                        <label class="col-xs-3 control-label">Refrigerante</label>
+                                        <div class="col-xs-9 text-center">
                                             <label class="checkbox-inline">
-                                                <input type="radio" name="refrigerant" value="ALTA" {{ isset($post->parameter->id) && $post->parameter->refrigerant == 'ALTA' ? 'checked' : '' }}> ALTA
+                                                <input type="radio" 
+                                                        name="refrigerant" 
+                                                        value="ALTA" 
+                                                        {{ isset($post->parameter->id) && $post->parameter->refrigerant == 'ALTA' ? 'checked' : '' }}> ALTA
                                             </label>
                                             <label class="checkbox-inline">
-                                                <input type="radio" name="refrigerant" value="MEDIA" {{ isset($post->parameter->id) && $post->parameter->refrigerant == 'MEDIA' ? 'checked' : '' }}> MEDIA
+                                                <input type="radio" 
+                                                        name="refrigerant" 
+                                                        value="MEDIA" 
+                                                        {{ isset($post->parameter->id) && $post->parameter->refrigerant == 'MEDIA' ? 'checked' : '' }}> MEDIA
                                             </label> 
                                             <label class="checkbox-inline">
-                                                <input type="radio" name="refrigerant" value="BAJA" {{  isset($post->parameter->id) && $post->parameter->refrigerant == 'BAJA' ? 'checked' : '' }}> BAJA
+                                                <input type="radio" 
+                                                        name="refrigerant" 
+                                                        value="BAJA" 
+                                                        {{  isset($post->parameter->id) && $post->parameter->refrigerant == 'BAJA' ? 'checked' : '' }}> BAJA
                                             </label>
                                         </div>
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="oil" class="col-sm-3 control-label">Aceite</label>
-                                        <div class="col-sm-9  text-center">
+                                        <label class="col-xs-3 control-label">Aceite</label>
+                                        <div class="col-xs-9 text-center">
                                             <label class="checkbox-inline">
-                                                <input type="radio" name="oil" value="ALTA" {{ isset($post->parameter->id) && $post->parameter->oil == 'ALTA' ? 'checked' : '' }}> ALTA
+                                                <input type="radio" 
+                                                        name="oil" 
+                                                        value="ALTA" 
+                                                        {{ isset($post->parameter->id) && $post->parameter->oil == 'ALTA' ? 'checked' : '' }}> ALTA
                                             </label>
                                             <label class="checkbox-inline">
-                                                <input type="radio" name="oil" value="MEDIA" {{ isset($post->parameter->id) && $post->parameter->oil == 'MEDIA' ? 'checked' : '' }}> MEDIA
+                                                <input type="radio" 
+                                                        name="oil" 
+                                                        value="MEDIA" 
+                                                        {{ isset($post->parameter->id) && $post->parameter->oil == 'MEDIA' ? 'checked' : '' }}> MEDIA
                                             </label> 
                                             <label class="checkbox-inline">
-                                                <input type="radio" name="oil" value="BAJA" {{ isset($post->parameter->id) && $post->parameter->oil == 'BAJA' ? 'checked' : '' }}> BAJA
+                                                <input type="radio" 
+                                                        name="oil" 
+                                                        value="BAJA" 
+                                                        {{ isset($post->parameter->id) && $post->parameter->oil == 'BAJA' ? 'checked' : '' }}> BAJA
                                             </label>
                                         </div>
                                     </div>
@@ -264,26 +306,22 @@
             <!-- /.tab-pane -->
             <div class="tab-pane" id="tab_material">
             
-                <div class="form-horizontal">              
-                    <div class="form-group">
-                        <label for="quantity" class="col-sm-2 control-label">Cantidad</label>
-                        <div id="quantity-div" class="col-sm-2">
-                            <input name="quantity"  
-                                type="number" 
-                                class="form-control" value="1">
-                        </div>
-                        <label for="detail" class="col-sm-2 control-label">Material</label>
-                        <div id="detail-div" class="col-sm-4">
-                            <input name="detail" 
-                                type="text" 
-                                class="form-control">   
-                        </div>
-
-                        <div class="col-sm-2">
-                            <button onclick="addMaterial()" type="button" class="btn btn-success btn-block">Agregar</button>    
-                        </div>
-                    </div>
+                <div id="quantity-div" class="form-group col-xs-3">
+                    <label for="quantity">Cantidad</label>
+                    <input id="quantity"
+                            name="quantity"  
+                            type="number" 
+                            class="form-control" value="1">
                 </div>
+                <div id="detail-div" class="form-group col-xs-9">
+                    <label for="detail">Material</label>
+                    <input id="detail"
+                            name="detail" 
+                            type="text" 
+                            class="form-control">
+                </div>  
+    
+                <button onclick="addMaterial()" type="button" class="btn btn-success btn-block">Agregar</button> 
                 <div class="table-responsive">
                     <table id="material-table" class="table table-bordered table-striped text-center">
                         <thead>
@@ -320,37 +358,151 @@
                             @endif
                         </tbody>
                     </table>
-                </div>
-                <div class="form-horizontal">
+                </div>             
+            </div>
+
+            <div class="tab-pane" id="tab_signature">
+                <form id="signature-form" method="POST" action="{{ route('admin.posts.signature.store', $post->id) }}" class="form-horizontal" >
+                    {{ csrf_field() }}
                     <div class="form-group">
-                        <label class="col-sm-2 control-label">Observaciones</label>
-                        <div class="col-sm-9">
-                            <textarea id="observation-order" 
-                                class="form-control" 
-                                placeholder="Ingresa una observacion">{{ old('observation', $post->observation) }}</textarea>
-                            {!! $errors->first('observation', '<span class="help-block">:message</span>' ) !!}   
+                        <div class="col-xs-5">
+                            <p>Fecha Llegada: <label>{{ $post->started_at->format('d/m/Y H:i') }}</label></p>
+                        </div>
+                        <div class="col-xs-7">
+                            <p>Tecnico Responsable: <label>{{ $post->owner->name }}</label></p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-4">
+                            <p>Empresa: <label>{{ isset($post->client->id) ? $post->client->name : '' }}</label></p>
+                        </div>
+                        <div class="col-xs-4">
+                            <p>Local: <label>{{ isset($post->client->id) ? $post->client->title : '' }}</label></p>
+                        </div>
+                        <div class="col-xs-4">
+                            <p>Direccion: <label>{{ isset($post->client->id) ? $post->client->adress : '' }}</label></p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-5">
+                            <p>Tipo de Orden: <label>{{ isset($post->type->id) ? $post->type->name : '' }}</label></p>
+                        </div>
+                        <div class="col-xs-7">
+                            <p>Detalle de Orden: <label>{{ isset($post->type->id) ? $post->type_other : '' }}</label></p>
+                        </div>
+                    </div>
+                  
+                    <div class="form-group">
+                        <div class="col-xs-4">
+                            <p>Equipo Interv: <label>{{ isset($post->client->id) ? $post->client->name : '' }}</label></p>
+                        </div>
+                        <div class="col-xs-4">
+                            <p>Modelo: <label>{{ $post->model }}</label></p>
+                        </div>
+                        <div class="col-xs-4">
+                            <p>Serie: <label>{{ $post->serie }}</label></p>
                         </div>
                     </div>
 
-                    <div id="email-div" class="form-group">
-                        <label class="col-sm-2 control-label">Correo Electronico del Cliente</label>
-                        <div class="col-sm-8">
-                            <input id="email-order" 
-                                    type="email" 
-                                    class="form-control" value="{{ old('email', $post->email) }}">   
+                    <div class="form-group">
+                        <div class="col-xs-12">
+                            <p>Problema: <label>{{ isset($post->problem->id) ? $post->problem->name : '' }}</label></p>
                         </div>
                     </div>
-                    <div id="client-div" class="form-group">
-                        <label class="col-sm-2 control-label">Nombre Persona que firma</label>
-                        <div class="col-sm-8">
-                            <input name="client" 
-                                type="text" 
-                                class="form-control" value="{{ isset($post->signature->id) ? $post->signature->title : '' }}">   
+                    <div class="form-group">
+                        <div class="col-xs-12">
+                            <p>Trabajo realizado: <label>{{ $post->job }}</label></p>
                         </div>
                     </div>
-                    <button id="confirm-button" type="button" class="btn btn-primary btn-block">Guardar y Autorizar</button>
-                </div>
+
+                    <div class="form-group">
+                        <div class="col-xs-12">
+                            <p>Parametros/Mediciones de <label>{{ isset($post->parameter->id) && $post->parameter->type <> NULL ? $post->parameter->type.' TEMPERATURA' : '' }} </label></p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-12">
+                            <p>Temperatura <label>{{ isset($post->parameter->id) && $post->parameter->temperature <> NULL ? $post->parameter->temperature.' CUMPLE' : '' }} </label></p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-6">
+                            <p>Presion Baja: <label>{{ isset($post->parameter->id) ? $post->parameter->pressure_low : '' }} </label></p>
+                        </div>
+                        <div class="col-xs-6">
+                            <p>Presion Alta: <label>{{ isset($post->parameter->id) ? $post->parameter->pressure_high : '' }} </label></p>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-xs-6">
+                            <p>Refrigerante: <label>
+                                @if( isset($post->parameter->refrigerant_id) ) 
+                                    @foreach ($refrigerants as $refrigerant)
+                                        @if( $post->parameter->refrigerant_id == $refrigerant->id ) 
+                                           {{ $refrigerant->name }}
+                                        @endif
+                                    @endforeach   
+                                @else 
+                                    {{ '' }}
+                                @endif </label></p>
+                        </div>
+
+                        <div class="col-xs-6">
+                            <p>Nivel: <label>{{ isset($post->parameter->id) ?  $post->parameter->refrigerant : '' }} </label></p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-12">
+                            <p>Aceite: <label>{{ isset($post->parameter->id) ? $post->parameter->oil : '' }} </label></p>
+                        </div>
+                    </div>
+
+                    <table class="table table-bordered table-striped text-center">
+                        <thead>
+                            <tr>
+                                <th>Cantidad</th>
+                                <th>Detalle</th>
+                            </tr>
+                        </thead>
+                        <tbody id="material-body">
+                            @if ($post->materials->count())
+                                @foreach ($post->materials as $material)
+                                    <tr>
+                                        <td>{{ $material->quantity }}</td>
+                                        <td>{{ $material->detail }}</td>
+                                    </tr>        
+                                @endforeach
+                            @else
+                                <tr> 
+                                    <td colspan="3">No hay materiales seleccionados</td>
+                                </tr>
+                            @endif
+                        </tbody>
+                    </table>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Observaciones</label>
+                        <div class="col-sm-9">
+                            <textarea name="observation"
+                                class="form-control" 
+                                placeholder="Ingresa una observacion de 140 caracteres">{{ old('observation', $post->observation) }}</textarea>
+                            {!! $errors->first('observation', '<span class="help-block">:message</span>' ) !!}   
+                        </div>
+                    </div>
+                    <div id="signature-area" class="col-sm-offset-3 col-sm-6">
+                        <canvas id="signature" class="signature-pad" style="border: 2px dashed #ccc" width="800px" height="200px"></canvas>
+                    </div>
+                    
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                            <input type="text" name="base64" id="base64">
+                            <button id="signature-clear" type="button" class="btn btn-info pull-left">Borrar</button>   <!--  data-action="clear"-->              
+                            <button id="signature-finished" type="button" class="btn btn-success pull-right">Firmar y Finalizar</button> <!-- id="signature-png" data-action="save-png"-->
+                        </div>
+                    </div>
+                </form>
             </div>
+
             <!-- /.tab-pane -->
           </div>
           <!-- /.tab-content -->
@@ -385,47 +537,13 @@
                     <button type="submit" class="btn btn-primary">Buscar Cliente</button>
                 </div>
             </form>
-            <form method="POST" class="form-horizontal" action="{{ route('admin.clients.store') }}">
-                {{ csrf_field() }} 
-                <input name="post_id" type="hidden" value="{{ $post->id }}">
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label for="name" class="col-sm-3 control-label">Empresa</label>
-                        <div class="col-sm-9">
-                            <input name="name" type="text" class="form-control">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="title" class="col-sm-3 control-label">Local</label>
-                        <div class="col-sm-9">
-                            <input name="title" type="text" class="form-control">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="adress" class="col-sm-3 control-label">Direccion</label>
-                        <div class="col-sm-9">
-                            <input name="adress" type="text" class="form-control">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="city" class="col-sm-3 control-label">Ciudad</label>
-                        <div class="col-sm-9">
-                            <input name="city" type="text" class="form-control">
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary pull-left" data-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-primary">Grabar y Seleccionar Cliente</button>
-                </div>
-            </form>
         </div>
     </div>
 </div>
 
 
 <div class="modal fade" id="photo-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -436,10 +554,14 @@
             <form method="post" action="{{ route('admin.posts.photos.store', $post->id) }}" enctype="multipart/form-data"> <!-- /admin/products/4/images --><!-- admin/posts/{post}/photos -->
                 {{ csrf_field() }}   
                 <div class="modal-body">
-                    <label for="inputPassword3" class="control-label">Titulo</label>
-                    <input type="text" name="title" class="form-control" >  <!-- required-->
-                    <label for="inputPassword3" class="control-label">Fotografia</label>
-                    <input type="file" name="photo" class="form-control">
+                    <div class="form-group">
+                        <label for="title" class="col-form-label">Titulo</label>
+                        <input id="title" name="title" type="text" class="form-control" />  <!-- required-->
+                    </div>
+                    <div class="form-group">
+                        <label for="photo" class="col-form-label">Fotografia</label>
+                        <input id="photo" name="photo" type="file" class="form-control" accept="image/*" />
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary pull-left" data-dismiss="modal">Cerrar</button>
@@ -450,35 +572,41 @@
     </div>
 </div>
 
-<div class="modal fade" id="confirm-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="order-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-                <h4 id="client-title" class="modal-title" id="exampleModalLabel">Cliente</h4>
+                <h4 id="client-title" class="modal-title" id="exampleModalLabel">MODIFICACION AL FOLIO</h4>
             </div>
-             
-            <div class="modal-body">
-                <div id="signature-pad" >
-                    <div>
-                        <canvas id="signature"></canvas>
-                    </div>
-                <div>
-            </div>
-            <form id="signature-form" method="post" action="{{ route('admin.posts.signature.store', $post->id) }}" > <!-- /admin/products/4/images --><!-- admin/posts/{post}/photos -->
+            <form method="POST" action="{{ route('admin.posts.updateTitle', $post) }}">
                 {{ csrf_field() }}
-                <input type="hidden" name="observation" id="observation">
-                <input type="hidden" name="email" id="email">
-                <input type="hidden" name="signature-title" id="signature-title">
-                <input type="hidden" name="base64" id="base64">
+                {{ method_field('PUT') }}
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="col-form-label">Numero de Folio</label>
+                        <input name="title" type="text" class="form-control" value="{{ $post->title }}" required />
+                    </div>
+                </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary pull-left" data-dismiss="modal">Cerrar</button>
-                    <button id="signature-clear" type="button" class="btn btn-info pull-left">Borrar</button>   <!--  data-action="clear"-->              
-                    <button id="signature-button" type="button" class="btn btn-primary">Finalizar</button> <!-- id="signature-png" data-action="save-png"-->
+                    <button type="submit" 
+                            onclick="return confirm('¿Estas seguro de querer modificar numero de folio?')" 
+                            class="btn btn-primary pull-left">Cambiar Folio</button>
+                </form> 
+                <form method="POST" 
+                        action="{{ route('admin.posts.updateFinished', $post) }}">
+                        {{ csrf_field() }}
+                        {{ method_field('PUT') }}
+                        <button type="submit" 
+                                onclick="return confirm('¿Estas seguro que desea finalizar?')"
+                                class="btn btn-danger"
+                        >Finalizar Orden de Trabajo</button>
+                </form>
                 </div>
-            </form>
+            
         </div>
     </div>
 </div>
@@ -492,7 +620,13 @@
     <!-- Select2 -->
     <link rel="stylesheet" href="{{ asset('adminlte/bower_components/select2/dist/css/select2.min.css') }}">
     <!-- Bootstrap time Picker -->
-    <link rel="stylesheet" href="{{ asset('adminlte/plugins/timepicker/bootstrap-timepicker.min.css') }}">  
+    <link rel="stylesheet" href="{{ asset('adminlte/plugins/timepicker/bootstrap-timepicker.min.css') }}"/>  
+    <style>
+        .nav-tabs-custom>.nav-tabs>li.active>a, .nav-tabs-custom>.nav-tabs>li.active:hover>a {
+            background-color: #3c8dbc;
+            color: #fff;
+        }
+    </style>
 @endpush
 
 @push('scripts')
@@ -505,102 +639,123 @@
     <script src="{{ asset('adminlte/bower_components/select2/dist/js/select2.full.min.js') }}"></script>
     <!-- bootstrap time picker -->
     <script src="{{ asset('adminlte/plugins/timepicker/bootstrap-timepicker.min.js') }}"></script>
-    <!-- Signature Pad -->
-    <script src="{{ asset('js/signature_pad/signature_pad.js') }}"></script>
-    <script src="{{ asset('js/signature_pad/app.js') }}"></script>
+    <!-- Signature Pad 
+    <script src="{{-- asset('js/signature_pad/signature_pad.js') --}}"></script>
+    <script src="{{-- asset('js/signature_pad/app.js') --}}"></script>-->
+   
+    <script src="https://cdn.jsdelivr.net/npm/signature_pad@2.3.2/dist/signature_pad.min.js"></script>
 
     <script>
+
+        function resizeCanvas () {
+            var gameArea = document.getElementById('signature-area');
+            var newWidth = gameArea.clientWidth;
+            var gameCanvas = document.getElementById('signature');
+            gameCanvas.width = newWidth-30;
+        }
+
         $(document).ready(function(){
-            
-            document.getElementById("confirm-button").addEventListener("click", function (event) {
-                document.getElementById("client-div").classList.remove("has-error");
-                document.getElementById("email-div").classList.remove("has-error");
 
-                var name = document.getElementsByName("client")[0].value;
-                var email = document.getElementById("email-order").value; 
-                var observation = document.getElementById("observation-order").value; 
-                var flag = true;
-                
-                if( name.length == 0 ){                    
-                    document.getElementById("client-div").classList.add("has-error");
-                    flag = false; 
-                } 
-                if( email.length == 0 ){                    
-                    document.getElementById("email-div").classList.add("has-error");
-                    flag = false; 
-                } 
-                if( flag ){
-                    document.getElementById("client-title").innerHTML = name;
-                    document.getElementById("signature-title").value = name;
-                    document.getElementById("email").value = email;
-                    document.getElementById("observation").value = observation;
+            var canvas = document.querySelector("canvas");
+            var signaturePad = new SignaturePad(canvas);
 
-                    document.getElementById("signature").height = "200"
-                    document.getElementById("signature").width = "300";
-                    $('#confirm-modal').modal('show');
+            window.addEventListener('resize', resizeCanvas, false);
+            window.addEventListener('orientationchange', resizeCanvas, false);
+            resizeCanvas();
+
+            document.getElementById('signature-clear').addEventListener('click', function () {
+                signaturePad.clear();
+            });
+
+            document.getElementById('signature-finished').addEventListener('click', function () {
+                if (signaturePad.isEmpty()) {
+                    alert("Por favor, proporcione una firma primero..");
+                } else {
+                    var image = canvas.toDataURL(); // data:image/png....
+                    document.getElementById("base64").value = image;
+                    var form = document.getElementById('signature-form');
+                    form.submit();
                 }
-            }, false);
-
-            document.getElementById("photo-button").addEventListener("click", function (event) {
-                $('#photo-modal').modal('show');
-            }, false);
+            });
+            
             
             document.getElementById("client-button").addEventListener("click", function (event) {
                 $('#client-modal').modal('show');
             }, false);
 
             document.getElementById("btn_order").addEventListener("click", function (event) {
-                var started_at = document.getElementsByName("started_date_at")[0].value+" "+document.getElementsByName("started_hour_at")[0].value;;
-
+                this.disabled = false;
+                document.getElementById("type_div").classList.remove("has-error");
+                document.getElementById("problem_div").classList.remove("has-error");
                 var type_id = document.getElementsByName("type_id")[0].value;
                 var type_other = document.getElementsByName("type_other")[0].value;
-//FALTA EQUIPO
                 var equipment = document.getElementsByName("equipment")[0].value;
                 var model = document.getElementsByName("model")[0].value;
                 var serie = document.getElementsByName("serie")[0].value;
                 var problem_id = document.getElementsByName("problem_id")[0].value;
                 var job = document.getElementsByName("job")[0].value;
+                var flag = true;
 
-                var url = "{{ route('admin.posts.update', $post) }}"
-                axios.put(url, {
-                        'started_at': started_at,
-                        'type_id': type_id,
-                        'type_other': type_other,
-                        'equipment': equipment,
-                        'model': model,
-                        'serie': serie,
-                        'problem_id': problem_id,
-                        'job': job
-                }).then(function(response){
-                    console.log(response.data);
-                    document.getElementById('li_order').classList.remove("active");
-                    document.getElementById('li_parameter').classList.add("active");
-                    
-                    document.getElementById('tab_order').classList.remove("active");
-                    document.getElementById('tab_parameter').classList.add("active");
-                })
-                .catch(function (error){
-                    console.log(error);        
-                });
+                if( type_id.length == 0 ){
+                    document.getElementById("type_div").classList.add("has-error");
+                    flag = false;
+                }
+                if( problem_id.length == 0 ){
+                    document.getElementById("problem_div").classList.add("has-error");
+                    flag = false;
+                }
+
+                if( flag ){
+                    var url = "{{ route('admin.posts.update', $post) }}"
+                    axios.put(url, {
+                            'type_id': type_id,
+                            'type_other': type_other,
+                            'equipment': equipment,
+                            'model': model,
+                            'serie': serie,
+                            'problem_id': problem_id,
+                            'job': job
+                    }).then(function(response){
+                        console.log(response.data);
+                        document.getElementById('li_order').classList.remove("active");
+                        document.getElementById('li_parameter').classList.add("active");
+                        
+                        document.getElementById('tab_order').classList.remove("active");
+                        document.getElementById('tab_parameter').classList.add("active");
+                    })
+                    .catch(function (error){
+                        console.log(error);        
+                    });
+                }
             }, false);
 
             document.getElementById("parameter-button").addEventListener("click", function (event) {
-                var refrigerant_select = document.getElementById("refrigerants");
-                var refrigerants = [];
-                for (var i=0; i < refrigerant_select.options.length; i++) {
-                    if (refrigerant_select.options[i].selected) {
-                        refrigerants.push(refrigerant_select.options[i].value);
-                    }
-                }
+                var flag = true;
+                document.getElementById("pressure_high-div").classList.remove("has-error");
+                document.getElementById("pressure_low-div").classList.remove("has-error");
+                
+                var refrigerant_id = document.getElementsByName("refrigerant_id")[0].value;
+
                 var type = document.getElementsByName("type")[0].value;
                 var temperature_radio = document.getElementsByName("temperature");
                 var temperature = "";
-                for(var i=0; i<temperature_radio.length; i= i+1){
+                for(var i = 0; i < temperature_radio.length; i = i + 1){
                     if(temperature_radio[i].checked)
                         temperature = temperature_radio[i].value;
                 }
                 var pressure_high = document.getElementsByName("pressure_high")[0].value;                
                 var pressure_low = document.getElementsByName("pressure_low")[0].value;
+
+                if( !(pressure_high > 0) && !(pressure_high == '') ){
+                    flag = false;
+                    document.getElementById("pressure_high-div").classList.add("has-error")
+                } 
+                if( !(pressure_low == '') ){
+                    if( !(pressure_low > 0) ){
+                        flag = false;
+                        document.getElementById("pressure_low-div").classList.add("has-error")
+                    }
+                } 
                 
                 var refrigerant_radio = document.getElementsByName("refrigerant");  
                 var refrigerant = "";
@@ -610,62 +765,52 @@
                 }
                 var oil_radio = document.getElementsByName("oil");  
                 var oil = "";
-                for(var i=0; i<oil_radio.length; i= i+1){
+                for(var i = 0; i < oil_radio.length; i = i + 1){
                     if(oil_radio[i].checked)
                         oil = oil_radio[i].value;
                 }
 
-              //  var url = "{{ route('admin.posts.parameter.store', $post->id) }}"
-                var url = "{{ route('admin.parameters.update', $post->parameter->id) }}"
-                axios.put(url, {
-                        'type': type,
-                        'temperature': temperature,
-                        'pressure_high': pressure_high,
-                        'pressure_low': pressure_low,
-                        'refrigerants': refrigerants,
-                        'refrigerant': refrigerant,
-                        'oil': oil
-                }).then(function(response){
-                    console.log(response.data);
-                    document.getElementById('li_parameter').classList.remove("active");
-                    document.getElementById('li_material').classList.add("active");
-                    
-                    document.getElementById('tab_parameter').classList.remove("active");
-                    document.getElementById('tab_material').classList.add("active");
-                })
-                .catch(function (error){
-                    console.log(error);        
-                });
+                if( flag ){
+                    var url = "{{ route('admin.parameters.update', $post->parameter->id) }}"
+                    axios.put(url, {
+                            'type': type,
+                            'temperature': temperature,
+                            'pressure_high': pressure_high,
+                            'pressure_low': pressure_low,
+                            'refrigerant_id': refrigerant_id,
+                            'refrigerant': refrigerant,
+                            'oil': oil
+                    }).then(function(response){
+                        console.log(response.data);
+                        document.getElementById('li_parameter').classList.remove("active");
+                        document.getElementById('li_material').classList.add("active");
+                        
+                        document.getElementById('tab_parameter').classList.remove("active");
+                        document.getElementById('tab_material').classList.add("active");
+                    })
+                    .catch(function (error){
+                        console.log(error);        
+                    });
+                }   
             }, false);
-
         });
 
-      /*  function destroyMaterial(id){
-            var url = "{{ route('admin.materials.destroy', "+id+") }}"
-            axios.delete(url).then(function(response){
-                console.log(response.data);
-            })
-            .catch(function (error){
-                console.log(error);        
-            });
-        }*/
- 
         function addMaterial(){
             document.getElementById('error-div').innerHTML= "";
             document.getElementById("quantity-div").classList.remove("has-error");            
             document.getElementById("detail-div").classList.remove("has-error");
             var quantity = document.getElementsByName("quantity")[0].value;
             var detail = document.getElementsByName("detail")[0].value;
-            var bandera = true;
-            if( quantity.length == 0 ){
-                bandera = false;
+            var flag = true;
+            if( !(quantity > 0) ){
+                flag = false;
                 document.getElementById("quantity-div").classList.add("has-error")
-            }
+            } 
             if( detail.length == 0 ){
-                bandera = false;
+                flag = false;
                 document.getElementById("detail-div").classList.add("has-error")
             }
-            if( bandera ){
+            if( flag ){
                 var url = "{{ route('admin.materials.store') }}"
                 axios.post(url, {
                         'post_id': '{{ $post->id }}',
@@ -674,7 +819,7 @@
                 }).then(function(response){
                     document.getElementsByName("quantity")[0].value = 1;
                     document.getElementsByName("detail")[0].value = "";
-                    listarMaterial("{{ $post->id }}");
+                    listMaterial("{{ $post->id }}");
                     console.log(response.data);
                 })
                 .catch(function (error){
@@ -691,7 +836,8 @@
             }
         }
 
-        function listarMaterial(id) {
+        function listMaterial(id) {
+            selectMaterial();
             var post = id;
             var url = '/admin/posts/' + post;
             axios.get(url).then(function(response){
@@ -703,7 +849,7 @@
                     var fila = document.createElement("tr");
                     var celda = document.createElement("td");
                     var spanTexto = document.createElement("span");
-                   // spanTexto.title = data.ESPECIALIDAD_CODIGO[i]; 
+               
                     spanTexto.textContent = response.data.materials[indice].quantity; 
                     celda.appendChild(spanTexto);
                     fila.appendChild(celda);
@@ -715,34 +861,57 @@
                     fila.appendChild(celda);
 
                     var celda = document.createElement("td");
-                    var spanTexto = document.createElement("span");
-                    spanTexto.textContent = response.data.materials[indice].price; 
-                    celda.appendChild(spanTexto);
+                    celda.innerHTML = `<button type="submit" 
+                            onclick="return confirm('¿Estas seguro de querer eliminar este material?')" 
+                            class="btn btn-danger">
+	                            <i class="fa fa-times"></i></button>`;
                     fila.appendChild(celda);
 
                     body.appendChild(fila);
                 }
             })
-                .catch(function (error){
+            .catch(function (error){
                 console.log(error);
             });
         }
 
-        $('.datepicker').datepicker({
-            autoclose: true,
-            setDate: new Date(),
-       //     format: 'dd/mm/yyyy' 
-        })
-    
-        $('.select2').select2({
-            tags: true
-        });
+        function selectMaterial(){
+            window.location.hash = '#material';
+            location.reload(true);
+        }
 
-        $('.timepicker').timepicker({
-            showInputs: false,
-            showMeridian: false,
-            minuteStep: 5,
-            defaultTime: 'current',
-        })
+        function selectSignature(){
+            window.location.hash = '#signature';
+            location.reload(true);
+        }
+
+
+console.log(window.location.hash);
+        switch (window.location.hash ) {
+            case '#signature':
+                    document.getElementById('li_order').classList.remove("active");
+                    document.getElementById('li_parameter').classList.remove("active");            
+                    document.getElementById('li_material').classList.remove("active");
+                    document.getElementById('li_signature').classList.add("active");
+                    
+                    document.getElementById('tab_order').classList.remove("active");
+                    document.getElementById('tab_parameter').classList.remove("active");
+                    document.getElementById('tab_material').classList.remove("active");            
+                    document.getElementById('tab_signature').classList.add("active");
+                break;
+            case '#material':
+                    document.getElementById('li_order').classList.remove("active");
+                    document.getElementById('li_parameter').classList.remove("active");  
+                    document.getElementById('li_signature').classList.remove("active");          
+                    document.getElementById('li_material').classList.add("active");    
+                    
+                    document.getElementById('tab_order').classList.remove("active");
+                    document.getElementById('tab_parameter').classList.remove("active");      
+                    document.getElementById('tab_signature').classList.remove("active");                    
+                    document.getElementById('tab_material').classList.add("active");      
+                break;
+            default:
+                break;
+        }
     </script>
 @endpush

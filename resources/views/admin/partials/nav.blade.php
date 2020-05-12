@@ -42,8 +42,31 @@
         </ul>   
     </li>-->
     @can('view', new App\User)
+
+    <li class="{{ setActiveRoute('admin.posts.index') }}">
+        <a href="{{ route('admin.clients.index') }}">
+            <i class="fa fa-users"></i> <span>Clientes</span>
+        </a>
+    </li>
+
+    <li class="{{ setActiveRoute('admin.posts.index') }}">
+        <a href="{{ route('admin.types.index') }}">
+            <i class="fa fa-plus"></i> <span>Tipos de Orden</span>
+        </a>
+    </li>
+    <li class="{{ setActiveRoute('admin.posts.index') }}">
+        <a href="{{ route('admin.problems.index') }}">
+            <i class="fa fa-plus"></i> <span>Problemas</span>
+        </a>
+    </li>
+    <li class="{{ setActiveRoute('admin.posts.index') }}">
+        <a href="{{ route('admin.refrigerants.index') }}">
+            <i class="fa fa-plus"></i> <span>Refrigerantes</span>
+        </a>
+    </li>
+
     <li class="treeview {{ setActiveRoute(['admin.users.index', 'admin.users.create']) }}">
-        <a href="#"><i class="fa fa-users"></i> <span>Usuarios</span>
+        <a href="#"><i class="fa fa-user"></i> <span>Usuarios</span>
         <span class="pull-right-container">
             <i class="fa fa-angle-left pull-right"></i>
             </span>
@@ -69,15 +92,15 @@
     @can('view', new \Spatie\Permission\Models\Role)
         <li class="{{ setActiveRoute(['admin.roles.index', 'admin.roles.edit']) }}">
             <a href="{{ route('admin.roles.index') }}">
-                <i class="fa fa-pencil"></i> <span>Roles</span>
+                <i class="fa fa-gear"></i> <span>Roles</span>
             </a>
         </li>
     @endcan
     @can('view', new \Spatie\Permission\Models\Permission)
         <li class="{{ setActiveRoute(['admin.permissions.index', 'admin.permissions.edit']) }}">
             <a href="{{ route('admin.permissions.index') }}">
-                <i class="fa fa-pencil"></i> <span>Permisos</span>
+                <i class="fa fa-gear"></i> <span>Permisos</span>
             </a>
         </li>
-    @endcan -->
+    @endcan
 </ul>

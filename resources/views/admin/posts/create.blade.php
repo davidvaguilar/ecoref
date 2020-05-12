@@ -8,21 +8,33 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-                <h5 class="modal-title" id="exampleModalLabel">Ingrese nuevo numero de Folio</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Registro de Orden de Trabajo</h5>
             </div>
             <div class="modal-body">
                 <div class="form-group {{ $errors->has('title') ? 'has-error' : '' }}">
-                    <!--<label>Titulo de la publicacion</label>-->
+                    <label>Numero de folio</label>
                     <input id="post-title"
                         name="title" 
+                        type="number"
                         class="form-control" 
                         placeholder="Ingresa aqui un nuevo numero de folio" 
                         value="{{ old('title') }}" autofocus required>
                     {!! $errors->first('title', '<span class="help-block">:message</span>' ) !!}                        
                 </div>
+
+                <div class="form-group {{ $errors->has('title') ? 'has-error' : '' }}">
+                    <label>Codigo del cliente</label>
+                    <input id="client-code"
+                        name="code" 
+                        type="text"
+                        class="form-control" 
+                        placeholder="Ingresa aqui codigo del cliente" 
+                        value="{{ old('code') }}" required>
+                    {!! $errors->first('code', '<span class="help-block">:message</span>' ) !!}                        
+                </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary pull-left" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary pull-left" data-dismiss="modal">Cerrar</button>
                 <button type="submit" class="btn btn-primary">Crear Orden de Trabajo</button>
             </div>
             </div>
@@ -41,7 +53,7 @@
         });
 
         $('#exampleModal').on('shown.bs.modal', function(){
-        $('#post-title').focus();
+            $('#post-title').focus();
             window.location.hash = '#create'; 
         });
     </script>
