@@ -6,6 +6,7 @@ use App\Post;
 use App\Client;
 use App\Category;
 use App\Tag;
+use Mail;
 use App\Material;
 use App\Refrigerant;
 use App\Problem;
@@ -111,6 +112,29 @@ class PostsController extends Controller
                 ->route('admin.posts.index')
                 ->with('flash', 'Orden de trabajo ha finalizado.');
     }
+
+    public function updateStatus( Post $post ){
+        $subject = $post->id.$post->client->id.$post->client->title.$post->owner->name.$post->started_at;
+
+        $to = 'ot@ecorefchile.cl';
+        $data = ['nombre' => 'Ecoref'];
+
+        $refrigerants = Refrigerant::all();
+        $pdf = PDF::loadView('pdf.order', ['post'=> $post, 'refrigerants'=> $refrigerants]);   
+      
+
+        Mail::send('emails.work-order', $data, function ($message) use ($pdf, $to, $subject) {
+            $message->from('hugo.ortiz@ecorefchile.cl', 'Ecoref Chile');
+            $message->to('ot@ecorefchile.cl')->subject($subject);
+            $message->attachData($pdf->output(), $subject.'.pdf');
+        });
+
+        $post->status = "ENVIADO";
+        $post->save();
+        return redirect()
+                ->route('admin.posts.index')
+                ->with('flash', 'Orden de trabajo ha finalizado.');
+    }
     
     public function update( Post $post, Request $request ){
         if( !$request->ajax()) return redirect('/');
@@ -186,8 +210,8 @@ class PostsController extends Controller
        // $pdf = \PDF::loadView('pdf.productospdf', ['productos' => $productos, 'cont'=> $cont]);
       //  $pdf->setPaper('A4', 'landscape');
       //  return $pdf->stream('productos.pdf'); //->stream('productos.pdf');
-      
-       $pdf = PDF::loadView('pdf.order', ['post'=> $post]);    
+      $refrigerants = Refrigerant::all();
+       $pdf = PDF::loadView('pdf.order', ['post'=> $post, 'refrigerants'=> $refrigerants]);    
        // return $pdf->stream('ordentrabajo-'.$post->id.'.pdf'); 
         $pdf->save('pdf/order/'. 'ordentrabajo-'.$post->id.'-'.Carbon::now()->format('dmYHis').'.pdf');
         return $pdf->stream('ordentrabajo-'.$post->id.'-'.Carbon::now()->format('dmYHis').'.pdf'); 

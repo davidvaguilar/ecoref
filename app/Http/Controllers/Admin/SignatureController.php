@@ -6,6 +6,7 @@ use App\Post;
 use Mail;
 use App\Client;
 use App\Signature;
+use App\Refrigerant;
 use Carbon\Carbon;
 use App\Mail\WorkOrder;
 use App\Http\Controllers\Controller;
@@ -15,8 +16,6 @@ use Barryvdh\DomPDF\Facade as PDF;
 class SignatureController extends Controller
 {
       public function store(Request $request, $id){
-
-            
             $base64 = $request->get('base64');
             $path = public_path().'/img/signatures/';
             $image = str_replace('data:image/png;base64,', '', $base64);
@@ -24,14 +23,13 @@ class SignatureController extends Controller
             $fileName = uniqid().'.png';
             
             $moved = file_put_contents($path.$fileName, $fileData);
-
             $signature = new Signature();
             $signature->url = '/img/signatures/'.$fileName;
             $signature->save();
             
             $post = Post::find($id);
-        
-            $pdf = PDF::loadView('pdf.order', ['post'=> $post]);   
+            $refrigerants = Refrigerant::all();
+            $pdf = PDF::loadView('pdf.order', ['post'=> $post, 'refrigerants'=> $refrigerants]);   
           
             $url = 'pdf/order/ordentrabajo-'.$post->id.'-'.Carbon::now()->format('dmYHis').'.pdf';
             $pdf->save($url);
@@ -48,7 +46,7 @@ class SignatureController extends Controller
            
             Mail::send('emails.work-order', $data, function ($message) use ($pdf, $to, $subject) {
                   $message->from('hugo.ortiz@ecorefchile.cl', 'Ecoref Chile');
-                  $message->to('david.aguilar@msn.com')->subject($subject);
+                  $message->to('ot@ecorefchile.cl')->subject($subject);
                   $message->attachData($pdf->output(), $subject.'.pdf');
             });
             return redirect()

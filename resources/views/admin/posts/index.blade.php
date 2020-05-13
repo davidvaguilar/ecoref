@@ -61,10 +61,18 @@
                                         ><i class="fa fa-times"></i></button>
                                     </form>
                                 @endcan
-                                <button type="submit"
-                                        onclick="return confirm('¿Estas seguro de querer volver a enviar este reporte?')"
-                                        class="btn btn-success"
-                                    ><i class="fa fa-envelope-o"></i></button>
+
+                                <form method="POST" 
+                                        action="{{ route('admin.posts.updateSend', $post) }}" 
+                                        style="display: inline">
+                                        {{ csrf_field() }}
+                                        {{ method_field('PUT') }}
+                                    <button type="submit"
+                                            onclick="return confirm('¿Estas seguro de querer volver a enviar este reporte?')"
+                                            class="btn btn-success"
+                                        ><i class="fa fa-envelope-o"></i></button>
+                                </form>
+
                             </td>
                         </tr>
                     @endforeach

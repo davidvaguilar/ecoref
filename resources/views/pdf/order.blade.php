@@ -76,7 +76,7 @@
         <tr>
           <td>
 
-            <table class="table">
+            <table class="table ">
               <tbody>
                 <tr>
                   <td width="25%">TEMPERATURA</td>
@@ -86,7 +86,7 @@
                 <tr>
                   <td rowspan="2">{{ $post->parameter->temperature }} CUMPLE</td>    
                   <td>ALTA: {{ $post->parameter->pressure_high }}</td>      
-                  <td rowspan="2">@if( isset($post->parameter->refrigerant_id) ) 
+                  <td rowspan="2" class="text-center">@if( isset($post->parameter->refrigerant_id) ) 
                                     @foreach ($refrigerants as $refrigerant)
                                         @if( $post->parameter->refrigerant_id == $refrigerant->id ) 
                                            {{ $refrigerant->name }}
