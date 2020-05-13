@@ -29,7 +29,7 @@
                     @foreach($posts as $post)
                         <tr> 
                             <td>{{ $post->title }}</td>
-                            <td>{{ $post->started_at->format('d/m/Y') }}</td>
+                            <td>{{ $post->started_at->format('d/m/Y H:i') }}</td>
                             <td>
                                 @if( isset($post->client->id) )
                                 <button type="button"

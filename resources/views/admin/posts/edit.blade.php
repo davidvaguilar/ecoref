@@ -145,7 +145,7 @@
                         <div class="col-xs-10">
                             <textarea id="job" 
                                     name="job" 
-                                    maxlength="5"
+                                    maxlength="140"
                                     class="form-control"
                                     placeholder="Ingresa maximo 140 caracteres">{{ old('job', $post->job) }}</textarea>
                             {!! $errors->first('job', '<span class="help-block">:message</span>' ) !!}   
