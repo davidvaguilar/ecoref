@@ -18,7 +18,8 @@
                         type="number"
                         class="form-control" 
                         placeholder="Ingresa aqui un nuevo numero de folio" 
-                        value="{{ old('title') }}" autofocus required>
+                        value="{{ old('title') }}"
+                        autocomplete="off" autofocus required>
                     {!! $errors->first('title', '<span class="help-block">:message</span>' ) !!}                        
                 </div>
 
@@ -29,7 +30,8 @@
                         type="text"
                         class="form-control" 
                         placeholder="Ingresa aqui codigo del cliente" 
-                        value="{{ old('code') }}" required>
+                        value="{{ old('code') }}" 
+                        autocomplete="off" required>
                     {!! $errors->first('code', '<span class="help-block">:message</span>' ) !!}                        
                 </div>
             </div>

@@ -2,10 +2,10 @@
 
 @section('header')
     <h1>Ordenes de Trabajo</h1>    
-    <ol class="breadcrumb">
+    <!--<ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Inicio</a></li>
         <li class="active">Trabajos</li>
-    </ol>
+    </ol>-->
 @stop
 
 @section('content')
@@ -26,7 +26,7 @@
                         <th>Cliente</th>
                         <th>Tipo de Orden</th>
                         <th>Problema</th>
-                        <th>Acciones</th>
+                        <th style="min-width:170px">Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
