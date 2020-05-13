@@ -601,9 +601,9 @@
                         {{ csrf_field() }}
                         {{ method_field('PUT') }}
                         <button type="submit" 
-                                onclick="return confirm('¿Estas seguro que desea finalizar?')"
+                                onclick="return confirm('¿Estas seguro que desea finalizar la orden de trabajo?')"
                                 class="btn btn-danger"
-                        >Finalizar Orden de Trabajo</button>
+                        >Finalizar</button>
                 </form>
                 </div>
             
