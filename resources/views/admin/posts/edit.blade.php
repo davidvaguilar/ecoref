@@ -528,7 +528,10 @@
                     <div class="form-group">
                         <label for="client_id" class="col-sm-3 control-label">Codigo Cliente</label>
                         <div class="col-sm-9">
-                            <input name="client_id" type="text" class="form-control" required>
+                            <input name="client_id" 
+                                    type="text" 
+                                    class="form-control" 
+                                    autocomplete="off" required>
                         </div>
                     </div>
                 </div>
@@ -556,11 +559,18 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="title" class="col-form-label">Titulo</label>
-                        <input id="title" name="title" type="text" class="form-control" />  <!-- required-->
+                        <input id="title" 
+                                name="title" 
+                                type="text" 
+                                class="form-control" required />
                     </div>
                     <div class="form-group">
                         <label for="photo" class="col-form-label">Fotografia</label>
-                        <input id="photo" name="photo" type="file" class="form-control" accept="image/*" />
+                        <input id="photo" 
+                                name="photo" 
+                                type="file" 
+                                class="form-control" 
+                                accept="image/*" />
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -587,7 +597,7 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label class="col-form-label">Numero de Folio</label>
-                        <input name="title" type="text" class="form-control" value="{{ $post->title }}" required />
+                        <input name="title" type="number" class="form-control" value="{{ $post->title }}" required />
                     </div>
                 </div>
                 <div class="modal-footer">
