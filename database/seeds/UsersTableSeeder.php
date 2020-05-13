@@ -96,5 +96,21 @@ class UsersTableSeeder extends Seeder
         $writer->save();
 
         $writer->assignRole($writerRole);
+
+        $writer = new User;
+        $writer->name = 'Tecnico Iquique';
+        $writer->email = 'iquique@ecoref.cl';
+        $writer->password = '123123';
+        $writer->save();
+
+        $writer->assignRole($writerRole);
+
+        $writer = new User;
+        $writer->name = 'Tecnico Antofagasta';
+        $writer->email = 'antofagasta@ecoref.cl';
+        $writer->password = '123123';
+        $writer->save();
+
+        $writer->assignRole($writerRole);
     }
 }
