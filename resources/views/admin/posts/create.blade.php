@@ -1,5 +1,6 @@
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    
     <form method="POST" action="{{ route('admin.posts.store', '#create') }}">
         {{ csrf_field() }}
         <div class="modal-dialog" role="document">
@@ -11,6 +12,9 @@
                 <h5 class="modal-title" id="exampleModalLabel">Registro de Orden de Trabajo</h5>
             </div>
             <div class="modal-body">
+                @if (session()->has('flash'))
+                    <div class="alert alert-danger">{{ session('flash') }}</div>
+                @endif
                 <div class="form-group {{ $errors->has('title') ? 'has-error' : '' }}">
                     <label>Numero de folio</label>
                     <input id="post-title"
