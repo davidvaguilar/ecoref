@@ -50,10 +50,10 @@ class PostPolicy
     public function update(User $user, Post $post)
     {
         return $user->id === $post->user_id
-            || $user->hasPermissionTo('Update posts');
+            && $user->hasPermissionTo('Update posts');
     }
 
-    /**
+    /** 
      * Determine whether the user can delete the post.
      *
      * @param  \App\User  $user
@@ -62,7 +62,8 @@ class PostPolicy
      */
     public function delete(User $user, Post $post)
     {
+       // dd($user->hasPermissionTo('Delete posts'));
         return $user->id === $post->user_id
-            || $user->hasPermissionTo('Delete posts');
+            && $user->hasPermissionTo('Delete posts');
     }
 }

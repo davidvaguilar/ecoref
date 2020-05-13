@@ -36,7 +36,7 @@ class UsersTableSeeder extends Seeder
             'name' => 'Delete posts',
             'display_name' => 'Eliminar ordenes'    
         ]);
-
+ 
         $viewUsersPermission = Permission::create([
             'name' => 'View users',
             'display_name' => 'Ver usuarios'    

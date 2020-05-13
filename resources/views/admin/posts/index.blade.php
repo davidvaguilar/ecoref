@@ -2,10 +2,6 @@
 
 @section('header')
     <h1>Ordenes de Trabajo</h1>    
-    <!--<ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i> Inicio</a></li>
-        <li class="active">Trabajos</li>
-    </ol>-->
 @stop
 
 @section('content')
@@ -48,19 +44,23 @@
                                     target="_blank" 
                                     class="btn btn-default"
                                 ><i class="fa fa-eye"></i></a>
-                                <a href="{{ route('admin.posts.edit', $post) }}" 
-                                    class="btn btn-info"
-                                ><i class="fa fa-pencil"></i></a>
-                                <form method="POST" 
-                                    action="{{ route('admin.posts.destroy', $post) }}" 
-                                    style="display: inline">
-                                    {{ csrf_field() }}
-                                    {{ method_field('DELETE') }}
-                                    <button type="submit" 
-                                        onclick="return confirm('¿Estas seguro de querer eliminar esta publicación?')"
-                                        class="btn btn-danger"
-                                    ><i class="fa fa-times"></i></button>
-                                </form>
+                                @can('update', $post)
+                                    <a href="{{ route('admin.posts.edit', $post) }}" 
+                                        class="btn btn-info"
+                                    ><i class="fa fa-pencil"></i></a>
+                                @endcan
+                                @can('delete', $post)
+                                    <form method="POST" 
+                                        action="{{ route('admin.posts.destroy', $post) }}" 
+                                        style="display: inline">
+                                        {{ csrf_field() }}
+                                        {{ method_field('DELETE') }}
+                                        <button type="submit" 
+                                            onclick="return confirm('¿Estas seguro de querer eliminar esta publicación?')"
+                                            class="btn btn-danger"
+                                        ><i class="fa fa-times"></i></button>
+                                    </form>
+                                @endcan
                                 <button type="submit"
                                         onclick="return confirm('¿Estas seguro de querer volver a enviar este reporte?')"
                                         class="btn btn-success"
@@ -89,7 +89,7 @@
     <script>
         $(function () {
             $('#posts-table').DataTable({
-            'paging'      : true,
+            'paging'      : false,
             'lengthChange': false,
             'searching'   : true,
             'ordering'    : false,
