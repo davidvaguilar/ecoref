@@ -19,9 +19,21 @@ class EmailsTableSeeder extends Seeder
         $email->save();
 
         $email = new Email;
-        $email->alias = "daniel";
+        $email->alias = "pepe";
         $email->domain = "correo.com";
-        $email->people_id = 1;
+        $email->people_id = 2;
+        $email->save();
+
+        $email = new Email;
+        $email->alias = "paco";
+        $email->domain = "correo.com";
+        $email->people_id = 3;
+        $email->save();
+
+        $email = new Email;
+        $email->alias = "francisco";
+        $email->domain = "correo.com";
+        $email->people_id = 4;
         $email->save();
     }
 }
