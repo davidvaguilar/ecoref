@@ -121,7 +121,8 @@ class PostsController extends Controller
 
         $refrigerants = Refrigerant::all();
         $pdf = PDF::loadView('pdf.order', ['post'=> $post, 'refrigerants'=> $refrigerants]);   
-      
+        $url = 'pdf/order/ordentrabajo-'.$post->id.'-'.Carbon::now()->format('dmYHis').'.pdf';
+        $pdf->save($url);
 
         Mail::send('emails.work-order', $data, function ($message) use ($pdf, $to, $subject) {
             $message->from('hugo.ortiz@ecorefchile.cl', 'Ecoref Chile');
