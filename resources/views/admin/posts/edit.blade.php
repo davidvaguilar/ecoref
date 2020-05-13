@@ -495,7 +495,7 @@
                     
                     <div class="form-group">
                         <div class="col-sm-12">
-                            <input type="text" name="base64" id="base64">
+                            <input type="hidden" name="base64" id="base64">
                             <button id="signature-clear" type="button" class="btn btn-info pull-left">Borrar</button>   <!--  data-action="clear"-->              
                             <button id="signature-finished" type="button" class="btn btn-success pull-right">Firmar y Finalizar</button> <!-- id="signature-png" data-action="save-png"-->
                         </div>
@@ -562,7 +562,8 @@
                         <input id="title" 
                                 name="title" 
                                 type="text" 
-                                class="form-control" required />
+                                class="form-control" 
+                                autocomplete="off" required />
                     </div>
                     <div class="form-group">
                         <label for="photo" class="col-form-label">Fotografia</label>
