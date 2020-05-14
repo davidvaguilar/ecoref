@@ -74,7 +74,7 @@
                                     <select id="type_id"
                                             name="type_id" 
                                             class="form-control">
-                                        <option value="">Seleccione un Tipo</option>
+                                        <!--<option value="">Seleccione un Tipo</option>-->
                                         @foreach ($types as $type)
                                             <option value="{{ $type->id }}"                              
                                                 {{ old('type_id', $post->type_id) == $type->id ? 'selected' : '' }} 
@@ -120,8 +120,8 @@
                                     <select id="problem_id" 
                                             name="problem_id" 
                                             class="form-control">
-                                        <option value="">Seleccione un Problema</option>
-                                    @foreach ($problems as $problem)
+                                        <!--<option value="">Seleccione un Problema</option> -->
+                                        @foreach ($problems as $problem)
                                             <option value="{{ $problem->id }}"                              
                                                     {{ old('problem_id', $post->problem_id) == $problem->id ? 'selected' : '' }}>
                                                 {{ $problem->name }}

@@ -19,19 +19,18 @@ class CreatePostsTable extends Migration
             $table->string('url', 80)->unique()->nullable();           
             $table->dateTime('started_at')->nullable();
             $table->dateTime('finished_at')->nullable();
-                $table->unsignedInteger('type_id')->nullable(); 
+                $table->unsignedInteger('type_id')->default(1); 
             $table->string('type_other')->nullable();
             $table->string('equipment')->nullable();
             $table->string('model')->nullable();
             $table->string('serie')->nullable();
-                $table->unsignedInteger('problem_id')->nullable(); 
+                $table->unsignedInteger('problem_id')->default(1);
             $table->text('job')->nullable();
 
             //PENDIENTE, FINALIZADO, ENVIADO
             $table->string('status', 15)->default("PENDIENTE");
 
             $table->unsignedInteger('parameter_id')->nullable();
-
             $table->unsignedInteger('client_id')->nullable();
             $table->unsignedInteger('vehicule_id')->nullable();
           //  $table->integer('kilometer_of')->nullable();
@@ -40,7 +39,6 @@ class CreatePostsTable extends Migration
             $table->text('observation')->nullable();
             $table->string('email', 70)->nullable();
             $table->string('signature_id')->nullable();
-           // $table->string('file', 70)->nullable();
             $table->unsignedInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
