@@ -4,7 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Post;
 use App\Photo;
-Use Image;
+use Image;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
@@ -43,15 +44,17 @@ class PhotosController extends Controller
           $photo->save();
         }
         return back();*/
-
+ 
         /*Image::make($request->file('photo'))
             ->resize(500, 500)
             ->save('img/orders/'.$file_name);  */
         // no sirve   ini_set('post_max_size', '40M');  
         // no sirve  ini_set('upload_max_filesize', '20M');  //Temporalmente  post_max_size = 10M
-        ini_set('memory_limit','256M');  // Temporalmente aumento de memoria
+        $post = Post::find($id);
+
+        ini_set('memory_limit','200M');  // Temporalmente aumento de memoria hasta 256
         $file = $request->file('photo');
-        $image_name = uniqid().'.'.$file->getClientOriginalExtension();
+        $image_name = 'ot-'.$post->title.'-'.Carbon::now()->format('dmYHis').'.'.$file->getClientOriginalExtension();
         $image = Image::make($file);
         $image->resize(600, 600);
         $image->save('img/orders/'.$image_name);

@@ -1,11 +1,7 @@
 @extends('admin.layout')
 
 @section('header')
-    <h1>Clientes</h1>    
-    <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i> Inicio</a></li>
-        <li class="active">Clientes</li>
-    </ol>
+    <h1>Clientes</h1>
 @stop
 
 @section('content')
@@ -27,7 +23,7 @@
                         <th>Direccion</th>                   
                         <th>Ciudad</th>
                         <th>Nombre.Email</th>
-                        <th>Acciones</th>
+                        <th style="min-width:80px">Acciones</th>
                     </tr>
                 </thead>
                 <tbody>

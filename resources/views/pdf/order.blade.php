@@ -49,7 +49,7 @@
       </tbody>
     </table>
     <h5>IDENTIFICACION DE PROBLEMAS</h5>
-    <table class="table table-bordered">
+    <table class="table table-bordered" width="60%">
       <tbody>
         <tr>
           <td width="60%">EQUIPO INTERVENIDO : {{ $post->equipment }}</td>
@@ -160,18 +160,12 @@
     
 
     @if ($post->photos->count())
-      <table class="table table-bordered">
-        <tbody>
-          <tr>
-            <td width="100%">{{ $post->id }}{{ isset($post->client->id) ? $post->client->title : '' }}{{ $post->owner->name }}{{ $post->started_at }}</td>
-          </tr>
-        </tbody>
-      </table>
+     
       <table class="text-center">
         <tbody>
         <tr>
           @foreach ($post->photos as $photo)
-            @if ($loop->iteration == 3 )
+            @if ($loop->iteration == 3 || $loop->iteration == 5 || $loop->iteration == 7)
               </tr>
               <tr>
             @endif

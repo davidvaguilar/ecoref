@@ -82,33 +82,37 @@ class UsersTableSeeder extends Seeder
         ]);
 
         $admin = new User;
-        $admin->name = 'David Villegas Aguilar';
-        $admin->email = 'administrador@ecoref.cl';
+        $admin->name = 'Administrador de Ecoref';
+        $admin->email = 'administrador@ecorefchile.cl';
         $admin->password = '123123';
+        $admin->url = '/img/users/test.png';
         $admin->save();
 
         $admin->assignRole($adminRole);
 
         $writer = new User;
         $writer->name = 'Tecnico a Prueba';
-        $writer->email = 'tecnico@ecoref.cl';
+        $writer->email = 'tecnico@ecorefchile.cl';
         $writer->password = '123123';
+        $writer->url = '/img/users/test.png';
         $writer->save();
 
         $writer->assignRole($writerRole);
 
         $writer = new User;
         $writer->name = 'Tecnico Iquique';
-        $writer->email = 'iquique@ecoref.cl';
+        $writer->email = 'iquique@ecorefchile.cl';
         $writer->password = '123123';
+        $writer->url = '/img/users/test.png';
         $writer->save();
 
         $writer->assignRole($writerRole);
 
         $writer = new User;
         $writer->name = 'Tecnico Antofagasta';
-        $writer->email = 'antofagasta@ecoref.cl';
+        $writer->email = 'antofagasta@ecorefchile.cl';
         $writer->password = '123123';
+        $writer->url = '/img/users/test.png';
         $writer->save();
 
         $writer->assignRole($writerRole);

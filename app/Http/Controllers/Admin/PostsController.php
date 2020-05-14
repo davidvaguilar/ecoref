@@ -23,9 +23,10 @@ class PostsController extends Controller
     public function index(){
         //$posts = Post::all();   //$posts = Post::where('user_id', auth()->id())->get();
         //$posts = auth()->user()->posts;
-        
+
+        $clients = Client::distinct()->get(['name']);
         $posts = Post::allowed()->orderBy('started_at', 'desc')->get();
-        return view('admin.posts.index', compact('posts'));
+        return view('admin.posts.index', compact('posts', 'clients'));
     }
 
    /* public function create(){
@@ -36,8 +37,14 @@ class PostsController extends Controller
 
     public function store(Request $request){
         $this->authorize('create', new Post);
+
         $code = $request->get('code');
-        $client_id = Client::where('code', $code)->get()->pluck('id')->first();
+        $name = $request->get('name');
+        $client_id = Client::where('code', $code)
+                            ->where('name', $name)
+                            ->get()
+                            ->pluck('id')
+                            ->first();
 
         if($client_id == NULL){
             return back()->with('flash', 'Cliente no existe');
@@ -76,7 +83,13 @@ class PostsController extends Controller
 
     public function selectClient(Request $request, $id){
         $post = Post::find($id);
-        $client_id = Client::where('code', $request->client_id)->get()->pluck('id')->first();
+        $code = $request->get('code');
+        $name = $request->get('name');
+        $client_id = Client::where('code', $code)
+                            ->where('name', $name)
+                            ->get()
+                            ->pluck('id')
+                            ->first();
         if($client_id == NULL){
             return back()->with('flash', 'Cliente no existe');
         }
@@ -91,7 +104,8 @@ class PostsController extends Controller
         $refrigerants = Refrigerant::all();
         $problems = Problem::all();
         $types = Type::all();
-        return view('admin.posts.edit', compact('post', 'problems', 'types', 'refrigerants'));
+        $clients = Client::distinct()->get(['name']);
+        return view('admin.posts.edit', compact('post', 'problems', 'types', 'refrigerants', 'clients'));
     }
 
     public function updateTitle( Post $post, Request $request ){
@@ -114,7 +128,7 @@ class PostsController extends Controller
     }
 
     public function updateStatus( Post $post ){
-        $subject = $post->id.$post->client->id.$post->client->title.$post->owner->name.$post->started_at;
+        $subject = 'OT'.$post->title.'-'.$post->client->code.'-'.trim($post->owner->name).'-'.$post->started_at->format('d-m-Y-H-i');
 
         $to = 'ot@ecorefchile.cl';
         $data = ['nombre' => 'Ecoref'];
@@ -126,7 +140,7 @@ class PostsController extends Controller
 
         Mail::send('emails.work-order', $data, function ($message) use ($pdf, $to, $subject) {
             $message->from('hugo.ortiz@ecorefchile.cl', 'Ecoref Chile');
-            $message->to('ot@ecorefchile.cl')->subject($subject);
+            $message->to('ot@ecorefchile.cl')->cc('david.villegas.aguilar@gmail.com')->subject($subject);
             $message->attachData($pdf->output(), $subject.'.pdf');
         });
 
@@ -236,7 +250,7 @@ class PostsController extends Controller
         $post->delete();
         return redirect()
             ->route('admin.posts.index')
-            ->with('flash', 'La publicación ha sido eliminada.');
+            ->with('flash', 'La OT ha sido eliminada.');
     }
 
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Post;
+use App\Record;
 use Mail;
 use App\Client;
 use App\Signature;
@@ -16,29 +17,34 @@ use Barryvdh\DomPDF\Facade as PDF;
 class SignatureController extends Controller
 {
       public function store(Request $request, $id){
+            $post = Post::find($id);
+
             $base64 = $request->get('base64');
             $path = public_path().'/img/signatures/';
             $image = str_replace('data:image/png;base64,', '', $base64);
             $fileData = base64_decode($image);
-            $fileName = uniqid().'.png';
+            $fileName = 'ot-'.$post->title.'-'.Carbon::now()->format('dmYHis').'.png';
             
             $moved = file_put_contents($path.$fileName, $fileData);
             $signature = new Signature();
             $signature->url = '/img/signatures/'.$fileName;
             $signature->save();
             
-            $post = Post::find($id);
             $refrigerants = Refrigerant::all();
             $pdf = PDF::loadView('pdf.order', ['post'=> $post, 'refrigerants'=> $refrigerants]);   
           
-            $url = 'pdf/order/ordentrabajo-'.$post->id.'-'.Carbon::now()->format('dmYHis').'.pdf';
+            $url = 'pdf/order/ot-'.$post->title.'-'.Carbon::now()->format('dmYHis').'.pdf';
             $pdf->save($url);
         
             $post->finished_at = Carbon::now();
             $post->observation = $request->observation;
             $post->signature_id = $signature->id;
-            $post->file = $url;
             $post->save();
+
+            $record = new Record;
+            $record->post_id = $post->id;
+            $record->url = $url;
+            $record->save();
           
             $subject = 'ordentrabajo-'.$post->id;
             $to = $post->email;

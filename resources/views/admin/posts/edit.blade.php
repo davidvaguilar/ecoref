@@ -19,497 +19,515 @@
 </div>
 <div class="row">
     @if ($post->photos->count() || $post->signature_id != null )
-        <div class="col-md-12">
-            <div class="box box-primary">
-                <div class="box-body">
-                    <div class="row">
-                        @foreach ($post->photos as $photo)
-                            <form method="POST" action="{{ route('admin.photos.destroy', $photo) }}" style="display: inline">
-                                {{ csrf_field() }}
-                                {{ method_field('DELETE') }}
-                                <div class="col-xs-4">
-                                    <button class="btn btn-danger" style="position:absolute">
-                                        <i class="fa fa-remove"></i>
-                                    </button>
-                                    <img src="{{ url($photo->url) }}" class="img-responsive" width="100px">
-                                </div>
-                            </form>
-                        @endforeach
-                        @if ($post->signature_id != null )
-                            <div class="col-md-2">
-                                <button class="btn btn-danger btn-xs" style="position:absolute">
-                                    <i class="fa fa-remove"></i>
-                                </button>
-                                <img src="{{ url($post->signature->url) }}" class="img-responsive" width="100px"/>
-                            </div>
-                        @endif
+        <div class="box box-default">
+            <div class="box-body">
+                @foreach ($post->photos as $photo)
+                    <form method="POST" action="{{ route('admin.photos.destroy', $photo) }}" style="display: inline">
+                        {{ csrf_field() }}
+                        {{ method_field('DELETE') }}
+                        <div class="col-xs-4">
+                            <button class="btn btn-danger" style="position:absolute">
+                                <i class="fa fa-remove"></i>
+                            </button>
+                            <img src="{{ url($photo->url) }}" class="img-responsive" width="100px">
+                        </div>
+                    </form>
+                @endforeach
+                @if ($post->signature_id != null )
+                    <div class="col-md-2">
+                        <button class="btn btn-danger btn-xs" style="position:absolute">
+                            <i class="fa fa-remove"></i>
+                        </button>
+                        <img src="{{ url($post->signature->url) }}" class="img-responsive" width="100px"/>
                     </div>
-                </div>
+                @endif
             </div>
         </div>
     @endif
 
-    <div class="col-md-12">
-        <!-- Custom Tabs -->
-        <div class="nav-tabs-custom">
-          <ul class="nav nav-tabs nav-justified">
-            <li id="li_order" class="active"><a href="#tab_order" data-toggle="tab">ANTECEDENTES</a></li>
-            <li id="li_parameter"><a href="#tab_parameter" data-toggle="tab">MEDICIONES</a></li>
-            <li id="li_material"><a href="#tab_material" data-toggle="tab">MATERIALES</a></li>
-            <li id="li_photo"><button id="photo-button" data-toggle="modal" data-target="#photo-modal" type="button" class="btn btn-link btn-block">FOTOGRAFIAS</button></li>
-            <li id="li_signature" onclick="selectSignature();"><a href="#tab_signature" data-toggle="tab">FIRMA</a></li>
-          </ul>
-          <div class="tab-content">
-            <div class="tab-pane active" id="tab_order">
+    <div class="box box-default">
+        <div class="box-body">
+            <div class="nav-tabs-custom">
+                <ul class="nav nav-tabs nav-justified">
+                    <li id="li_order" class="active"><a href="#tab_order" data-toggle="tab">ANTECEDENTES</a></li>
+                    <li id="li_parameter"><a href="#tab_parameter" data-toggle="tab">MEDICIONES</a></li>
+                    <li id="li_material"><a href="#tab_material" data-toggle="tab">MATERIALES</a></li>
+                    <li id="li_photo"><a href="#tab_photo" data-toggle="tab">FOTOGRAFIAS</a></li>
+                    <li id="li_signature" onclick="selectSignature();"><a href="#tab_signature" data-toggle="tab">FIRMA</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="tab_order">
 
-                <form class="form-horizontal">
-                    <div class="form-group">
-                        <label for="started_date_at" class="col-sm-4 control-label">Fecha Llegada: {{ $post->started_at->format('d/m/Y  H:i') }}</label>
-                        <label for="technical" class="col-sm-6 control-label">Tecnico Responsable: {{ $post->owner->name }}</label>
-                       
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-4 control-label">Empresa: <button id="client-button" type="button" class="btn btn-success">{{  isset($post->client->id) ? $post->client->name : '' }}</button> </label>
-                        <label class="col-sm-4 control-label">Local: {{  isset($post->client->id) ? $post->client->title : '' }}</label>
-                        <!--<label class="col-sm-4 control-label">Direccion: {{--  isset($post->client->id) ? $post->client->adress : '' --}}</label>-->
-                        <!--<div class="col-sm-3 pull-right">
-                            <button id="client-button" type="button" class="btn btn-success">{{--  isset($post->client->id) ? $post->client->name : '' --}}</button>                     
-                        </div>-->
-                    </div>
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <label for="started_date_at" class="col-sm-4 control-label">Fecha Llegada: {{ $post->started_at->format('d/m/Y  H:i') }}</label>
+                                <label for="technical" class="col-sm-6 control-label">Tecnico Responsable: {{ $post->owner->name }}</label> 
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">Empresa: <button id="client-button" type="button" class="btn btn-success">{{  isset($post->client->id) ? $post->client->name : '' }}</button> </label>
+                                <label class="col-sm-4 control-label">Local: {{  isset($post->client->id) ? $post->client->title : '' }}</label>
+                            </div>
 
-                    <div id="type_div" class="form-group {{ $errors->has('type_id') ? 'has-error' : '' }}">
-                        <label for="type_id" class="col-xs-4 control-label">Tipo de Orden</label>
-                        <div class="col-xs-8">
-                            <select id="type_id"
-                                    name="type_id" 
-                                    class="form-control">
-                                <option value="">Seleccione un Tipo</option>
-                                @foreach ($types as $type)
-                                    <option value="{{ $type->id }}"                              
-                                        {{ old('type_id', $post->type_id) == $type->id ? 'selected' : '' }} 
-                                        >{{ $type->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="type_other" class="col-xs-4 control-label">Detalle de Orden</label>
-                        <div class="col-xs-8">
-                            <input id="type_other" 
-                                    name="type_other" 
-                                    type="text" 
-                                    class="form-control" 
-                                    value="{{ old('type_other', $post->type_other) }}">
-                            {!! $errors->first('type_other', '<span class="help-block">:message</span>' ) !!}  
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="equipment" class="col-sm-2 control-label">Equipo Intervenido</label>
-                        <div class="col-sm-10">
-                            <input id="equipment" name="equipment" type="text" class="form-control" value="{{ old('equipment', $post->equipment) }}">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="model" class="col-sm-2 control-label">Modelo</label>        
-                        <div class="col-sm-4">
-                            <input id="model" name="model" type="text" class="form-control" value="{{ old('model', $post->model) }}">
-                        </div>
-                        <label for="serie" class="col-sm-2 control-label">Serie</label>        
-                        <div class="col-sm-4">
-                            <input id="serie" name="serie" type="text" class="form-control" value="{{ old('serie', $post->serie) }}">
-                        </div>
-                    </div>
-
-                    <div id="problem_div" class="form-group {{ $errors->has('problem_id') ? 'has-error' : '' }}">
-                        <label for="problem_id" class="col-xs-2 control-label">Problema</label>
-                        <div class="col-xs-10">
-                            <select id="problem_id" 
-                                    name="problem_id" 
-                                    class="form-control">
-                                <option value="">Seleccione un Problema</option>
-                               @foreach ($problems as $problem)
-                                    <option value="{{ $problem->id }}"                              
-                                            {{ old('problem_id', $post->problem_id) == $problem->id ? 'selected' : '' }}>
-                                        {{ $problem->name }}
-                                    </option>
-                                @endforeach  
-                            </select> 
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="job" class="col-xs-2 control-label">Trabajo Realizado</label>
-                        <div class="col-xs-10">
-                            <textarea id="job" 
-                                    name="job" 
-                                    maxlength="140"
-                                    class="form-control"
-                                    placeholder="Ingresa maximo 140 caracteres">{{ old('job', $post->job) }}</textarea>
-                            {!! $errors->first('job', '<span class="help-block">:message</span>' ) !!}   
-                        </div>
-                    </div>
-                    <button id="btn_order" type="button" class="btn btn-primary btn-block">Guardar y Siguiente</button>  
-                </form>
-            </div>
-            <!-- /.tab-pane -->
-            <div class="tab-pane" id="tab_parameter">
-                <form class="form-horizontal">
-                    <div class="box-body">
-
-                        <div class=" col-sm-12">
-                            <div class="box box-info">
-                                <div class="box-header with-border">
-                                    <h3 class="box-title">PARAMETROS/MEDICIONES/NIVELES</h3>
-                                </div>
-                                <div class="box-body">
-                                    <div class="form-group">
-                                        <label for="type" class="col-xs-2 control-label">Tipo</label>
-                                        <div class="col-xs-10">
-                                            <select id="type"
-                                                    name="type" 
-                                                    class="form-control" 
-                                                    style="font-weight: bold;">
-                                                <option value="BAJA" {{ isset($post->parameter->id) && $post->parameter->type == 'BAJA' ? 'selected' : '' }}>
-                                                        BAJA TEMPERATURA
-                                                </option>
-                                                <option value="MEDIA" {{ isset($post->parameter->id) && $post->parameter->type == 'MEDIA' ? 'selected' : '' }}>
-                                                        MEDIA TEMPERATURA
-                                                </option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-xs-2 control-label">Temperatura</label>
-                                        <div class="col-xs-10 text-center">
-                                            <label class="checkbox-inline">
-                                                <input type="radio" 
-                                                        name="temperature" 
-                                                        value="SI" 
-                                                        {{ isset($post->parameter->id) && $post->parameter->temperature == 'SI' ? 'checked' : '' }}> SI CUMPLE
-                                            </label>
-                                            <label class="checkbox-inline">
-                                                <input type="radio" 
-                                                        name="temperature" 
-                                                        value="NO" 
-                                                        {{ isset($post->parameter->id) && $post->parameter->temperature == 'NO' ? 'checked' : '' }}> NO CUMPLE
-                                            </label>                          
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="pressure_low" class="col-xs-2 control-label">Presion</label>
-                                        <div id="pressure_low-div" class="col-xs-5">
-                                            <input id="pressure_low"
-                                                    name="pressure_low" 
-                                                    type="number" 
-                                                    class="form-control" 
-                                                    placeholder="BAJA"
-                                                    min="0"
-                                                    value="{{ isset($post->parameter->id) ? $post->parameter->pressure_low : '' }}">
-                                        </div>
-                                        <div id="pressure_high-div" class="col-xs-5">
-                                            <input id="pressure_high"
-                                                    name="pressure_high" 
-                                                    type="number" 
-                                                    class="form-control" 
-                                                    placeholder="ALTA" 
-                                                    min="0"
-                                                    value="{{ isset($post->parameter->id) ? $post->parameter->pressure_high : '' }}">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="refrigerant_id" class="col-xs-3 control-label">Refrigerante</label>
-                                        <div class="col-xs-9">
-                                            <select id="refrigerant_id" 
-                                                    name="refrigerant_id" 
-                                                    class="form-control"
-                                                    style="font-weight: bold;">
-                                                <option value="">Seleccione refrigerante</option>
-                                                @foreach ($refrigerants as $refrigerant)
-                                                    <option value="{{ $refrigerant->id }}"                              
-                                                            {{ old('refrigerant_id', $post->parameter->refrigerant_id) == $refrigerant->id ? 'selected' : '' }}>
-                                                        {{ $refrigerant->name }}
-                                                    </option>
-                                                @endforeach  
-                                            </select> 
-                                            <!-- <select id="refrigerants" 
-                                                    class="form-control select2" 
-                                                    multiple="multiple" 
-                                                    data-placeholder="Seleccione una o mas etiquetas" 
-                                                    style="width: 100%;">
-                                                @foreach ($refrigerants as $refrigerant)
-                                                    <option {{-- collect(old('refrigerants', $post->parameter->refrigerants->pluck('id') ))->contains($refrigerant->id) ? 'selected' : '' -}} 
-                                                            value="{{ $refrigerant->id }}"
-                                                        >{{-- $refrigerant->name --}}</option>
-                                                @endforeach
-                                            </select>     -->              
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label class="col-xs-3 control-label">Refrigerante</label>
-                                        <div class="col-xs-9 text-center">
-                                            <label class="checkbox-inline">
-                                                <input type="radio" 
-                                                        name="refrigerant" 
-                                                        value="ALTA" 
-                                                        {{ isset($post->parameter->id) && $post->parameter->refrigerant == 'ALTA' ? 'checked' : '' }}> ALTA
-                                            </label>
-                                            <label class="checkbox-inline">
-                                                <input type="radio" 
-                                                        name="refrigerant" 
-                                                        value="MEDIA" 
-                                                        {{ isset($post->parameter->id) && $post->parameter->refrigerant == 'MEDIA' ? 'checked' : '' }}> MEDIA
-                                            </label> 
-                                            <label class="checkbox-inline">
-                                                <input type="radio" 
-                                                        name="refrigerant" 
-                                                        value="BAJA" 
-                                                        {{  isset($post->parameter->id) && $post->parameter->refrigerant == 'BAJA' ? 'checked' : '' }}> BAJA
-                                            </label>
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label class="col-xs-3 control-label">Aceite</label>
-                                        <div class="col-xs-9 text-center">
-                                            <label class="checkbox-inline">
-                                                <input type="radio" 
-                                                        name="oil" 
-                                                        value="ALTA" 
-                                                        {{ isset($post->parameter->id) && $post->parameter->oil == 'ALTA' ? 'checked' : '' }}> ALTA
-                                            </label>
-                                            <label class="checkbox-inline">
-                                                <input type="radio" 
-                                                        name="oil" 
-                                                        value="MEDIA" 
-                                                        {{ isset($post->parameter->id) && $post->parameter->oil == 'MEDIA' ? 'checked' : '' }}> MEDIA
-                                            </label> 
-                                            <label class="checkbox-inline">
-                                                <input type="radio" 
-                                                        name="oil" 
-                                                        value="BAJA" 
-                                                        {{ isset($post->parameter->id) && $post->parameter->oil == 'BAJA' ? 'checked' : '' }}> BAJA
-                                            </label>
-                                        </div>
-                                    </div>
+                            <div id="type_div" class="form-group {{ $errors->has('type_id') ? 'has-error' : '' }}">
+                                <label for="type_id" class="col-xs-4 control-label">Tipo de Orden</label>
+                                <div class="col-xs-8">
+                                    <select id="type_id"
+                                            name="type_id" 
+                                            class="form-control">
+                                        <option value="">Seleccione un Tipo</option>
+                                        @foreach ($types as $type)
+                                            <option value="{{ $type->id }}"                              
+                                                {{ old('type_id', $post->type_id) == $type->id ? 'selected' : '' }} 
+                                                >{{ $type->name }}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
-                        </div>
-                        <button id="parameter-button" type="button" class="btn btn-primary btn-block">Guardar y Siguiente</button>
-                    </div>
-                </form>            
-            </div>
-            <!-- /.tab-pane -->
-            <div class="tab-pane" id="tab_material">
-            
-                <div id="quantity-div" class="form-group col-xs-3">
-                    <label for="quantity">Cantidad</label>
-                    <input id="quantity"
-                            name="quantity"  
-                            type="number" 
-                            class="form-control" value="1">
-                </div>
-                <div id="detail-div" class="form-group col-xs-9">
-                    <label for="detail">Material</label>
-                    <input id="detail"
-                            name="detail" 
-                            type="text" 
-                            class="form-control">
-                </div>  
-    
-                <button onclick="addMaterial()" type="button" class="btn btn-success btn-block">Agregar</button> 
-                <div class="table-responsive">
-                    <table id="material-table" class="table table-bordered table-striped text-center">
-                        <thead>
-                            <tr>
-                                <th>Cantidad</th>
-                                <th>Detalle</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody id="material-body">
-                            @if ($post->materials->count())
-                                @foreach ($post->materials as $material)
-                                    <tr>
-                                        <td>{{ $material->quantity }}</td>
-                                        <td>{{ $material->detail }}</td>
-                                        <td>
-                                            <form method="POST" 
-                                                action="{{ route('admin.materials.destroy', $material) }}" 
-                                                style="display: inline">
-                                                {{ csrf_field() }}
-                                                {{ method_field('DELETE') }}
-                                                <button type="submit" 
-                                                    onclick="return confirm('¿Estas seguro de querer eliminar este material?')"
-                                                    class="btn btn-danger"
-                                                ><i class="fa fa-times"></i></button>
-                                            </form>
-                                        </td>
-                                    </tr>        
-                                @endforeach
-                            @else
-                                <tr> 
-                                    <td colspan="3">No hay materiales seleccionados</td>
-                                </tr>
-                            @endif
-                        </tbody>
-                    </table>
-                </div>             
-            </div>
 
-            <div class="tab-pane" id="tab_signature">
-                <form id="signature-form" method="POST" action="{{ route('admin.posts.signature.store', $post->id) }}" class="form-horizontal" >
-                    {{ csrf_field() }}
-                    <div class="form-group">
-                        <div class="col-xs-5">
-                            <p>Fecha Llegada: <label>{{ $post->started_at->format('d/m/Y H:i') }}</label></p>
-                        </div>
-                        <div class="col-xs-7">
-                            <p>Tecnico Responsable: <label>{{ $post->owner->name }}</label></p>
+                            <div class="form-group">
+                                <label for="type_other" class="col-xs-4 control-label">Detalle de Orden</label>
+                                <div class="col-xs-8">
+                                    <input id="type_other" 
+                                            name="type_other" 
+                                            type="text" 
+                                            class="form-control" 
+                                            value="{{ old('type_other', $post->type_other) }}">
+                                    {!! $errors->first('type_other', '<span class="help-block">:message</span>' ) !!}  
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="equipment" class="col-sm-2 control-label">Equipo Intervenido</label>
+                                <div class="col-sm-10">
+                                    <input id="equipment" name="equipment" type="text" class="form-control" value="{{ old('equipment', $post->equipment) }}">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="model" class="col-sm-2 control-label">Modelo</label>        
+                                <div class="col-sm-4">
+                                    <input id="model" name="model" type="text" class="form-control" value="{{ old('model', $post->model) }}">
+                                </div>
+                                <label for="serie" class="col-sm-2 control-label">Serie</label>        
+                                <div class="col-sm-4">
+                                    <input id="serie" name="serie" type="text" class="form-control" value="{{ old('serie', $post->serie) }}">
+                                </div>
+                            </div>
+
+                            <div id="problem_div" class="form-group {{ $errors->has('problem_id') ? 'has-error' : '' }}">
+                                <label for="problem_id" class="col-xs-4 control-label">Problema</label>
+                                <div class="col-xs-8">
+                                    <select id="problem_id" 
+                                            name="problem_id" 
+                                            class="form-control">
+                                        <option value="">Seleccione un Problema</option>
+                                    @foreach ($problems as $problem)
+                                            <option value="{{ $problem->id }}"                              
+                                                    {{ old('problem_id', $post->problem_id) == $problem->id ? 'selected' : '' }}>
+                                                {{ $problem->name }}
+                                            </option>
+                                        @endforeach  
+                                    </select> 
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="job" class="col-sm-2 control-label">Trabajo Realizado</label>
+                                <div class="col-sm-10">
+                                    <textarea id="job" 
+                                            name="job" 
+                                            maxlength="140"
+                                            class="form-control"
+                                            placeholder="Ingresa maximo 140 caracteres">{{ old('job', $post->job) }}</textarea>
+                                    {!! $errors->first('job', '<span class="help-block">:message</span>' ) !!}   
+                                </div>
+                            </div>
+                            <button id="btn_order" type="button" class="btn btn-primary btn-block">Guardar y Siguiente</button>  
                         </div>
                     </div>
-                    <div class="form-group">
-                        <div class="col-xs-4">
-                            <p>Empresa: <label>{{ isset($post->client->id) ? $post->client->name : '' }}</label></p>
-                        </div>
-                        <div class="col-xs-4">
-                            <p>Local: <label>{{ isset($post->client->id) ? $post->client->title : '' }}</label></p>
-                        </div>
-                        <div class="col-xs-4">
-                            <p>Direccion: <label>{{ isset($post->client->id) ? $post->client->adress : '' }}</label></p>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-xs-5">
-                            <p>Tipo de Orden: <label>{{ isset($post->type->id) ? $post->type->name : '' }}</label></p>
-                        </div>
-                        <div class="col-xs-7">
-                            <p>Detalle de Orden: <label>{{ isset($post->type->id) ? $post->type_other : '' }}</label></p>
-                        </div>
-                    </div>
-                  
-                    <div class="form-group">
-                        <div class="col-xs-4">
-                            <p>Equipo Interv: <label>{{ isset($post->client->id) ? $post->client->name : '' }}</label></p>
-                        </div>
-                        <div class="col-xs-4">
-                            <p>Modelo: <label>{{ $post->model }}</label></p>
-                        </div>
-                        <div class="col-xs-4">
-                            <p>Serie: <label>{{ $post->serie }}</label></p>
-                        </div>
+                    <!-- /.tab-pane -->
+                    <div class="tab-pane" id="tab_parameter">
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <label for="type" class="col-xs-2 control-label">Tipo</label>
+                                <div class="col-xs-10">
+                                    <select id="type"
+                                            name="type" 
+                                            class="form-control" 
+                                            style="font-weight: bold;">
+                                        <option value="BAJA" {{ isset($post->parameter->id) && $post->parameter->type == 'BAJA' ? 'selected' : '' }}>
+                                                BAJA TEMPERATURA
+                                        </option>
+                                        <option value="MEDIA" {{ isset($post->parameter->id) && $post->parameter->type == 'MEDIA' ? 'selected' : '' }}>
+                                                MEDIA TEMPERATURA
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-xs-2 control-label">Temperatura</label>
+                                <div class="col-xs-10 text-center">
+                                    <label class="checkbox-inline">
+                                        <input type="radio" 
+                                                name="temperature" 
+                                                value="SI" 
+                                                {{ isset($post->parameter->id) && $post->parameter->temperature == 'SI' ? 'checked' : '' }}> SI CUMPLE
+                                    </label>
+                                    <label class="checkbox-inline">
+                                        <input type="radio" 
+                                                name="temperature" 
+                                                value="NO" 
+                                                {{ isset($post->parameter->id) && $post->parameter->temperature == 'NO' ? 'checked' : '' }}> NO CUMPLE
+                                    </label>                          
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="pressure_low" class="col-xs-2 control-label">Presion</label>
+                                <div id="pressure_low-div" class="col-xs-5">
+                                    <input id="pressure_low"
+                                            name="pressure_low" 
+                                            type="number" 
+                                            class="form-control" 
+                                            placeholder="BAJA"
+                                            min="0"
+                                            value="{{ isset($post->parameter->id) ? $post->parameter->pressure_low : '' }}">
+                                </div>
+                                <div id="pressure_high-div" class="col-xs-5">
+                                    <input id="pressure_high"
+                                            name="pressure_high" 
+                                            type="number" 
+                                            class="form-control" 
+                                            placeholder="ALTA" 
+                                            min="0"
+                                            value="{{ isset($post->parameter->id) ? $post->parameter->pressure_high : '' }}">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="refrigerant_id" class="col-xs-3 control-label">Refrigerante</label>
+                                <div class="col-xs-9">
+                                    <select id="refrigerant_id" 
+                                            name="refrigerant_id" 
+                                            class="form-control"
+                                            style="font-weight: bold;">
+                                        <option value="">Seleccione refrigerante</option>
+                                        @foreach ($refrigerants as $refrigerant)
+                                            <option value="{{ $refrigerant->id }}"                              
+                                                    {{ old('refrigerant_id', $post->parameter->refrigerant_id) == $refrigerant->id ? 'selected' : '' }}>
+                                                {{ $refrigerant->name }}
+                                            </option>
+                                        @endforeach  
+                                    </select> 
+                                    <!-- <select id="refrigerants" 
+                                            class="form-control select2" 
+                                            multiple="multiple" 
+                                            data-placeholder="Seleccione una o mas etiquetas" 
+                                            style="width: 100%;">
+                                        @foreach ($refrigerants as $refrigerant)
+                                            <option {{-- collect(old('refrigerants', $post->parameter->refrigerants->pluck('id') ))->contains($refrigerant->id) ? 'selected' : '' -}} 
+                                                    value="{{ $refrigerant->id }}"
+                                                >{{-- $refrigerant->name --}}</option>
+                                        @endforeach
+                                    </select>     -->              
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-xs-3 control-label">Refrigerante</label>
+                                <div class="col-xs-9 text-center">
+                                    <label class="checkbox-inline">
+                                        <input type="radio" 
+                                                name="refrigerant" 
+                                                value="ALTA" 
+                                                {{ isset($post->parameter->id) && $post->parameter->refrigerant == 'ALTA' ? 'checked' : '' }}> ALTA
+                                    </label>
+                                    <label class="checkbox-inline">
+                                        <input type="radio" 
+                                                name="refrigerant" 
+                                                value="MEDIA" 
+                                                {{ isset($post->parameter->id) && $post->parameter->refrigerant == 'MEDIA' ? 'checked' : '' }}> MEDIA
+                                    </label> 
+                                    <label class="checkbox-inline">
+                                        <input type="radio" 
+                                                name="refrigerant" 
+                                                value="BAJA" 
+                                                {{  isset($post->parameter->id) && $post->parameter->refrigerant == 'BAJA' ? 'checked' : '' }}> BAJA
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-xs-3 control-label">Aceite</label>
+                                <div class="col-xs-9 text-center">
+                                    <label class="checkbox-inline">
+                                        <input type="radio" 
+                                                name="oil" 
+                                                value="ALTA" 
+                                                {{ isset($post->parameter->id) && $post->parameter->oil == 'ALTA' ? 'checked' : '' }}> ALTA
+                                    </label>
+                                    <label class="checkbox-inline">
+                                        <input type="radio" 
+                                                name="oil" 
+                                                value="MEDIA" 
+                                                {{ isset($post->parameter->id) && $post->parameter->oil == 'MEDIA' ? 'checked' : '' }}> MEDIA
+                                    </label> 
+                                    <label class="checkbox-inline">
+                                        <input type="radio" 
+                                                name="oil" 
+                                                value="BAJA" 
+                                                {{ isset($post->parameter->id) && $post->parameter->oil == 'BAJA' ? 'checked' : '' }}> BAJA
+                                    </label>
+                                </div>
+                            </div>
+                            <button id="parameter-button" type="button" class="btn btn-primary btn-block">Guardar y Siguiente</button>
+                        </div>            
                     </div>
 
-                    <div class="form-group">
-                        <div class="col-xs-12">
-                            <p>Problema: <label>{{ isset($post->problem->id) ? $post->problem->name : '' }}</label></p>
-                        </div>
+                    <div class="tab-pane" id="tab_photo">
+                        <form method="post" action="{{ route('admin.posts.photos.store', $post->id) }}" enctype="multipart/form-data" class="form-horizontal"> <!-- /admin/products/4/images --><!-- admin/posts/{post}/photos -->
+                            {{ csrf_field() }}   
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <label for="title" class="col-xs-3 control-label">Titulo</label>
+                                    <div class="col-xs-9">
+                                        <input id="title" 
+                                                name="title" 
+                                                type="text" 
+                                                class="form-control" 
+                                                autocomplete="off" required />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="photo" class="col-xs-3 control-label">Fotografia</label>
+                                    <div class="col-xs-9">
+                                        <input id="photo" 
+                                                name="photo" 
+                                                type="file" 
+                                                class="form-control" 
+                                                accept="image/*" required />
+                                    </div>                                    
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary pull-left" data-dismiss="modal">Cerrar</button>
+                                <button type="submit" class="btn btn-primary">Subir nueva imagen</button>
+                            </div>
+                        </form>
                     </div>
-                    <div class="form-group">
-                        <div class="col-xs-12">
-                            <p>Trabajo realizado: <label>{{ $post->job }}</label></p>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <div class="col-xs-12">
-                            <p>Parametros/Mediciones de <label>{{ isset($post->parameter->id) && $post->parameter->type <> NULL ? $post->parameter->type.' TEMPERATURA' : '' }} </label></p>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-xs-12">
-                            <p>Temperatura <label>{{ isset($post->parameter->id) && $post->parameter->temperature <> NULL ? $post->parameter->temperature.' CUMPLE' : '' }} </label></p>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-xs-6">
-                            <p>Presion Baja: <label>{{ isset($post->parameter->id) ? $post->parameter->pressure_low : '' }} </label></p>
-                        </div>
-                        <div class="col-xs-6">
-                            <p>Presion Alta: <label>{{ isset($post->parameter->id) ? $post->parameter->pressure_high : '' }} </label></p>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <div class="col-xs-6">
-                            <p>Refrigerante: <label>
-                                @if( isset($post->parameter->refrigerant_id) ) 
-                                    @foreach ($refrigerants as $refrigerant)
-                                        @if( $post->parameter->refrigerant_id == $refrigerant->id ) 
-                                           {{ $refrigerant->name }}
-                                        @endif
-                                    @endforeach   
-                                @else 
-                                    {{ '' }}
-                                @endif </label></p>
-                        </div>
-
-                        <div class="col-xs-6">
-                            <p>Nivel: <label>{{ isset($post->parameter->id) ?  $post->parameter->refrigerant : '' }} </label></p>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-xs-12">
-                            <p>Aceite: <label>{{ isset($post->parameter->id) ? $post->parameter->oil : '' }} </label></p>
-                        </div>
-                    </div>
-
-                    <table class="table table-bordered table-striped text-center">
-                        <thead>
-                            <tr>
-                                <th>Cantidad</th>
-                                <th>Detalle</th>
-                            </tr>
-                        </thead>
-                        <tbody id="material-body">
-                            @if ($post->materials->count())
-                                @foreach ($post->materials as $material)
-                                    <tr>
-                                        <td>{{ $material->quantity }}</td>
-                                        <td>{{ $material->detail }}</td>
-                                    </tr>        
-                                @endforeach
-                            @else
-                                <tr> 
-                                    <td colspan="3">No hay materiales seleccionados</td>
-                                </tr>
-                            @endif
-                        </tbody>
-                    </table>
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label">Observaciones</label>
-                        <div class="col-sm-9">
-                            <textarea name="observation"
-                                class="form-control" 
-                                placeholder="Ingresa una observacion de 140 caracteres">{{ old('observation', $post->observation) }}</textarea>
-                            {!! $errors->first('observation', '<span class="help-block">:message</span>' ) !!}   
-                        </div>
-                    </div>
-                    <div id="signature-area" class="col-sm-offset-3 col-sm-6">
-                        <canvas id="signature" class="signature-pad" style="border: 2px dashed #ccc" width="800px" height="200px"></canvas>
-                    </div>
+                    <!-- /.tab-pane -->
+                    <div class="tab-pane" id="tab_material">
                     
-                    <div class="form-group">
-                        <div class="col-sm-12">
-                            <input type="hidden" name="base64" id="base64">
-                            <button id="signature-clear" type="button" class="btn btn-info pull-left">Borrar</button>   <!--  data-action="clear"-->              
-                            <button id="signature-finished" type="button" class="btn btn-success pull-right">Firmar y Finalizar</button> <!-- id="signature-png" data-action="save-png"-->
+                        <div id="quantity-div" class="form-group col-xs-3">
+                            <label for="quantity">Cantidad</label>
+                            <input id="quantity"
+                                    name="quantity"  
+                                    type="number" 
+                                    class="form-control" value="1">
                         </div>
+                        <div id="detail-div" class="form-group col-xs-9">
+                            <label for="detail">Material</label>
+                            <input id="detail"
+                                    name="detail" 
+                                    type="text" 
+                                    class="form-control"
+                                    autocomplete="off">
+                        </div>  
+            
+                        <button onclick="addMaterial()" type="button" class="btn btn-success btn-block">Agregar</button> 
+                        <div class="table-responsive">
+                            <table id="material-table" class="table table-bordered table-striped text-center">
+                                <thead>
+                                    <tr>
+                                        <th>Cantidad</th>
+                                        <th>Detalle</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="material-body">
+                                    @if ($post->materials->count())
+                                        @foreach ($post->materials as $material)
+                                            <tr>
+                                                <td>{{ $material->quantity }}</td>
+                                                <td>{{ $material->detail }}</td>
+                                                <td>
+                                                    <form method="POST" 
+                                                        action="{{ route('admin.materials.destroy', $material) }}" 
+                                                        style="display: inline">
+                                                        {{ csrf_field() }}
+                                                        {{ method_field('DELETE') }}
+                                                        <button type="submit" 
+                                                            onclick="return confirm('¿Estas seguro de querer eliminar este material?')"
+                                                            class="btn btn-danger"
+                                                        ><i class="fa fa-times"></i></button>
+                                                    </form>
+                                                </td>
+                                            </tr>        
+                                        @endforeach
+                                    @else
+                                        <tr> 
+                                            <td colspan="3">No hay materiales seleccionados</td>
+                                        </tr>
+                                    @endif
+                                </tbody>
+                            </table>
+                        </div>             
                     </div>
-                </form>
-            </div>
 
-            <!-- /.tab-pane -->
-          </div>
-          <!-- /.tab-content -->
+                    <div class="tab-pane" id="tab_signature">
+                        <form id="signature-form" method="POST" action="{{ route('admin.posts.signature.store', $post->id) }}" class="form-horizontal" >
+                            {{ csrf_field() }}
+                            <div class="form-group">
+                                <div class="col-xs-5">
+                                    <p>Fecha Llegada: <label>{{ $post->started_at->format('d/m/Y H:i') }}</label></p>
+                                </div>
+                                <div class="col-xs-7">
+                                    <p>Tecnico Responsable: <label>{{ $post->owner->name }}</label></p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-xs-4">
+                                    <p>Empresa: <label>{{ isset($post->client->id) ? $post->client->name : '' }}</label></p>
+                                </div>
+                                <div class="col-xs-4">
+                                    <p>Local: <label>{{ isset($post->client->id) ? $post->client->title : '' }}</label></p>
+                                </div>
+                                <div class="col-xs-4">
+                                    <p>Direccion: <label>{{ isset($post->client->id) ? $post->client->adress : '' }}</label></p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-xs-5">
+                                    <p>Tipo de Orden: <label>{{ isset($post->type->id) ? $post->type->name : '' }}</label></p>
+                                </div>
+                                <div class="col-xs-7">
+                                    <p>Detalle de Orden: <label>{{ isset($post->type->id) ? $post->type_other : '' }}</label></p>
+                                </div>
+                            </div>
+                        
+                            <div class="form-group">
+                                <div class="col-xs-4">
+                                    <p>Equipo Interv: <label>{{ isset($post->client->id) ? $post->client->name : '' }}</label></p>
+                                </div>
+                                <div class="col-xs-4">
+                                    <p>Modelo: <label>{{ $post->model }}</label></p>
+                                </div>
+                                <div class="col-xs-4">
+                                    <p>Serie: <label>{{ $post->serie }}</label></p>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-xs-12">
+                                    <p>Problema: <label>{{ isset($post->problem->id) ? $post->problem->name : '' }}</label></p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-xs-12">
+                                    <p>Trabajo realizado: <label>{{ $post->job }}</label></p>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-xs-12">
+                                    <p>Parametros/Mediciones de <label>{{ isset($post->parameter->id) && $post->parameter->type <> NULL ? $post->parameter->type.' TEMPERATURA' : '' }} </label></p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-xs-12">
+                                    <p>Temperatura <label>{{ isset($post->parameter->id) && $post->parameter->temperature <> NULL ? $post->parameter->temperature.' CUMPLE' : '' }} </label></p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-xs-6">
+                                    <p>Presion Baja: <label>{{ isset($post->parameter->id) ? $post->parameter->pressure_low : '' }} </label></p>
+                                </div>
+                                <div class="col-xs-6">
+                                    <p>Presion Alta: <label>{{ isset($post->parameter->id) ? $post->parameter->pressure_high : '' }} </label></p>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-xs-6">
+                                    <p>Refrigerante: <label>
+                                        @if( isset($post->parameter->refrigerant_id) ) 
+                                            @foreach ($refrigerants as $refrigerant)
+                                                @if( $post->parameter->refrigerant_id == $refrigerant->id ) 
+                                                {{ $refrigerant->name }}
+                                                @endif
+                                            @endforeach   
+                                        @else 
+                                            {{ '' }}
+                                        @endif </label></p>
+                                </div>
+
+                                <div class="col-xs-6">
+                                    <p>Nivel: <label>{{ isset($post->parameter->id) ?  $post->parameter->refrigerant : '' }} </label></p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-xs-12">
+                                    <p>Aceite: <label>{{ isset($post->parameter->id) ? $post->parameter->oil : '' }} </label></p>
+                                </div>
+                            </div>
+
+                            <table class="table table-bordered table-striped text-center">
+                                <thead>
+                                    <tr>
+                                        <th>Cantidad</th>
+                                        <th>Detalle</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="material-body">
+                                    @if ($post->materials->count())
+                                        @foreach ($post->materials as $material)
+                                            <tr>
+                                                <td>{{ $material->quantity }}</td>
+                                                <td>{{ $material->detail }}</td>
+                                            </tr>        
+                                        @endforeach
+                                    @else
+                                        <tr> 
+                                            <td colspan="3">No hay materiales seleccionados</td>
+                                        </tr>
+                                    @endif
+                                </tbody>
+                            </table>
+                            <div class="form-group">
+                            
+                                <div class="col-sm-9" >
+                                    <textarea name="observation"
+                                        class="form-control" 
+                                        style="display:none;"
+                                        placeholder="Maximo 140 caracteres" >{{ old('observation', $post->observation) }}</textarea>
+                                    {!! $errors->first('observation', '<span class="help-block">:message</span>' ) !!}   
+                                </div>
+                            </div>
+                            <div id="signature-area" class="col-sm-offset-3 col-sm-6">
+                                <canvas id="signature" class="signature-pad" style="border: 2px dashed #ccc" width="800px" height="200px"></canvas>
+                            </div>
+                            
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <input type="hidden" name="base64" id="base64">
+                                    <button id="signature-clear" type="button" class="btn btn-info pull-left">Borrar Firma</button>   <!--  data-action="clear"-->              
+                                    <button id="signature-finished" 
+                                        type="button" 
+                                        class="btn btn-success pull-right">Finalizar</button> <!-- id="signature-png" data-action="save-png"-->
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- /.tab-pane -->
+                </div>
+            <!-- /.tab-content -->
+            </div>
         </div>
-        <!-- nav-tabs-custom -->
+        <div class="overlay">
+            <i class="fa fa-refresh fa-spin"></i>
+        </div>
     </div>
-    <!-- /.col -->
+   
 </div>
 
 <div class="modal fade" id="client-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -521,62 +539,37 @@
                 </button>
                 <h4 class="modal-title" id="exampleModalLabel">Cliente</h4>
             </div>
-            <form method="post" class="form-horizontal" action="{{ route('admin.posts.selectClient', $post->id) }}">
+            <form method="post" action="{{ route('admin.posts.selectClient', $post->id) }}" class="form-horizontal">
                 {{ csrf_field() }} 
                 {{ method_field('PUT') }}
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="client_id" class="col-sm-3 control-label">Codigo Cliente</label>
-                        <div class="col-sm-9">
-                            <input name="client_id" 
-                                    type="text" 
-                                    class="form-control" 
-                                    autocomplete="off" required>
+                        <label for="name" class="col-xs-2 control-label">Cliente</label>
+                        <div class="col-xs-4">
+                                <select id="name"
+                                    name="name" 
+                                    class="form-control" require>
+                                @foreach ($clients as $client)
+                                    <option value="{{ $client->name }}"  
+                                        >{{ $client->name }}</option>
+                                @endforeach
+                            </select>
                         </div>
+                        <div class="col-xs-6">
+                            <input id="code"
+                                name="code" 
+                                type="number"
+                                class="form-control" 
+                                placeholder="ID LOCAL" 
+                                value="{{ old('code') }}" 
+                                autocomplete="off" required>
+                        </div>
+                        {!! $errors->first('code', '<span class="help-block">:message</span>' ) !!}                        
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary pull-left" data-dismiss="modal">Cancelar</button>
                     <button type="submit" class="btn btn-primary">Buscar Cliente</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-
-<div class="modal fade" id="photo-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                <h4 class="modal-title" id="exampleModalLabel">Fotos del Problema</h4>
-            </div>
-            <form method="post" action="{{ route('admin.posts.photos.store', $post->id) }}" enctype="multipart/form-data"> <!-- /admin/products/4/images --><!-- admin/posts/{post}/photos -->
-                {{ csrf_field() }}   
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label for="title" class="col-form-label">Titulo</label>
-                        <input id="title" 
-                                name="title" 
-                                type="text" 
-                                class="form-control" 
-                                autocomplete="off" required />
-                    </div>
-                    <div class="form-group">
-                        <label for="photo" class="col-form-label">Fotografia</label>
-                        <input id="photo" 
-                                name="photo" 
-                                type="file" 
-                                class="form-control" 
-                                accept="image/*" />
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary pull-left" data-dismiss="modal">Cerrar</button>
-                    <button type="submit" class="btn btn-primary">Subir nueva imagen</button>
                 </div>
             </form>
         </div>
@@ -667,6 +660,7 @@
 
         $(document).ready(function(){
 
+           
             var canvas = document.querySelector("canvas");
             var signaturePad = new SignaturePad(canvas);
 
@@ -804,6 +798,10 @@
                     });
                 }   
             }, false);
+
+            var overlay = document.getElementsByClassName('overlay');
+            while (overlay.length > 0) overlay[0].remove();
+
         });
 
         function addMaterial(){
@@ -897,7 +895,7 @@
         }
 
 
-console.log(window.location.hash);
+        console.log(window.location.hash);
         switch (window.location.hash ) {
             case '#signature':
                     document.getElementById('li_order').classList.remove("active");

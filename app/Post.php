@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Post extends Model
 {
+    use SoftDeletes;
+    
     protected $fillable = [ 
         'title', 'url','body', 'iframe', 'excerpt', 'published_at', 'category_id', 'user_id', 
         'started_at', 'finished_at', 'client_id'
@@ -56,6 +58,10 @@ class Post extends Model
 
     public function tags(){   // $post->category->name
         return $this->belongsToMany(Tag::class);
+    }
+
+    public function records(){
+        return $this->hasMany(Record::class);
     }
 
     public function photos(){

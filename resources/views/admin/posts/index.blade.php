@@ -17,9 +17,11 @@
             <table id="posts-table" class="table table-bordered table-striped">
                 <thead>
                     <tr>
+                        <th></th>
                         <th>Folio</th>
                         <th>Fecha Creacion</th>
                         <th>Cliente</th>
+                        <th>Local</th>
                         <th>Tipo de Orden</th>
                         <th>Problema</th>
                         <th style="min-width:170px">Acciones</th>
@@ -27,28 +29,36 @@
                 </thead>
                 <tbody>
                     @foreach($posts as $post)
-                        <tr> 
-                            <td>{{ $post->title }}</td>
-                            <td>{{ $post->started_at->format('d/m/Y H:i') }}</td>
+                        <tr>
                             <td>
-                                @if( isset($post->client->id) )
-                                <button type="button"
-                                    class="btn btn-xs btn-danger">
-                                    {{ $post->client->name }}</button>
-                                @endif
-                            </td>
-                            <td>{{ isset($post->type->id) ? $post->type->name : '' }}</td>
-                            <td>{{ isset($post->problem->id) ? $post->problem->name : '' }}</td>
-                            <td>
-                                <a href="{{ route('productos_pdf', $post) }}" 
-                                    target="_blank" 
-                                    class="btn btn-default"
-                                ><i class="fa fa-eye"></i></a>
                                 @can('update', $post)
                                     <a href="{{ route('admin.posts.edit', $post) }}" 
                                         class="btn btn-info"
                                     ><i class="fa fa-pencil"></i></a>
                                 @endcan
+                            </td>
+                            <td>{{ $post->title }}</td>
+                            <td>{{ $post->started_at->format('d/m/Y H:i') }}</td>
+                            <td>
+                                @if( isset($post->client->id) )
+                                    {{ $post->client->name }}
+                                @endif
+                            </td>
+                            <td>
+                                @if( isset($post->client->id) )
+                                <button type="button"
+                                    class="btn btn-xs btn-danger">
+                                    {{ $post->client->title }}</button>
+                                @endif
+                            </td>
+                            <td>{{ isset($post->type->id) ? $post->type->name : '' }}</td>
+                            <td>{{ isset($post->problem->id) ? $post->problem->name : '' }}</td>
+                            <td>
+                                <!--<a href="{{ route('productos_pdf', $post) }}" 
+                                    target="_blank" 
+                                    class="btn btn-default"
+                                ><i class="fa fa-eye"></i></a>-->
+                                
                                 @can('delete', $post)
                                     <form method="POST" 
                                         action="{{ route('admin.posts.destroy', $post) }}" 
@@ -62,16 +72,25 @@
                                     </form>
                                 @endcan
 
-                                <form method="POST" 
+                                @if( $post->records->count() )
+                                    @foreach ($post->records as $record)
+                                        <a href="{{ url($record->url) }}" 
+                                            title="Creacion: {{ $record->created_at}}"
+                                            target="_blank" 
+                                            class="btn btn-default"
+                                        ><i class="fa fa-file-pdf-o"></i></a>
+                                    @endforeach
+                                    <form method="POST" 
                                         action="{{ route('admin.posts.updateSend', $post) }}" 
                                         style="display: inline">
                                         {{ csrf_field() }}
                                         {{ method_field('PUT') }}
-                                    <button type="submit"
+                                        <button type="submit"
                                             onclick="return confirm('¿Estas seguro de querer volver a enviar este reporte?')"
                                             class="btn btn-success"
                                         ><i class="fa fa-envelope-o"></i></button>
-                                </form>
+                                    </form>
+                                @endif
 
                             </td>
                         </tr>
@@ -79,6 +98,10 @@
                 </tbody>
             </table>
             
+        </div>
+
+        <div class="overlay">
+            <i class="fa fa-refresh fa-spin"></i>
         </div>
         <!-- /.box-body -->
     </div>
@@ -91,11 +114,13 @@
 @endpush
 
 @push('scripts')
+    @include('admin.posts.create')
     <!-- DataTables -->
     <script src="{{ asset('adminlte/bower_components/datatables.net/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('adminlte/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
     <script>
         $(function () {
+
             $('#posts-table').DataTable({
             'paging'      : false,
             'lengthChange': false,
@@ -103,7 +128,10 @@
             'ordering'    : false,
             'info'        : true,
             'autoWidth'   : false
-            })
+            });
+            
+            var overlay = document.getElementsByClassName('overlay');
+            while (overlay.length > 0) overlay[0].remove();
         })
 
         $.extend( true, $.fn.dataTable.defaults, {

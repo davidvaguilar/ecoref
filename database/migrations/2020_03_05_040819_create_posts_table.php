@@ -40,7 +40,7 @@ class CreatePostsTable extends Migration
             $table->text('observation')->nullable();
             $table->string('email', 70)->nullable();
             $table->string('signature_id')->nullable();
-            $table->string('file', 70)->nullable();
+           // $table->string('file', 70)->nullable();
             $table->unsignedInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
