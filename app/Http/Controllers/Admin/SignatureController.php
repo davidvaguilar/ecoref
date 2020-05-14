@@ -56,6 +56,6 @@ class SignatureController extends Controller
             });
             return redirect()
                   ->route('admin.posts.index')
-                  ->with('flash', 'Reporte de trabajo ha sido enviado al correo.');
+                  ->with('flash', 'Se ha generado un PDF de la OT '.$post->title.'.');
       }
 }
