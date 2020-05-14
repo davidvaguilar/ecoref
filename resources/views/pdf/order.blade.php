@@ -17,8 +17,8 @@
           <td>FOLIO N°<br>{{ $post->id }}</td>
         </tr>
         <tr>
-          <td width="120px">FECHA LLEGADA<br>{{ $post->started_at }}</td>
-          <td width="120px">FECHA RETIRO<br>{{ $post->started_at }}</td>
+          <td width="120px">FECHA LLEGADA<br>{{ $post->started_at->format('d/m/Y  H:i') }}</td>
+          <td width="120px">FECHA RETIRO<br>{{ $post->finished_at->format('d/m/Y  H:i') }}</td>
           <td  width="120px">TECNICO RESPONSABLE<br>Cod. {{ $post->owner->id }}</td>
         </tr>
       <!-- <tr>

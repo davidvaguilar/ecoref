@@ -138,10 +138,12 @@ class PostsController extends Controller
         $url = 'pdf/order/ordentrabajo-'.$post->id.'-'.Carbon::now()->format('dmYHis').'.pdf';
         $pdf->save($url);
 
+       // dd(url($post->records->last()->url));
+
         Mail::send('emails.work-order', $data, function ($message) use ($pdf, $to, $subject) {
             $message->from('hugo.ortiz@ecorefchile.cl', 'Ecoref Chile');
             $message->to('ot@ecorefchile.cl')->cc('david.villegas.aguilar@gmail.com')->subject($subject);
-            $message->attachData($pdf->output(), $subject.'.pdf');
+            $message->attachData(url($post->records->last()->url), $subject.'.pdf');
         });
 
         $post->status = "ENVIADO";
