@@ -143,7 +143,7 @@ class PostsController extends Controller
         Mail::send('emails.work-order', $data, function ($message) use ($pdf, $to, $subject, $record) {
             $message->from('hugo.ortiz@ecorefchile.cl', 'Ecoref Chile');
             $message->to('ot@ecorefchile.cl')->cc('david.villegas.aguilar@gmail.com')->subject($subject);
-            $message->attachData($record, $subject.'.pdf');
+            $message->attach($record);
         });
 
         $post->status = "ENVIADO";
