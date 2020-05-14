@@ -6,6 +6,7 @@ use App\Post;
 use App\Client;
 use App\Category;
 use App\Tag;
+use App\Record;
 use Mail;
 use App\Material;
 use App\Refrigerant;
@@ -67,13 +68,6 @@ class PostsController extends Controller
         return redirect()->route('admin.posts.edit', $post);
     }
 
-    /*public function show($id){
-        $materials = Material::where('post_id', '=', $id)->get();
-        return[
-            'materials' => $materials
-        ];
-    }*/
-
     public function show($id){
         $post = Post::find($id);
         return[
@@ -109,7 +103,6 @@ class PostsController extends Controller
     }
 
     public function updateTitle( Post $post, Request $request ){
-       
         $this->validate($request, [
             'title' => 'required',
         ]);
@@ -122,9 +115,20 @@ class PostsController extends Controller
     public function updateFinished( Post $post ){
         $post->finished_at = Carbon::now();
         $post->save();
+
+        $refrigerants = Refrigerant::all();
+        $pdf = PDF::loadView('pdf.order', ['post'=> $post, 'refrigerants'=> $refrigerants]);   
+        $url = 'pdf/order/ot-'.$post->title.'-'.Carbon::now()->format('dmYHis').'.pdf';
+        $pdf->save($url);
+
+        $record = new Record;
+        $record->post_id = $post->id;
+        $record->url = $url;
+        $record->save();
+
         return redirect()
                 ->route('admin.posts.index')
-                ->with('flash', 'Orden de trabajo ha finalizado.');
+                ->with('flash', 'Orden de trabajo ha finalizado sin firma del cliente.');
     }
 
     public function updateStatus( Post $post ){
@@ -133,10 +137,10 @@ class PostsController extends Controller
         $to = 'ot@ecorefchile.cl';
         $data = ['nombre' => 'Ecoref'];
 
-        $refrigerants = Refrigerant::all();
+       /* $refrigerants = Refrigerant::all();
         $pdf = PDF::loadView('pdf.order', ['post'=> $post, 'refrigerants'=> $refrigerants]);   
         $url = 'pdf/order/ordentrabajo-'.$post->id.'-'.Carbon::now()->format('dmYHis').'.pdf';
-        $pdf->save($url);
+        $pdf->save($url);*/
 
         $record = url($post->records->last()->url);
 
