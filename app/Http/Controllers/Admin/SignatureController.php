@@ -30,16 +30,15 @@ class SignatureController extends Controller
             $signature->url = '/img/signatures/'.$fileName;
             $signature->save();
             
-            $refrigerants = Refrigerant::all();
-            $pdf = PDF::loadView('pdf.order', ['post'=> $post, 'refrigerants'=> $refrigerants]);   
-          
-            $url = 'pdf/order/ot-'.$post->title.'-'.Carbon::now()->format('dmYHis').'.pdf';
-            $pdf->save($url);
-        
             $post->finished_at = Carbon::now();
             $post->observation = $request->observation;
             $post->signature_id = $signature->id;
             $post->save();
+
+            $refrigerants = Refrigerant::all();
+            $pdf = PDF::loadView('pdf.order', ['post'=> $post, 'refrigerants'=> $refrigerants]);   
+            $url = 'pdf/order/ot-'.$post->title.'-'.Carbon::now()->format('dmYHis').'.pdf';
+            $pdf->save($url);
 
             $record = new Record;
             $record->post_id = $post->id;
