@@ -18,6 +18,7 @@ class CreateRecordsTable extends Migration
             $table->string('url', 70);
             $table->unsignedInteger('post_id');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

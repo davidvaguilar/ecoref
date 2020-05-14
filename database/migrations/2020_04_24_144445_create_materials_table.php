@@ -23,6 +23,7 @@ class CreateMaterialsTable extends Migration
             $table->unsignedInteger('post_id')->nullable();  //aca deve ir order
             $table->unsignedInteger('user_id');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

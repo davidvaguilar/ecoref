@@ -18,6 +18,7 @@ class CreateSignaturesTable extends Migration
             $table->string('title', 70)->nullable();
             $table->string('url', 50);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

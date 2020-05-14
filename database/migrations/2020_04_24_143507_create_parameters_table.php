@@ -23,6 +23,7 @@ class CreateParametersTable extends Migration
             $table->string('oil', 10)->nullable();
             $table->string('refrigerant_id', 10)->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

@@ -22,6 +22,7 @@ class CreatePeopleTable extends Migration
             $table->string('email', 70)->nullable();
             $table->unsignedInteger('client_id')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
