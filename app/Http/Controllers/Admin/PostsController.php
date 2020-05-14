@@ -137,14 +137,9 @@ class PostsController extends Controller
         $to = 'ot@ecorefchile.cl';
         $data = ['nombre' => 'Ecoref'];
 
-       /* $refrigerants = Refrigerant::all();
-        $pdf = PDF::loadView('pdf.order', ['post'=> $post, 'refrigerants'=> $refrigerants]);   
-        $url = 'pdf/order/ordentrabajo-'.$post->id.'-'.Carbon::now()->format('dmYHis').'.pdf';
-        $pdf->save($url);*/
-
         $record = url($post->records->last()->url);
 
-        Mail::send('emails.work-order', $data, function ($message) use ($pdf, $to, $subject, $record) {
+        Mail::send('emails.work-order', $data, function ($message) use ($to, $subject, $record) {
             $message->from('hugo.ortiz@ecorefchile.cl', 'Ecoref Chile');
             $message->to('ot@ecorefchile.cl')->cc('david.villegas.aguilar@gmail.com')->subject($subject);
             $message->attach($record);
