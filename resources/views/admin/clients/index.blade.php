@@ -17,28 +17,37 @@
             <table id="clients-table" class="table table-bordered table-striped">
                 <thead>
                     <tr>
+                        <th></th>
                         <th>Id Local</th>
                         <th>Empresa</th>                        
                         <th>Local</th>                        
                         <th>Direccion</th>                   
                         <th>Ciudad</th>
-                        <th>Nombre.Email</th>
-                        <th style="min-width:80px">Acciones</th>
+                        <th>Emails</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach($clients as $client)
                         <tr> 
+                            <td>
+                                <a href="{{ route('admin.clients.edit', $client) }}" 
+                                        class="btn btn-info"
+                                ><i class="fa fa-pencil"></i></a>
+                            </td>    
                             <td>{{ $client->code }}</td>
                             <td>{{ $client->name }}</td>
                             <td>{{ $client->title }}</td>
                             <td>{{ $client->adress }}</td>
                             <td>{{ $client->city }}</td>
-                            <td>{{ $client->city }}</td>
                             <td>
-                                <a href="{{ route('admin.clients.edit', $client) }}" 
-                                    class="btn btn-info"
-                                ><i class="fa fa-pencil"></i></a>
+                                @if( $client->peoples->count() )
+                                    @foreach ($client->peoples as $people)
+                                        {{ $people->email }}
+                                    @endforeach
+                                @endif
+                            </td>
+                            <td>
                                 <form method="POST" 
                                     action="{{ route('admin.clients.destroy', $client) }}" 
                                     style="display: inline">
@@ -78,7 +87,7 @@
             $('#clients-table').DataTable({
             'paging'      : false,
             'lengthChange': false,
-            'searching'   : false,
+            'searching'   : true,
             'ordering'    : false,
             'info'        : true,
             'autoWidth'   : false

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Post;
 use App\Client;
+use App\People;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -11,9 +12,8 @@ class ClientsController extends Controller
 {
     public function index()
     {
-        
+
         $clients = Client::all();
-     
         return view('admin.clients.index', compact('clients'));
     }
 
@@ -54,7 +54,30 @@ class ClientsController extends Controller
         return redirect()->route('admin.clients.edit', $client);
     }
 
-    public function edit(Client $client){
-        return view('admin.clients.edit', compact('client'));
+    public function edit(Client $client){  
+        $peoples = People::all();
+        return view('admin.clients.edit', compact('client', 'peoples'));
     }
+
+    
+    public function update(Request $request, Client $client)
+    {
+       // dd($request->get('peoples'));
+        $data = $request->validate([
+            'code' => 'required',
+            'name' => 'required',
+            'city' => 'required'
+        ]);
+
+        $client->code = $request->code;
+        $client->name = $request->name;
+        $client->title = $request->title;
+        $client->adress = $request->adress;
+        $client->city = $request->city;
+        $client->save();
+        $client->syncPeoples($request->get('peoples'));
+
+        return back()->with('flash', 'Datos del cliente actualizados');
+    }
+
 }

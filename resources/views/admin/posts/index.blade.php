@@ -24,7 +24,7 @@
                         <th>Local</th>
                         <th>Tipo de Orden</th>
                         <th>Problema</th>
-                        <th style="min-width:170px">Acciones</th>
+                        <th style="min-width:170px">Archivos</th>
                     </tr>
                 </thead>
                 <tbody>

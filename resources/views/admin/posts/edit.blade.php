@@ -618,13 +618,13 @@
 @stop
 
 @push('styles')
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.0/dropzone.css">
-    <!-- bootstrap datepicker -->
-    <link rel="stylesheet" href="{{ asset('adminlte/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css') }}">
-    <!-- Select2 -->
-    <link rel="stylesheet" href="{{ asset('adminlte/bower_components/select2/dist/css/select2.min.css') }}">
-    <!-- Bootstrap time Picker -->
-    <link rel="stylesheet" href="{{ asset('adminlte/plugins/timepicker/bootstrap-timepicker.min.css') }}"/>  
+    <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.0/dropzone.css">-->
+    <!-- bootstrap datepicker 
+    <link rel="stylesheet" href="{{ asset('adminlte/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css') }}">-->
+    <!-- Select2 
+    <link rel="stylesheet" href="{{ asset('adminlte/bower_components/select2/dist/css/select2.min.css') }}">-->
+    <!-- Bootstrap time Picker
+    <link rel="stylesheet" href="{{ asset('adminlte/plugins/timepicker/bootstrap-timepicker.min.css') }}"/>   -->
     <style>
         .nav-tabs-custom>.nav-tabs>li.active>a, .nav-tabs-custom>.nav-tabs>li.active:hover>a {
             background-color: #3c8dbc;
@@ -634,21 +634,21 @@
 @endpush
 
 @push('scripts')
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.0/dropzone.min.js"></script>
-    <!-- bootstrap datepicker -->
-    <script src="{{ asset('adminlte/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js') }}"></script>
-    <!-- CK Editor -->
-    <script src="{{ asset('adminlte/bower_components/ckeditor/ckeditor.js') }}"></script>
-    <!-- Select2 -->
-    <script src="{{ asset('adminlte/bower_components/select2/dist/js/select2.full.min.js') }}"></script>
-    <!-- bootstrap time picker -->
-    <script src="{{ asset('adminlte/plugins/timepicker/bootstrap-timepicker.min.js') }}"></script>
+   <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.0/dropzone.min.js"></script>-->
+    <!-- bootstrap datepicker 
+    <script src="{{ asset('adminlte/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js') }}"></script>-->
+    <!-- CK Editor 
+    <script src="{{ asset('adminlte/bower_components/ckeditor/ckeditor.js') }}"></script>-->
+    <!-- Select2 
+    <script src="{{ asset('adminlte/bower_components/select2/dist/js/select2.full.min.js') }}"></script>-->
+    <!-- bootstrap time picker
+    <script src="{{ asset('adminlte/plugins/timepicker/bootstrap-timepicker.min.js') }}"></script> -->
     <!-- Signature Pad 
     <script src="{{-- asset('js/signature_pad/signature_pad.js') --}}"></script>
     <script src="{{-- asset('js/signature_pad/app.js') --}}"></script>-->
-   
-    <script src="https://cdn.jsdelivr.net/npm/signature_pad@2.3.2/dist/signature_pad.min.js"></script>
+    <!--<script src="https://cdn.jsdelivr.net/npm/signature_pad@2.3.2/dist/signature_pad.min.js"></script>-->
 
+    <script src="{{ asset('js/signature_pad/signature_pad.min.js') }}"></script>
     <script>
 
         function resizeCanvas () {

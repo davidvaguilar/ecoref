@@ -15,6 +15,8 @@ class CreateClientPeopleTable extends Migration
     {
         Schema::create('client_people', function (Blueprint $table) {
             $table->increments('id');
+            $table->unsignedInteger('client_id');
+            $table->unsignedInteger('people_id');
             $table->timestamps();
         });
     }

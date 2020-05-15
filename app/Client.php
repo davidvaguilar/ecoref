@@ -14,6 +14,17 @@ class Client extends Model
     }
 
     public function peoples(){
-        return $this->hasMany(People::class);
+        return $this->belongsToMany(People::class);
     }
+
+    public function syncPeoples($peoples){
+        $peopleIds = collect($peoples)->map(function($people){
+            return People::find($people)
+            ? $people
+            : People::create(['email' => $people])->id;
+        });
+
+        return $this->peoples()->sync($peopleIds);
+    }
+
 }

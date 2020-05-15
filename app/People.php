@@ -9,7 +9,11 @@ class People extends Model
 {
     use SoftDeletes;
     
-    public function emails(){
-        return $this->hasMany(Email::class);
+    protected $guarded = [];  //sacar al proteccion 
+    
+    public function clients(){
+        return $this->belongsToMany(Client::class);
     }
+
+
 }
