@@ -9,16 +9,15 @@
         <div class="box-header">
             <h3 class="box-title">Listado de Clientes</h3>
             <button class="btn btn-primary pull-right" data-toggle="modal" data-target="#client-modal">
-                <i class="fa fa-plus"></i> Crear nuevo cliente
+                <i class="fa fa-fw fa-plus"></i>Nuevo cliente
             </button>
         </div>
-        <!-- /.box-header -->
         <div class="box-body table-responsive">
             <table id="clients-table" class="table table-bordered table-striped">
                 <thead>
                     <tr>
                         <th></th>
-                        <th>Id Local</th>
+                        <th>Id</th>
                         <th>Empresa</th>                        
                         <th>Local</th>                        
                         <th>Direccion</th>                   
@@ -41,11 +40,12 @@
                             <td>{{ $client->adress }}</td>
                             <td>{{ $client->city }}</td>
                             <td>
-                                @if( $client->peoples->count() )
-                                    @foreach ($client->peoples as $people)
+                            <!-- ?Subject=Interesado%20en%20el%20curso-->
+                                @foreach( $client->peoples as $people )
+                                    <a href="mailto:{{ $people->email }}" target="_blank" class="btn btn-xs btn-success">
                                         {{ $people->email }}
-                                    @endforeach
-                                @endif
+                                    </a>@if( !$loop->last ),@endif
+                                @endforeach
                             </td>
                             <td>
                                 <form method="POST" 
@@ -57,18 +57,14 @@
                                         onclick="return confirm('¿Estas seguro de querer eliminar este cliente?')"
                                         class="btn btn-danger"
                                     ><i class="fa fa-times"></i></button>
-                                </form>
-                                
+                                </form> 
                             </td>
                         </tr>
                     @endforeach
                 </tbody>
             </table>
-            
         </div>
-        <!-- /.box-body -->
     </div>
-    <!-- /.box -->
 @stop
 
 @push('styles')

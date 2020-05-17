@@ -9,4 +9,9 @@ class Material extends Model
     protected $fillable = [ 
         'post_id', 'quantity', 'detail', 'user_id'
     ];
+
+    public function setDetailAttribute($detail){
+        $this->attributes['detail'] = strtoupper($detail);
+    }
+
 }

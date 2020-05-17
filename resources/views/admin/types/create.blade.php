@@ -1,4 +1,3 @@
-<!-- Modal -->
 <div class="modal fade" id="type-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <form method="POST" action="{{ route('admin.types.store') }}">
         {{ csrf_field() }}
@@ -13,7 +12,7 @@
             <div class="modal-body">
                 <div class="form-group {{ $errors->has('name') ? 'has-error' : '' }}">
                     <!--<label>Titulo de la publicacion</label>-->
-                    <input id="type-name"
+                    <input id="name"
                         name="name" 
                         class="form-control" 
                         placeholder="Ingresa aqui un nuevo tipo de orden" 

@@ -10,7 +10,11 @@ class Type extends Model
     use SoftDeletes;
 
     public function posts(){
-        return $this->hasMany(Post::class);
+        return $this->hasMany(Post::class); 
+    }
+
+    public function setNameAttribute($name){
+        $this->attributes['name'] = strtoupper($name);
     }
 
 }

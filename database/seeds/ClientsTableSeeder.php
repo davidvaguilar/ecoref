@@ -13,6 +13,14 @@ class ClientsTableSeeder extends Seeder
     public function run()
     {
         $client = new Client;
+        $client->code = "GEN";
+        $client->name = "PARTICULAR";
+        $client->title = "PARTICULAR";
+        $client->adress = "SECTOR CIUDAD";
+        $client->city = "NORTE";
+        $client->save();
+
+        $client = new Client;
         $client->code = "681";
         $client->name = "UNIMARC";
         $client->title = "ROTONDA";

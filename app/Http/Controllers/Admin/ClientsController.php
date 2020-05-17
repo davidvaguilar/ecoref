@@ -46,10 +46,12 @@ class ClientsController extends Controller
     public function store(Request $request){
         $data = $request->validate([
             'name' => 'required',
+            'code' => 'required'
         ]);
 
         $client = new Client();
-        $client->name = $request->name;
+        $client->name = $request->get('name');
+        $client->code = $request->get('code');
         $client->save();
         return redirect()->route('admin.clients.edit', $client);
     }
@@ -58,26 +60,28 @@ class ClientsController extends Controller
         $peoples = People::all();
         return view('admin.clients.edit', compact('client', 'peoples'));
     }
-
     
-    public function update(Request $request, Client $client)
-    {
-       // dd($request->get('peoples'));
+    public function update(Request $request, Client $client){
         $data = $request->validate([
             'code' => 'required',
             'name' => 'required',
-            'city' => 'required'
         ]);
 
-        $client->code = $request->code;
-        $client->name = $request->name;
-        $client->title = $request->title;
-        $client->adress = $request->adress;
-        $client->city = $request->city;
+        $client->code = $request->get('code');
+        $client->name = $request->get('name');
+        $client->title = $request->get('title');
+        $client->adress = $request->get('adress');
+        $client->city = $request->get('city');
         $client->save();
+
         $client->syncPeoples($request->get('peoples'));
 
-        return back()->with('flash', 'Datos del cliente actualizados');
+        return redirect()->route('admin.clients.index')->with('flash', 'Local '.$request->get('code').' actualizado correctamente');
+    }
+
+    public function destroy(Client $client){
+        $client->delete();
+        return back()->with('flash', 'El cliente ha sido eliminado.');
     }
 
 }

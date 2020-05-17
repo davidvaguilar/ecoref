@@ -42,46 +42,55 @@
         </ul>   
     </li>-->
     @can('view', new App\User)
+        <li class="{{ setActiveRoute('admin.clients.index') }}">
+            <a href="{{ route('admin.clients.index') }}">
+                <i class="fa fa-users"></i> <span>Clientes</span>
+            </a>
+        </li>
+        <li class="treeview {{ setActiveRoute(['admin.users.index', 'admin.users.create']) }}">
+            <a href="#"><i class="fa fa-user"></i> <span>Usuarios</span>
+            <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+                </span>
+            </a>
+            <ul class="treeview-menu">
+                <li class="{{ setActiveRoute('admin.users.index') }}">
+                    <a href="{{ route('admin.users.index') }}">
+                        <i class="fa fa-eye"> Ver todos los usuarios</i>
+                    </a>
+                </li>
+                <li class="{{ setActiveRoute('admin.users.create') }}">
+                    <a href="{{ route('admin.users.create') }}">
+                        <i class="fa fa-pencil"> Crear un usuario</i>
+                    </a>
+                </li>
+            </ul>
+        </li>
 
-    <li class="{{ setActiveRoute('admin.posts.index') }}">
-        <a href="{{ route('admin.clients.index') }}">
-            <i class="fa fa-users"></i> <span>Clientes</span>
-        </a>
-    </li>
-
-    <li class="{{ setActiveRoute('admin.posts.index') }}">
-        <a href="{{ route('admin.types.index') }}">
-            <i class="fa fa-plus"></i> <span>Tipos de Orden</span>
-        </a>
-    </li>
-    <li class="{{ setActiveRoute('admin.posts.index') }}">
-        <a href="{{ route('admin.problems.index') }}">
-            <i class="fa fa-plus"></i> <span>Problemas</span>
-        </a>
-    </li>
-    <li class="{{ setActiveRoute('admin.posts.index') }}">
-        <a href="{{ route('admin.refrigerants.index') }}">
-            <i class="fa fa-plus"></i> <span>Refrigerantes</span>
-        </a>
-    </li>
-
-    <li class="treeview {{ setActiveRoute(['admin.users.index', 'admin.users.create']) }}">
-        <a href="#"><i class="fa fa-user"></i> <span>Usuarios</span>
-        <span class="pull-right-container">
-            <i class="fa fa-angle-left pull-right"></i>
-            </span>
-        </a>
-        <ul class="treeview-menu">
-            <li class="{{ setActiveRoute('admin.users.index') }}">
-                <a href="{{ route('admin.users.index') }}">
-                    <i class="fa fa-eye"> Ver todos los usuarios</i>
-                </a>
-            </li>
-            <li class="{{ setActiveRoute('admin.users.create') }}">
-                <a href="{{ route('admin.users.create') }}"><i class="fa fa-pencil"> Crear un usuario</i></a>
-            </li>
-        </ul>
-    </li>
+        <li class="treeview {{ setActiveRoute(['admin.types.index', 'admin.problems.index', 'admin.refrigerants.index']) }}">
+            <a href="#"><i class="fa fa-cog"></i> <span>Administración</span>
+            <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+                </span>
+            </a>
+            <ul class="treeview-menu">
+                <li class="{{ setActiveRoute('admin.types.index') }}">
+                    <a href="{{ route('admin.types.index') }}">
+                        <i class="fa fa-circle-o"></i> <span>Tipos de Orden</span>
+                    </a>
+                </li>
+                <li class="{{ setActiveRoute('admin.problems.index') }}">
+                    <a href="{{ route('admin.problems.index') }}">
+                        <i class="fa fa-circle-o"></i> <span>Problemas</span>
+                    </a>
+                </li>
+                <li class="{{ setActiveRoute('admin.refrigerants.index') }}">
+                    <a href="{{ route('admin.refrigerants.index') }}">
+                        <i class="fa fa-circle-o"></i> <span>Refrigerantes</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
     @else
         <li class="{{ setActiveRoute(['admin.users.show', 'admin.users.edit']) }}">
             <a href="{{ route('admin.users.show', auth()->user()) }}">

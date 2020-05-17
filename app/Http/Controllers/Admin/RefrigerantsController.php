@@ -9,18 +9,33 @@ use Illuminate\Http\Request;
 class RefrigerantsController extends Controller
 {
     public function index(){
-        $refrigerants = Refrigerant::all();        
+        $refrigerants = Refrigerant::orderBy('created_at', 'desc')->get();    
         return view('admin.refrigerants.index', compact('refrigerants'));
     }
 
     public function store(Request $request){
-        $this->validate($request, ['title' => 'required|min:3'] );
+        $data = $request->validate([
+            'name' => 'required',
+        ]);
 
         $refrigerant = new Refrigerant();
-        $refrigerant->name = $refrigerant->name;
-
+        $refrigerant->name = $request->get('name');
         $refrigerant->save();
         return redirect()->route('admin.refrigerants.index')
-                ->with('flash', 'El refrigerante ha sido creada.');;
+                        ->with('flash', 'El refrigerante ha sido creada.');;
+    }
+
+    public function update(Request $request, Refrigerant $refrigerant){
+        $data = $request->validate([
+          'name' => 'required',
+        ]);
+        $refrigerant->name = $request->get('name');
+        $refrigerant->save();
+        return redirect()->route('admin.refrigerants.index')->with('flash', 'Refrigerante se ha actualizado correctamente');
+    }
+
+    public function destroy(Refrigerant $refrigerant){
+        $refrigerant->delete();
+        return back()->with('flash', 'El refrigerante de orden ha sido eliminada.');
     }
 }

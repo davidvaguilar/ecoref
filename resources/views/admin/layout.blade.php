@@ -18,7 +18,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <!-- Ionicons -->
   <link rel="stylesheet" href="{{ asset('adminlte/bower_components/Ionicons/css/ionicons.min.css') }}">
 
-  
+  @stack('styles')
   <!-- Theme style -->
   <link rel="stylesheet" href="{{ asset('adminlte/css/AdminLTE.min.css') }}">
   <!-- AdminLTE Skins. We have chosen the skin-blue for this starter
@@ -26,19 +26,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
         apply the skin class to the body tag so the changes take effect. -->
   <link rel="stylesheet" href="{{ asset('adminlte/css/skins/skin-blue.min.css') }}">
 
-  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-  <!--[if lt IE 9]>
-  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-  <![endif]-->
-
-  <!-- Google Font -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+  <!-- Google Font
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic"> -->
 
   <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 
-  @stack('styles')
 </head>
 <!--
 BODY TAG OPTIONS:
@@ -211,18 +203,6 @@ desired effect
         </div>
       </div>
 
-      <!-- search form (Optional)
-      <form action="#" method="get" class="sidebar-form">
-        <div class="input-group">
-          <input type="text" name="q" class="form-control" placeholder="Search...">
-          <span class="input-group-btn">
-              <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
-              </button>
-            </span>
-        </div>
-      </form> -->
-      <!-- /.search form -->
-
       <!-- Sidebar Menu -->
       @include('admin.partials.nav')
       <!-- /.sidebar-menu -->
@@ -256,9 +236,8 @@ desired effect
       Anything you want
     </div>-->
     <!-- Default to the left -->
-    <strong>Copyright &copy; 2020 <a href="#">Company</a>.</strong> All rights reserved.
+    <strong>Copyright &copy; 2020 <a href="{{ url('http://www.dyi.cl') }}" target="_blank">DYI</a>.</strong> All rights reserved.
   </footer>
-
   
   <!-- /.control-sidebar -->
   <!-- Add the sidebar's background. This div must be placed
@@ -272,11 +251,6 @@ desired effect
 <script src="{{ asset('adminlte/bower_components/jquery/dist/jquery.min.js') }}"></script>
 <!-- Bootstrap 3.3.7 -->
 <script src="{{ asset('adminlte/bower_components/bootstrap/dist/js/bootstrap.min.js') }}"></script>
-{{--
-@unless(request()->is('admin/posts/*'))
-    @include('admin.posts.create')
-
-@endunless  --}}
 
 @stack('scripts')
 <!-- AdminLTE App -->
