@@ -11,12 +11,11 @@ class Post extends Model
     use SoftDeletes;
     
     protected $fillable = [ 
-        'title', 'url','body', 'iframe', 'excerpt', 'published_at', 'category_id', 'user_id', 
+        'title', 'published_at', 'category_id', 'user_id', 
         'started_at', 'finished_at', 'client_id'
     ];
 
-    protected $dates = ['published_at', 'started_at', 'finished_at'];  // Instancia de Carbon
-//    protected $dates = ['published_at'];  // Instancia de Carbon
+    protected $dates = ['published_at', 'started_at', 'finished_at', 'deleted_at'];  // Instancia de Carbon
 
     //protected $with = (['category', 'tags', 'owner', 'photos']);   CUIDADO YA QUE CARGA pede formar loop
 

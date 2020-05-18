@@ -54,10 +54,10 @@
                             <td>{{ isset($post->type->id) ? $post->type->name : '' }}</td>
                             <td>{{ isset($post->problem->id) ? $post->problem->name : '' }}</td>
                             <td>
-                                <!--<a href="{{ route('productos_pdf', $post) }}" 
+                                <a href="{{ route('productos_pdf', $post) }}" 
                                     target="_blank" 
                                     class="btn btn-default"
-                                ><i class="fa fa-eye"></i></a>-->
+                                ><i class="fa fa-eye"></i></a>
                                 
                                 @can('delete', $post)
                                     <form method="POST" 
@@ -97,15 +97,11 @@
                     @endforeach
                 </tbody>
             </table>
-            
         </div>
-
         <div class="overlay">
             <i class="fa fa-refresh fa-spin"></i>
         </div>
-        <!-- /.box-body -->
     </div>
-    <!-- /.box -->
 @stop
 
 @push('styles')
