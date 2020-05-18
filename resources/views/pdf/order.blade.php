@@ -164,8 +164,8 @@
           </strong></td>
         </tr>
         <tr>
-          <td>Presion Baja: <strong>{{ isset($post->parameter->id) ? $post->parameter->pressure_high : '' }}</strong></td>
-          <td>Presion Alta: <strong>{{ isset($post->parameter->id) ? $post->parameter->pressure_low : '' }}</strong></td>
+          <td>Presion Baja: <strong>{{ isset($post->parameter->id) ? $post->parameter->pressure_low : '' }}</strong></td>
+          <td>Presion Alta: <strong>{{ isset($post->parameter->id) ? $post->parameter->pressure_high : '' }}</strong></td>
         </tr>
         <tr>
           <td>Refrigerante: <strong>{{ isset($post->parameter->id) ? $post->parameter->refrigerant : '' }}</strong></td>
