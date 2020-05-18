@@ -10,7 +10,7 @@ class Photo extends Model
     protected $guarded = [];  //sacar al proteccion 
 
     public function setTitleAttribute($title){
-        $this->attributes['title'] = strtoupper($title);
+        $this->attributes['title'] = mb_strtoupper($title);
     }
 
     protected static function boot(){

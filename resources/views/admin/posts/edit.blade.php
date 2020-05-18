@@ -156,6 +156,7 @@
                                             name="type" 
                                             class="form-control" 
                                             style="font-weight: bold;">
+                                        <option value="">Seleccione una opcion</option>
                                         <option value="BAJA" {{ isset($post->parameter->id) && $post->parameter->type == 'BAJA' ? 'selected' : '' }}>
                                                 BAJA TEMPERATURA
                                         </option>

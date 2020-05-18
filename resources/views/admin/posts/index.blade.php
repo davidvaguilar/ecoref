@@ -42,8 +42,9 @@
                             <td>
                                 @can('update', $post)
                                     <a href="{{ route('admin.posts.edit', $post) }}" 
-                                        class="btn btn-info"
-                                    ><i class="fa fa-pencil"></i></a>
+                                            class="btn btn-info" title="Editar OT">
+                                        <i class="fa fa-pencil"></i>
+                                    </a>
                                 @endcan
                             </td>   
                             @role('Admin')  
@@ -95,7 +96,7 @@
                                     @role('Admin')  
                                         @foreach ($post->records as $record)
                                             <a href="{{ url($record->url) }}" 
-                                                title="Creacion: {{ $record->created_at->format('d-m-Y H:i') }}"
+                                                title="PDF creado el {{ $record->created_at->format('d-m-Y H:i') }}"
                                                 target="_blank" 
                                                 class="btn btn-default"
                                             ><i class="fa fa-file-pdf-o"></i></a>
@@ -108,13 +109,14 @@
                                             <button type="submit"
                                                 onclick="return confirm('¿Estas seguro de querer volver a enviar este reporte?')"
                                                 class="btn btn-success"
+                                                title="Enviar PDF al Cliente"
                                             ><i class="fa fa-envelope-o"></i></button>
                                         </form>
                                     @else 
                                         @foreach ($post->records as $record)
                                             @if($loop->last)
                                                 <a href="{{ url($record->url) }}" 
-                                                    title="Creacion: {{ $record->created_at->format('d-m-Y H:i') }}"
+                                                    title="PDF creado el {{ $record->created_at->format('d-m-Y H:i') }}"
                                                     target="_blank" 
                                                     class="btn btn-default"
                                                 ><i class="fa fa-file-pdf-o"></i></a>
@@ -128,6 +130,7 @@
                                             <button type="submit"
                                                 onclick="return confirm('¿Estas seguro de querer volver a enviar este reporte?')"
                                                 class="btn btn-success"
+                                                title="Enviar PDF al Cliente"
                                             ><i class="fa fa-envelope-o"></i></button>
                                         </form>
                                     @endrole
@@ -144,6 +147,7 @@
                                     <button type="submit" 
                                         onclick="return confirm('¿Estas seguro de querer eliminar esta publicación?')"
                                         class="btn btn-danger"
+                                        title="Eliminar OT"
                                     ><i class="fa fa-times"></i></button>
                                 </form>
                             </td>

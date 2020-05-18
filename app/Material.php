@@ -11,7 +11,7 @@ class Material extends Model
     ];
 
     public function setDetailAttribute($detail){
-        $this->attributes['detail'] = strtoupper($detail);
+        $this->attributes['detail'] = mb_strtoupper($detail);
     }
 
 }

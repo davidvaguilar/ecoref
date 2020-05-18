@@ -153,19 +153,19 @@ class Post extends Model
     }
 
     public function setEquipmentAttribute($equipment){
-        $this->attributes['equipment'] = strtoupper($equipment);
+        $this->attributes['equipment'] = mb_strtoupper($equipment);
     }
 
     public function setModelAttribute($model){
-        $this->attributes['model'] = strtoupper($model);
+        $this->attributes['model'] = mb_strtoupper($model);
     }
 
     public function setJobAttribute($job){
-        $this->attributes['job'] = strtoupper($job);
+        $this->attributes['job'] = mb_strtoupper($job);
     }
 
     public function setTypeOtherAttribute($type_other){
-        $this->attributes['type_other'] = strtoupper($type_other);
+        $this->attributes['type_other'] = mb_strtoupper($type_other);
     }
 
 

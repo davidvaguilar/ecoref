@@ -14,7 +14,7 @@ class Type extends Model
     }
 
     public function setNameAttribute($name){
-        $this->attributes['name'] = strtoupper($name);
+        $this->attributes['name'] = mb_strtoupper($name);
     }
 
 }

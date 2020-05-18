@@ -142,37 +142,41 @@
 
     <!--<h4>PARAMETROS/MEDICIONES/NIVELES</h4>-->
     <br>
-    <table style="width: 100%;">
-      <thead>
-        <tr>
-          <th colspan="2">PARAMETROS/MEDICIONES/NIVELES {{ isset($post->parameter->id) ? $post->parameter->type.' TEMPERATURA' : '' }}</th>
-        </tr>
-      </thead>
-      <tbody style="border-top: 1px solid black; border-bottom: 1px solid black; font-size: 10pt;">
-        <tr>
-          <td>Temperatura: <strong>{{ isset($post->parameter->id) ? $post->parameter->temperature.' CUMPLE' : '' }} </strong></td>
-          <td>Refrigerante: <strong>
-            @if( isset($post->parameter->refrigerant_id) ) 
-                @foreach ($refrigerants as $refrigerant)
-                    @if( $post->parameter->refrigerant_id == $refrigerant->id ) 
-                      {{ $refrigerant->name }}
-                    @endif
-                @endforeach   
-            @else 
-                {{ '' }}
-            @endif   
-          </strong></td>
-        </tr>
-        <tr>
-          <td>Presion Baja: <strong>{{ isset($post->parameter->id) ? $post->parameter->pressure_low : '' }}</strong></td>
-          <td>Presion Alta: <strong>{{ isset($post->parameter->id) ? $post->parameter->pressure_high : '' }}</strong></td>
-        </tr>
-        <tr>
-          <td>Refrigerante: <strong>{{ isset($post->parameter->id) ? $post->parameter->refrigerant : '' }}</strong></td>
-          <td>Aceite: <strong>{{ isset($post->parameter->id) ? $post->parameter->oil : '' }}</strong></td>
-        </tr>
-      </tbody>
-    </table>
+    @if( isset($post->parameter->type) )
+      <table style="width: 100%;">
+        <thead>
+          <tr>
+            <th colspan="2">PARAMETROS/MEDICIONES/NIVELES {{ isset($post->parameter->type) ? $post->parameter->type.' TEMPERATURA' : 'NO APLICA' }}</th>
+          </tr>
+        </thead>
+      
+        <tbody style="border-top: 1px solid black; border-bottom: 1px solid black; font-size: 10pt;">
+          <tr>
+            <td>Temperatura: <strong>{{ isset($post->parameter->id) ? $post->parameter->temperature.' CUMPLE' : '' }} </strong></td>
+            <td>Refrigerante: <strong>
+              @if( isset($post->parameter->refrigerant_id) ) 
+                  @foreach ($refrigerants as $refrigerant)
+                      @if( $post->parameter->refrigerant_id == $refrigerant->id ) 
+                        {{ $refrigerant->name }}
+                      @endif
+                  @endforeach   
+              @else 
+                  {{ '' }}
+              @endif   
+            </strong></td>
+          </tr>
+          <tr>
+            <td>Presion Baja: <strong>{{ isset($post->parameter->id) ? $post->parameter->pressure_low : '' }}</strong></td>
+            <td>Presion Alta: <strong>{{ isset($post->parameter->id) ? $post->parameter->pressure_high : '' }}</strong></td>
+          </tr>
+          <tr>
+            <td>Refrigerante: <strong>{{ isset($post->parameter->id) ? $post->parameter->refrigerant : '' }}</strong></td>
+            <td>Aceite: <strong>{{ isset($post->parameter->id) ? $post->parameter->oil : '' }}</strong></td>
+          </tr>
+        </tbody>
+     </table>
+    
+    @endif
 
     <table style="font-size: 10pt;
             width: 100%;
@@ -190,7 +194,7 @@
           @foreach ($post->materials as $material)
               <tr class="even_row">
                 <td style="border-right: 1px solid black; padding: 0.3em;">{{ $material->quantity }}</td>
-                <td style="border-right: 1px solid black; padding: 0.3em;">{{ $material->detail }}</td>
+                <td style="text-align: left; border-right: 1px solid black; padding: 0.3em;">{{ $material->detail }}</td>
               </tr>        
             @endforeach
         @endif

@@ -18,19 +18,19 @@ class Client extends Model
     }
 
     public function setNameAttribute($name){
-        $this->attributes['name'] = strtoupper($name);
+        $this->attributes['name'] = mb_strtoupper($name);
     }
 
     public function setTitleAttribute($title){
-        $this->attributes['title'] = strtoupper($title);
+        $this->attributes['title'] = mb_strtoupper($title);
     }
 
     public function setAdressAttribute($adress){
-        $this->attributes['adress'] = strtoupper($adress);
+        $this->attributes['adress'] = mb_strtoupper($adress);
     }
 
     public function setCityAttribute($city){
-        $this->attributes['city'] = strtoupper($city);
+        $this->attributes['city'] = mb_strtoupper($city);
     }
 
     public function syncPeoples($peoples){
