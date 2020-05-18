@@ -18,13 +18,22 @@
                 <thead>
                     <tr>
                         <th></th>
-                        <th>Folio</th>
+                        @role('Admin')
+                            <th>Responsable</th>
+                        @endrole
+                        <th>Folio</th> 
+                        @role('Admin')
+                            <th>Estado</th>
+                        @endrole
                         <th>Fecha Creacion</th>
                         <th>Cliente</th>
                         <th>Local</th>
                         <th>Tipo de Orden</th>
                         <th>Problema</th>
                         <th style="min-width:170px">Archivos</th>
+                        @role('Admin')
+                            <th></th>
+                        @endrole
                     </tr>
                 </thead>
                 <tbody>
@@ -36,9 +45,35 @@
                                         class="btn btn-info"
                                     ><i class="fa fa-pencil"></i></a>
                                 @endcan
-                            </td>
+                            </td>   
+                            @role('Admin')  
+                                <td>{{ $post->owner->name }}</td>
+                            @endrole
                             <td>{{ $post->title }}</td>
-                            <td>{{ $post->started_at->format('d/m/Y H:i') }}</td>
+                            @role('Admin')
+                                <td>
+                                    @switch( $post->status )
+                                        @case('PENDIENTE')
+                                            <button type="button"
+                                                class="btn btn-xs btn-warning">
+                                                {{ $post->status }}</button>
+                                            @break
+                                        @case('FINALIZADO')
+                                            <button type="button"
+                                                    class="btn btn-xs btn-success">
+                                                    {{ $post->status }}</button>
+                                            @break
+                                        @case('ENVIADO')
+                                            <button type="button"
+                                                    class="btn btn-xs btn-success">
+                                                    {{ $post->status }}</button>
+                                            @break
+                                        @default
+                                            <span>Sin estado</span>
+                                    @endswitch
+                                </td>
+                            @endrole      
+                            <td><span title="{{ $post->started_at->format('d-m-Y H:i') }}">{{ $post->started_at->diffForHumans() }}</span></td>
                             <td>
                                 @if( isset($post->client->id) )
                                     {{ $post->client->name }}
@@ -46,9 +81,7 @@
                             </td>
                             <td>
                                 @if( isset($post->client->id) )
-                                <button type="button"
-                                    class="btn btn-xs btn-danger">
-                                    {{ $post->client->title }}</button>
+                                    {{ $post->client->code }} - {{ $post->client->title }}
                                 @endif
                             </td>
                             <td>{{ isset($post->type->id) ? $post->type->name : '' }}</td>
@@ -57,20 +90,7 @@
                                 <!--<a href="{{-- route('productos_pdf', $post) --}}" 
                                     target="_blank" 
                                     class="btn btn-default"
-                                ><i class="fa fa-eye"></i></a>-->
-                                @can('delete', $post)
-                                    <form method="POST" 
-                                        action="{{ route('admin.posts.destroy', $post) }}" 
-                                        style="display: inline">
-                                        {{ csrf_field() }}
-                                        {{ method_field('DELETE') }}
-                                        <button type="submit" 
-                                            onclick="return confirm('¿Estas seguro de querer eliminar esta publicación?')"
-                                            class="btn btn-danger"
-                                        ><i class="fa fa-times"></i></button>
-                                    </form>
-                                @endcan
-
+                                ><i class="fa fa-eye"></i></a>-->                                
                                 @if( $post->records->count() )
                                     @foreach ($post->records as $record)
                                         <a href="{{ url($record->url) }}" 
@@ -90,8 +110,22 @@
                                         ><i class="fa fa-envelope-o"></i></button>
                                     </form>
                                 @endif
-
                             </td>
+
+                            @role('Admin')
+                            <td>
+                                <form method="POST" 
+                                    action="{{ route('admin.posts.destroy', $post) }}" 
+                                    style="display: inline">
+                                    {{ csrf_field() }}
+                                    {{ method_field('DELETE') }}
+                                    <button type="submit" 
+                                        onclick="return confirm('¿Estas seguro de querer eliminar esta publicación?')"
+                                        class="btn btn-danger"
+                                    ><i class="fa fa-times"></i></button>
+                                </form>
+                            </td>
+                            @endrole 
                         </tr>
                     @endforeach
                 </tbody>
