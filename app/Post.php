@@ -152,6 +152,24 @@ class Post extends Model
                                 : null;
     }
 
+    public function setEquipmentAttribute($equipment){
+        $this->attributes['equipment'] = strtoupper($equipment);
+    }
+
+    public function setModelAttribute($model){
+        $this->attributes['model'] = strtoupper($model);
+    }
+
+    public function setJobAttribute($job){
+        $this->attributes['job'] = strtoupper($job);
+    }
+
+    public function setTypeOtherAttribute($type_other){
+        $this->attributes['type_other'] = strtoupper($type_other);
+    }
+
+
+
 
     public function setCategoryIdAttribute($category){
         $this->attributes['category_id'] = Category::find($category)

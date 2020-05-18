@@ -92,23 +92,45 @@
                                     class="btn btn-default"
                                 ><i class="fa fa-eye"></i></a>-->                                
                                 @if( $post->records->count() )
-                                    @foreach ($post->records as $record)
-                                        <a href="{{ url($record->url) }}" 
-                                            title="Creacion: {{ $record->created_at}}"
-                                            target="_blank" 
-                                            class="btn btn-default"
-                                        ><i class="fa fa-file-pdf-o"></i></a>
-                                    @endforeach
-                                    <form method="POST" 
-                                        action="{{ route('admin.posts.updateSend', $post) }}" 
-                                        style="display: inline">
-                                        {{ csrf_field() }}
-                                        {{ method_field('PUT') }}
-                                        <button type="submit"
-                                            onclick="return confirm('¿Estas seguro de querer volver a enviar este reporte?')"
-                                            class="btn btn-success"
-                                        ><i class="fa fa-envelope-o"></i></button>
-                                    </form>
+                                    @role('Admin')  
+                                        @foreach ($post->records as $record)
+                                            <a href="{{ url($record->url) }}" 
+                                                title="Creacion: {{ $record->created_at->format('d-m-Y H:i') }}"
+                                                target="_blank" 
+                                                class="btn btn-default"
+                                            ><i class="fa fa-file-pdf-o"></i></a>
+                                        @endforeach
+                                        <form method="POST" 
+                                            action="{{ route('admin.posts.updateSend', $post) }}" 
+                                            style="display: inline">
+                                            {{ csrf_field() }}
+                                            {{ method_field('PUT') }}
+                                            <button type="submit"
+                                                onclick="return confirm('¿Estas seguro de querer volver a enviar este reporte?')"
+                                                class="btn btn-success"
+                                            ><i class="fa fa-envelope-o"></i></button>
+                                        </form>
+                                    @else 
+                                        @foreach ($post->records as $record)
+                                            @if($loop->last)
+                                                <a href="{{ url($record->url) }}" 
+                                                    title="Creacion: {{ $record->created_at->format('d-m-Y H:i') }}"
+                                                    target="_blank" 
+                                                    class="btn btn-default"
+                                                ><i class="fa fa-file-pdf-o"></i></a>
+                                            @endif
+                                        @endforeach
+                                        <form method="POST" 
+                                            action="{{ route('admin.posts.updateSend', $post) }}" 
+                                            style="display: inline">
+                                            {{ csrf_field() }}
+                                            {{ method_field('PUT') }}
+                                            <button type="submit"
+                                                onclick="return confirm('¿Estas seguro de querer volver a enviar este reporte?')"
+                                                class="btn btn-success"
+                                            ><i class="fa fa-envelope-o"></i></button>
+                                        </form>
+                                    @endrole
                                 @endif
                             </td>
 

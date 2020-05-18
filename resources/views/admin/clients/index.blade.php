@@ -24,7 +24,6 @@
                         <th>Ciudad</th>
                         <th>Emails</th>
                         <th></th>
-                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -48,7 +47,6 @@
                                     </a>@if( !$loop->last ),@endif
                                 @endforeach
                             </td>
-                            <td><span class="sparkpie">0,0,0</span></td>
                             <td>                                
                                 <form method="POST" 
                                     action="{{ route('admin.clients.destroy', $client) }}" 
@@ -76,20 +74,12 @@
 @endpush
 
 @push('scripts')
-
     @include('admin.clients.create')
+    
     <!-- DataTables -->
     <script src="{{ asset('adminlte/bower_components/datatables.net/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('adminlte/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
-    <!-- Sparkline -->
-    <script src="{{ asset('adminlte/bower_components/jquery-sparkline/dist/jquery.sparkline.min.js') }}"></script>
     <script>
-
-        $('.sparkpie').sparkline('html', {
-            type: 'pie', 
-            height: '2.0em'
-        });
-
         $(function () {
             $('#clients-table').DataTable({
             'paging'      : false,

@@ -82,7 +82,7 @@ class UsersTableSeeder extends Seeder
         ]);
 
         $admin = new User;
-        $admin->name = 'Administrador de Ecoref';
+        $admin->name = 'Administrador Ecoref';
         $admin->email = 'administrador@ecorefchile.cl';
         $admin->password = '123123';
         $admin->url = '/img/users/test.png';

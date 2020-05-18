@@ -42,7 +42,7 @@
                         <div class="col-xs-6">
                             <input id="code"
                                 name="code" 
-                                type="number"
+                                type="text"
                                 class="form-control" 
                                 placeholder="ID LOCAL" 
                                 value="{{ old('code') }}" 

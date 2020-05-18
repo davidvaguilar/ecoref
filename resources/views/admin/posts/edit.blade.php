@@ -74,7 +74,6 @@
                                     <select id="type_id"
                                             name="type_id" 
                                             class="form-control">
-                                        <!--<option value="">Seleccione un Tipo</option>-->
                                         @foreach ($types as $type)
                                             <option value="{{ $type->id }}"                              
                                                 {{ old('type_id', $post->type_id) == $type->id ? 'selected' : '' }} 
@@ -120,7 +119,6 @@
                                     <select id="problem_id" 
                                             name="problem_id" 
                                             class="form-control">
-                                        <!--<option value="">Seleccione un Problema</option> -->
                                         @foreach ($problems as $problem)
                                             <option value="{{ $problem->id }}"                              
                                                     {{ old('problem_id', $post->problem_id) == $problem->id ? 'selected' : '' }}>
@@ -132,7 +130,10 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="job" class="col-sm-2 control-label">Trabajo Realizado</label>
+                                <label for="job" class="col-sm-2 control-label">Trabajo Realizado
+                                    <small>(<span class="cont-job">{{ strlen($post->job) }}</span>/140)</small>
+                                </label>
+                                
                                 <div class="col-sm-10">
                                     <textarea id="job" 
                                             name="job" 
@@ -218,17 +219,7 @@
                                             </option>
                                         @endforeach  
                                     </select> 
-                                    <!-- <select id="refrigerants" 
-                                            class="form-control select2" 
-                                            multiple="multiple" 
-                                            data-placeholder="Seleccione una o mas etiquetas" 
-                                            style="width: 100%;">
-                                        @foreach ($refrigerants as $refrigerant)
-                                            <option {{-- collect(old('refrigerants', $post->parameter->refrigerants->pluck('id') ))->contains($refrigerant->id) ? 'selected' : '' -}} 
-                                                    value="{{ $refrigerant->id }}"
-                                                >{{-- $refrigerant->name --}}</option>
-                                        @endforeach
-                                    </select>     -->              
+                                           
                                 </div>
                             </div>
 
@@ -322,7 +313,9 @@
                             <input id="quantity"
                                     name="quantity"  
                                     type="number" 
-                                    class="form-control" value="1">
+                                    class="form-control" 
+                                    min="1" max="99" maxlength="2"
+                                    value="1">
                         </div>
                         <div id="detail-div" class="form-group col-xs-9">
                             <label for="detail">Material</label>
@@ -558,7 +551,7 @@
                         <div class="col-xs-6">
                             <input id="code"
                                 name="code" 
-                                type="number"
+                                type="text"
                                 class="form-control" 
                                 placeholder="ID LOCAL" 
                                 value="{{ old('code') }}" 
@@ -651,6 +644,11 @@
         $(document).ready(function(){
 
            
+            $('#job').keyup(function() {
+                cantidad = $('#job').val().length;
+                $('.cont-job').html(cantidad);   
+            });
+
             var canvas = document.querySelector("canvas");
             var signaturePad = new SignaturePad(canvas);
 

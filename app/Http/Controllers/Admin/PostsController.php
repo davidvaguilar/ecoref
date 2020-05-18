@@ -25,16 +25,13 @@ class PostsController extends Controller
         //$posts = Post::all();   //$posts = Post::where('user_id', auth()->id())->get();
         //$posts = auth()->user()->posts;
 
-        $clients = Client::distinct()->get(['name']);
+        //$clients = Client::distinct()->get(['name']);
+        $clients = Client::groupBy('name')->orderBy('name', 'desc')->get(['name']);
+
+       // dd($clients);
         $posts = Post::allowed()->orderBy('started_at', 'desc')->get();
         return view('admin.posts.index', compact('posts', 'clients'));
     }
-
-   /* public function create(){
-        $categories = Category::all();
-        $tags = Tag::all();
-        return view('admin.posts.create', compact('categories', 'tags'));
-    }*/
 
     public function store(Request $request){
         $this->authorize('create', new Post);
@@ -46,7 +43,7 @@ class PostsController extends Controller
                             ->get()
                             ->pluck('id')
                             ->first();
-
+                            
         if($client_id == NULL){
             return back()->with('flash', 'Cliente no existe');
         }
@@ -98,7 +95,9 @@ class PostsController extends Controller
         $refrigerants = Refrigerant::all();
         $problems = Problem::all();
         $types = Type::all();
-        $clients = Client::distinct()->get(['name']);
+       // $clients = Client::distinct()->get(['name']);
+       
+        $clients = Client::groupBy('name')->orderBy('name', 'desc')->get(['name']);
         return view('admin.posts.edit', compact('post', 'problems', 'types', 'refrigerants', 'clients'));
     }
 
