@@ -15,7 +15,7 @@
               <b>Email</b> <a class="pull-right">{{ $user->email }}</a>
             </li>
             <li class="list-group-item">
-              <b>Publicaciones</b> <a class="pull-right">{{ $user->posts->count() }}</a>
+              <b>Ordenes de Trabajo</b> <a class="pull-right">{{ $user->posts->count() }}</a>
             </li>
             @if ($user->roles->count())
               <li class="list-group-item">

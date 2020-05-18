@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Illuminate\Support\Facades\DB;
 use App\Post;
 use App\Client;
 use App\People;
@@ -12,8 +13,14 @@ class ClientsController extends Controller
 {
     public function index()
     {
+       /*$problems = DB::table('posts as p')
+        ->select(DB::raw('COUNT(p.id) as cantidad'))
+      //  ->whereYear('p.finished_at', $anio)
+        ->groupBy(  DB::raw('client_id'), DB::raw('problem_id') )
+        ->get()
+        ->pluck('cantidad');*/
 
-        $clients = Client::all();
+        $clients = Client::get();
         return view('admin.clients.index', compact('clients'));
     }
 

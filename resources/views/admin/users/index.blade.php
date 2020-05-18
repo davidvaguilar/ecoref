@@ -118,10 +118,10 @@
     <script>
         $(function () {
             $('#posts-table').DataTable({
-            'paging'      : true,
+            'paging'      : false,
             'lengthChange': false,
             'searching'   : false,
-            'ordering'    : true,
+            'ordering'    : false,
             'info'        : true,
             'autoWidth'   : false
             })

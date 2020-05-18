@@ -76,17 +76,17 @@
             <ul class="treeview-menu">
                 <li class="{{ setActiveRoute('admin.types.index') }}">
                     <a href="{{ route('admin.types.index') }}">
-                        <i class="fa fa-circle-o"></i> <span>Tipos de Orden</span>
+                        <i class="fa fa-circle-o text-red"></i> <span>Tipos de Orden</span>
                     </a>
                 </li>
                 <li class="{{ setActiveRoute('admin.problems.index') }}">
                     <a href="{{ route('admin.problems.index') }}">
-                        <i class="fa fa-circle-o"></i> <span>Problemas</span>
+                        <i class="fa fa-circle-o text-yellow"></i> <span>Problemas</span>
                     </a>
                 </li>
                 <li class="{{ setActiveRoute('admin.refrigerants.index') }}">
                     <a href="{{ route('admin.refrigerants.index') }}">
-                        <i class="fa fa-circle-o"></i> <span>Refrigerantes</span>
+                        <i class="fa fa-circle-o text-aqua"></i> <span>Refrigerantes</span>
                     </a>
                 </li>
             </ul>
