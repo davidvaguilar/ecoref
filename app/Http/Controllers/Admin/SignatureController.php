@@ -39,21 +39,20 @@ class SignatureController extends Controller
             $refrigerants = Refrigerant::all();
             $pdf = PDF::loadView('pdf.order', ['post'=> $post, 'refrigerants'=> $refrigerants]);   
             $url = 'pdf/order/OT'.$post->title.'-'.$post->owner->id.'-'.config('app.name', 'Laravel').'-'.Carbon::now()->format('d-m-Y-H-i').'.pdf';
-            $pdf->save($url);
+            $pdf->save($url); 
 
             $record = new Record;
             $record->post_id = $post->id;
             $record->url = $url;
             $record->save();
           
-            $subject = 'ordentrabajo-'.$post->id;
-            $to = $post->email;
+            $subject = 'OT'.$post->title.' firmado';          
             $data = ['nombre' => 'Ecoref'];
-           
-            Mail::send('emails.work-order', $data, function ($message) use ($pdf, $to, $subject) {
-                  $message->from('hugo.ortiz@ecorefchile.cl', 'Ecoref Chile');
-                  $message->to('ot@ecorefchile.cl')->subject($subject);
-                  $message->attachData($pdf->output(), $subject.'.pdf');
+
+            Mail::send('emails.work-order', $data, function ($message) use ($pdf, $subject) {
+                  $message->from('hugo.ortiz@ecorefchile.cl', config('app.name', 'Laravel'));
+                  $message->to('ot@ecorefchile.cl')->bcc('david.villegas.aguilar@gmail.com')->subject($subject);
+                  $message->attachData($pdf->output(), $subject);
             });
             return redirect()
                   ->route('admin.posts.index')

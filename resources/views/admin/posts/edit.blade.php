@@ -295,7 +295,7 @@
                                     <label class="checkbox-inline">
                                         <input type="radio" 
                                                 name="type" 
-                                                value="ORDEN"> Foto Orden
+                                                value="ORDEN"> Foto Reporte
                                     </label>                          
                                 </div>
                             </div>
@@ -417,7 +417,7 @@
                         
                             <div class="form-group">
                                 <div class="col-xs-4">
-                                    <p>Equipo Interv: <label>{{ isset($post->client->id) ? $post->client->name : '' }}</label></p>
+                                    <p>Equipo Interv: <label>{{ $post->equipment }}</label></p>
                                 </div>
                                 <div class="col-xs-4">
                                     <p>Modelo: <label>{{ $post->model }}</label></p>

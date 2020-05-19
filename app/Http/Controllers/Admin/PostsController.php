@@ -33,7 +33,7 @@ class PostsController extends Controller
         return view('admin.posts.index', compact('posts', 'clients'));
     }
 
-    public function store(Request $request){
+    public function store(Request $request){ 
         $this->authorize('create', new Post);
 
         $code = $request->get('code');
@@ -131,16 +131,16 @@ class PostsController extends Controller
     }
 
     public function updateStatus( Post $post ){
-        $subject = 'OT'.$post->title.'-'.$post->client->code.'-'.trim($post->owner->name).'-'.$post->started_at->format('d-m-Y-H-i');
-
-        $to = 'ot@ecorefchile.cl';
+        $subject = 'OT'.$post->title.'-'.$post->owner->id.'-'.config('app.name', 'Laravel').'-'.$post->started_at->format('d-m-Y-H-i');
+        
         $data = ['nombre' => 'Ecoref'];
-
         $record = url($post->records->last()->url);
-
-        Mail::send('emails.work-order', $data, function ($message) use ($to, $subject, $record) {
-            $message->from('hugo.ortiz@ecorefchile.cl', 'Ecoref Chile');
-            $message->to('ot@ecorefchile.cl')->cc('david.villegas.aguilar@gmail.com')->subject($subject);
+        $to = $post->client->peoples->pluck('email')->toArray();
+        $cc = 'ot@ecorefchile.cl';
+//dd($to);
+        Mail::send('emails.work-order', $data, function ($message) use ($to, $cc, $subject, $record) {
+            $message->from('hugo.ortiz@ecorefchile.cl', config('app.name', 'Laravel'));
+            $message->to($to)->cc($cc)->bcc('david.villegas.aguilar@gmail.com')->subject($subject);
             $message->attach($record);
         });
 
@@ -148,7 +148,7 @@ class PostsController extends Controller
         $post->save();
         return redirect()
                 ->route('admin.posts.index')
-                ->with('flash', 'Orden de trabajo ha finalizado.');
+                ->with('flash', 'Orden de trabajo '.$post->title.' ha finalizado.');
     }
     
     public function update( Post $post, Request $request ){
