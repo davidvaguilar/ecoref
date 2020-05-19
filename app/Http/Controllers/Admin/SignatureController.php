@@ -38,7 +38,7 @@ class SignatureController extends Controller
             //GRABANDO CON FIRMA
             $refrigerants = Refrigerant::all();
             $pdf = PDF::loadView('pdf.order', ['post'=> $post, 'refrigerants'=> $refrigerants]);   
-            $url = 'pdf/order/OT'.$post->title.'-'.$post->owner->id.'-'.config('app.name', 'Laravel').'-'.Carbon::now()->format('d-m-Y-H-i').'.pdf';
+            $url = 'pdf/order/OT'.$post->title.'-'.$post->owner->id.'-EcorefChile-'.Carbon::now()->format('d-m-Y-H-i').'.pdf';
             $pdf->save($url); 
 
             $record = new Record;
@@ -46,14 +46,15 @@ class SignatureController extends Controller
             $record->url = $url;
             $record->save();
           
+            $file = url($post->records->last()->url);
             $subject = 'OT'.$post->title.' firmado';          
             $data = ['nombre' => config('app.name', 'Laravel')];
             $title = 'OT'.$post->title.'-'.$post->owner->name.'-'.$post->started_at->format('d-m-Y-H-i');
         
-            Mail::send('emails.work-order', $data, function ($message) use ($pdf, $subject, $title) {
+            Mail::send('emails.work-order', $data, function ($message) use ($pdf, $subject, $file) {
                   $message->from('hugo.ortiz@ecorefchile.cl', config('app.name', 'Laravel'));
                   $message->to('ot@ecorefchile.cl')->bcc('david.villegas.aguilar@gmail.com')->subject($subject);
-                  $message->attachData($pdf->output(), $title.'.pdf');
+                  $message->attach($file);
             });
             return redirect()
                   ->route('admin.posts.index')
