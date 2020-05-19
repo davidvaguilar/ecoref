@@ -47,7 +47,7 @@ class SignatureController extends Controller
             $record->save();
             
             $data = ['nombre' => config('app.name', 'Laravel')];
-            $file = url($post->records->last()->url);
+            $file = url($url);
             $subject = 'OT'.$post->title.' firmado';          
             
             Mail::send('emails.work-order', $data, function ($message) use ($subject, $file) {
@@ -55,7 +55,7 @@ class SignatureController extends Controller
                   $message->to('ot@ecorefchile.cl')->bcc('david.villegas.aguilar@gmail.com')->subject($subject);
                   $message->attach($file);
             });
-            
+
             return redirect()
                   ->route('admin.posts.index')
                   ->with('flash', 'Se ha generado un PDF de la OT '.$post->title.'.');
