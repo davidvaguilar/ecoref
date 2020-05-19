@@ -51,11 +51,11 @@ class SignatureController extends Controller
             $data = ['nombre' => config('app.name', 'Laravel')];
             $title = 'OT'.$post->title.'-'.$post->owner->name.'-'.$post->started_at->format('d-m-Y-H-i');
         
-            Mail::send('emails.work-order', $data, function ($message) use ($pdf, $subject, $file) {
-                  $message->from('hugo.ortiz@ecorefchile.cl', config('app.name', 'Laravel'));
+          /*  Mail::send('emails.work-order', $data, function ($message) use ($pdf, $subject, $file) {
+                  $message->from('postmaster@dyi.cl');
                   $message->to('ot@ecorefchile.cl')->bcc('david.villegas.aguilar@gmail.com')->subject($subject);
                   $message->attach($file);
-            });
+            }); */
             return redirect()
                   ->route('admin.posts.index')
                   ->with('flash', 'Se ha generado un PDF de la OT '.$post->title.'.');
