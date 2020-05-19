@@ -135,8 +135,8 @@ class PostsController extends Controller
         
         $data = ['nombre' => config('app.name', 'Laravel')];
         $file = url($post->records->last()->url);
-       // $to = 'test-qmkh87juw@srv1.mail-tester.com';    //TEST
-        $to = 'ot@ecorefchile.cl';        
+       // $to = 'ot@ecorefchile.cl';        
+         $to = 'test-sk3r4anwl@srv1.mail-tester.com';    //TEST
         $cc = $post->client->peoples->pluck('email')->toArray();
 //dd($to);   ->cc($cc)
 
