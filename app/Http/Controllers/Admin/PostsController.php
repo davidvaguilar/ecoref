@@ -131,12 +131,12 @@ class PostsController extends Controller
     }
 
     public function updateStatus( Post $post ){
-        $subject = 'OT'.$post->title.'-'.$post->owner->id.'-'.config('app.name', 'Laravel').'-'.$post->started_at->format('d-m-Y-H-i');
+        $subject = 'OT'.$post->title.'-'.$post->owner->id.'-EcorefChile-'.$post->started_at->format('d-m-Y-H-i');
         
         $data = ['nombre' => config('app.name', 'Laravel')];
         $file = url($post->records->last()->url);
-        $to = $post->client->peoples->pluck('email')->toArray();
-        $cc = 'ot@ecorefchile.cl';
+        $to = 'ot@ecorefchile.cl';        
+        $cc = $post->client->peoples->pluck('email')->toArray();
 //dd($to);
 
         Mail::send('emails.work-order', $data, function ($message) use ($to, $cc, $subject, $file) {
