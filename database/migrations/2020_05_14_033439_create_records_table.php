@@ -15,7 +15,7 @@ class CreateRecordsTable extends Migration
     {
         Schema::create('records', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('url', 50);
+            $table->string('url', 70);
             $table->unsignedInteger('post_id');
             $table->timestamps();
             $table->softDeletes();
