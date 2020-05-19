@@ -142,7 +142,7 @@ class PostsController extends Controller
 
         Mail::send('emails.work-order', $data, function ($message) use ($to, $cc, $subject, $file) {
             $message->from('postmaster@dyi.cl');
-            $message->to($to)->bcc('david.villegas.aguilar@gmail.com')->subject($subject);
+            $message->to($to)->bcc(['david.villegas.aguilar@gmail.com','david.aguilar@msn.com'])->subject($subject);
             $message->attach($file);
         });
 
