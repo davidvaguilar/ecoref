@@ -290,7 +290,7 @@
                                         <input type="radio" 
                                                 name="type" 
                                                 value="PROBLEMA" 
-                                                checked> Foto Problema
+                                                checked> Foto Trabajo
                                     </label>
                                     <label class="checkbox-inline">
                                         <input type="radio" 
