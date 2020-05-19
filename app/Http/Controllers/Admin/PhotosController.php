@@ -63,7 +63,8 @@ class PhotosController extends Controller
                     $image->resize(600, 600);
                 break;
             case 'ORDEN':
-                    $image->resize(1200, 800);
+                    $image->resize(1224, 1584);
+                    //$image->resize(1836, 2376);
                 break;
         }
         $image->save('img/orders/'.$image_name);

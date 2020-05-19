@@ -17,8 +17,8 @@ class CreatePeopleTable extends Migration
             $table->increments('id');
             $table->string('first_name', 70)->nullable();
             $table->string('middle_name', 70)->nullable();
-            $table->string('father_surname', 40)->nullable();
-            $table->string('mother_surname', 40)->nullable();
+            $table->string('father_surname', 50)->nullable();
+            $table->string('mother_surname', 50)->nullable();
             $table->string('email', 70)->nullable();
             $table->timestamps();
             $table->softDeletes();

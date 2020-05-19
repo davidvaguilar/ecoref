@@ -19,7 +19,7 @@ class CreatePhotosTable extends Migration
 
             //PROBLEMA, ORDEN
             $table->string('type', 20)->default('PROBLEMA');
-            $table->string('url', 70);
+            $table->string('url', 50);
             $table->unsignedInteger('post_id');
             $table->timestamps();
             $table->softDeletes();

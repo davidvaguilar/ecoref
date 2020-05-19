@@ -152,7 +152,7 @@
       
         <tbody style="border-top: 1px solid black; border-bottom: 1px solid black; font-size: 10pt;">
           <tr>
-            <td>Temperatura: <strong>{{ isset($post->parameter->id) ? $post->parameter->temperature.' CUMPLE' : '' }} </strong></td>
+            <td>Temperatura: <strong>{{ isset($post->parameter->temperature) ? $post->parameter->temperature.' CUMPLE' : '' }} </strong></td>
             <td>Refrigerante: <strong>
               @if( isset($post->parameter->refrigerant_id) ) 
                   @foreach ($refrigerants as $refrigerant)

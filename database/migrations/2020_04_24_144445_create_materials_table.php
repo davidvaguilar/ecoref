@@ -16,7 +16,7 @@ class CreateMaterialsTable extends Migration
         Schema::create('materials', function (Blueprint $table) {
             $table->increments('id');        
             $table->unsignedInteger('quantity');
-            $table->text('detail');
+            $table->string('detail', 70);
             $table->unsignedInteger('price')->nullable();
 
             $table->unsignedInteger('post_id')->nullable();  //aca deve ir order
