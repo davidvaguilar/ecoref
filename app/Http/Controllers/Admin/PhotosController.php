@@ -25,9 +25,9 @@ class PhotosController extends Controller
     }*/
 
     public function store(Request $request, $id){
-        //dd($id);
+        ini_set('memory_limit', '256M');  // Temporalmente aumento de memoria hasta 256
+      
         $this->validate($request, [
-            'title' => 'required',
             'photo' => 'required|image'
         ]); 
 
@@ -50,18 +50,28 @@ class PhotosController extends Controller
             ->save('img/orders/'.$file_name);  */
         // no sirve   ini_set('post_max_size', '40M');  
         // no sirve  ini_set('upload_max_filesize', '20M');  //Temporalmente  post_max_size = 10M
+       
         $post = Post::find($id);
-
-        ini_set('memory_limit','200M');  // Temporalmente aumento de memoria hasta 256
+        
         $file = $request->file('photo');
-        $image_name = 'ot-'.$post->title.'-'.Carbon::now()->format('dmYHis').'.'.$file->getClientOriginalExtension();
+        $image_name = 'ot'.$post->title.'-'.Carbon::now()->format('dmYHis').'.'.$file->getClientOriginalExtension();
         $image = Image::make($file);
-        $image->resize(600, 600);
+
+
+        switch ($request->get('type')) {
+            case 'PROBLEMA':
+                    $image->resize(600, 600);
+                break;
+            case 'ORDEN':
+                    $image->resize(1200, 800);
+                break;
+        }
         $image->save('img/orders/'.$image_name);
-     
+
         $photo = new Photo();
         $photo->url = '/img/orders/'.$image_name;
         $photo->title = $request->get('title');
+        $photo->type = $request->get('type');
         
         $photo->post_id = $id;
         $photo->save();

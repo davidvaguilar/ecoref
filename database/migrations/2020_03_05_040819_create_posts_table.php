@@ -27,7 +27,7 @@ class CreatePostsTable extends Migration
                 $table->unsignedInteger('problem_id')->default(1);
             $table->text('job')->nullable();
 
-            //PENDIENTE, FINALIZADO, ENVIADO
+            //PENDIENTE, ENVIADO        //FINALIZADO,
             $table->string('status', 15)->default("PENDIENTE");
 
             $table->unsignedInteger('parameter_id')->nullable();

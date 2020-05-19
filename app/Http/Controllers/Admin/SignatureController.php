@@ -23,7 +23,7 @@ class SignatureController extends Controller
             $path = public_path().'/img/signatures/';
             $image = str_replace('data:image/png;base64,', '', $base64);
             $fileData = base64_decode($image);
-            $fileName = 'ot-'.$post->title.'-'.Carbon::now()->format('dmYHis').'.png';
+            $fileName = 'ot'.$post->title.'-'.Carbon::now()->format('dmYHis').'.png';
             
             $moved = file_put_contents($path.$fileName, $fileData);
             $signature = new Signature();
@@ -35,9 +35,10 @@ class SignatureController extends Controller
             $post->signature_id = $signature->id;
             $post->save();
 
+            //GRABANDO CON FIRMA
             $refrigerants = Refrigerant::all();
             $pdf = PDF::loadView('pdf.order', ['post'=> $post, 'refrigerants'=> $refrigerants]);   
-            $url = 'pdf/order/ot-'.$post->title.'-'.Carbon::now()->format('dmYHis').'.pdf';
+            $url = 'pdf/order/OT'.$post->title.'-'.$post->owner->id.'-'.config('app.name', 'Laravel').'-'.Carbon::now()->format('d-m-Y-H-i').'.pdf';
             $pdf->save($url);
 
             $record = new Record;

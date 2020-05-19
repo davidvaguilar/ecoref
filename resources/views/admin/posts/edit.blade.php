@@ -1,6 +1,12 @@
 @extends('admin.layout')
 
 @section('header')
+    <style>
+        .nav-tabs-custom>.nav-tabs>li.active>a, .nav-tabs-custom>.nav-tabs>li.active:hover>a {
+            background-color: #3c8dbc;
+            color: #fff;
+        }
+    </style>
     <h1>
         Orden de Trabajo Folio N° <button type="button" data-toggle="modal" data-target="#order-modal" class="btn btn-primary">{{ $post->title }}</button>
     </h1>
@@ -278,33 +284,44 @@
                     <div class="tab-pane" id="tab_photo">
                         <form method="post" action="{{ route('admin.posts.photos.store', $post->id) }}" enctype="multipart/form-data" class="form-horizontal"> <!-- /admin/products/4/images --><!-- admin/posts/{post}/photos -->
                             {{ csrf_field() }}   
-                            <div class="modal-body">
-                                <div class="form-group">
-                                    <label for="title" class="col-xs-3 control-label">Titulo</label>
-                                    <div class="col-xs-9">
-                                        <input id="title" 
-                                                name="title" 
-                                                type="text" 
-                                                class="form-control" 
-                                                autocomplete="off" required />
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="photo" class="col-xs-3 control-label">Fotografia</label>
-                                    <div class="col-xs-9">
-                                        <input id="photo" 
-                                                name="photo" 
-                                                type="file" 
-                                                class="form-control" 
-                                                accept="image/*" required />
-                                    </div>                                    
+                            <div class="form-group">
+                                <div class="col-xs-12 text-center">
+                                    <label class="checkbox-inline">
+                                        <input type="radio" 
+                                                name="type" 
+                                                value="PROBLEMA" 
+                                                checked> Foto Problema
+                                    </label>
+                                    <label class="checkbox-inline">
+                                        <input type="radio" 
+                                                name="type" 
+                                                value="ORDEN"> Foto Orden
+                                    </label>                          
                                 </div>
                             </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary pull-left" data-dismiss="modal">Cerrar</button>
-                                <button type="submit" class="btn btn-primary">Subir nueva imagen</button>
+                            <div class="form-group">
+                                <label for="title" class="col-xs-3 control-label">Titulo</label>
+                                <div class="col-xs-9">
+                                    <input id="title" 
+                                            name="title" 
+                                            type="text" 
+                                            class="form-control" 
+                                            autocomplete="off" />
+                                </div>
                             </div>
+                            <div class="form-group">
+                                <label for="photo" class="col-xs-3 control-label">Fotografia</label>
+                                <div class="col-xs-9">
+                                    <input id="photo" 
+                                            name="photo" 
+                                            type="file" 
+                                            class="form-control" 
+                                            accept="image/*" required />
+                                </div>                                    
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-block">Subir nueva imagen</button>
                         </form>
+
                     </div>
                     <!-- /.tab-pane -->
                     <div class="tab-pane" id="tab_material">
@@ -544,8 +561,9 @@
                                     name="name" 
                                     class="form-control" require>
                                 @foreach ($clients as $client)
-                                    <option value="{{ $client->name }}"  
-                                        >{{ $client->name }}</option>
+                                    <option value="{{ $client->name }}"
+                                        {{ $post->client->name == $client->name ? 'selected' : '' }} >
+                                        {{ $client->name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -555,7 +573,7 @@
                                 type="text"
                                 class="form-control" 
                                 placeholder="ID LOCAL" 
-                                value="{{ old('code') }}" 
+                                value="{{ $post->client->code }}" 
                                 autocomplete="off" required>
                         </div>
                         {!! $errors->first('code', '<span class="help-block">:message</span>' ) !!}                        
@@ -579,10 +597,10 @@
                 </button>
                 <h4 id="client-title" class="modal-title" id="exampleModalLabel">MODIFICACION AL FOLIO</h4>
             </div>
-            <form method="POST" action="{{ route('admin.posts.updateTitle', $post) }}">
-                {{ csrf_field() }}
-                {{ method_field('PUT') }}
-                <div class="modal-body">
+            <div class="modal-body">
+                <form method="POST" action="{{ route('admin.posts.updateTitle', $post) }}">
+                    {{ csrf_field() }}
+                    {{ method_field('PUT') }}
                     <div class="form-group">
                         <label class="col-form-label">Numero de Folio</label>
                         <input name="title" type="number" class="form-control" value="{{ $post->title }}" required />
@@ -603,7 +621,7 @@
                                 class="btn btn-danger"
                         >Finalizar</button>
                 </form>
-                </div>
+            </div>
             
         </div>
     </div>
@@ -612,26 +630,10 @@
 @stop
 
 @push('styles')
-  
-    <style>
-        .nav-tabs-custom>.nav-tabs>li.active>a, .nav-tabs-custom>.nav-tabs>li.active:hover>a {
-            background-color: #3c8dbc;
-            color: #fff;
-        }
-    </style>
+    
 @endpush
 
 @push('scripts')
-  <!-- $('#formSave .direccion').keyup(function() {
-        cantidad = $('#formSave .direccion').val().length;
-        $('#formSave .contador-direccion').html(cantidad);   
-    });
-	
-	$('#formSave .solicitud').keyup(function() {
-        cantidad = $('#formSave .solicitud').val().length;
-        $('#formSave .contador-solicitud').html(cantidad);   
-    });-->
-
     <script src="{{ asset('js/signature_pad/signature_pad.min.js') }}"></script>
     <script>
 
@@ -644,7 +646,6 @@
 
         $(document).ready(function(){
 
-           
             $('#job').keyup(function() {
                 cantidad = $('#job').val().length;
                 $('.cont-job').html(cantidad);   
