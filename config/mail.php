@@ -57,11 +57,10 @@ return [
 
     'from' => [
         'address' => env('MAIL_FROM_ADDRESS', 'postmaster@dyi.cl'),
+        'name' => env('MAIL_FROM_NAME', 'Administrador'),
     ],
 
     /*
-      'name' => env('MAIL_FROM_NAME', 'Administrador'),
-
     |--------------------------------------------------------------------------
     | E-Mail Encryption Protocol
     |--------------------------------------------------------------------------
