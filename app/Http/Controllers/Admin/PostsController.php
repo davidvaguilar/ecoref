@@ -133,7 +133,7 @@ class PostsController extends Controller
     public function updateStatus( Post $post ){
         $subject = 'OT'.$post->title.'-'.$post->owner->id.'-EcorefChile-'.$post->started_at->format('d-m-Y-H-i');
         
-        $data = ['message' => config('app.name', 'Laravel')];
+        $data = ['email' => config('app.name', 'Laravel')];
         $file = url($post->records->last()->url);
        // $to = 'ot@ecorefchile.cl'; 
        //dd($to);   ->cc($cc)
@@ -144,12 +144,13 @@ class PostsController extends Controller
                 ['email' => 'david.aguilar@msn.com', 'name' => '']]; 
         $cc = $post->client->peoples->pluck('email')->toArray();
 
+        Mail::to($to)->bcc($bcc)->send(new WorkOrder($post));
 
-        Mail::send('emails.work-order', $data, function ($message) use ($to, $cc, $bcc, $subject, $file) {
+        /*Mail::send('emails.work-order', $data, function ($message) use ($to, $cc, $bcc, $subject, $file) {
             $message->from('postmaster@dyi.cl');
             $message->to($to)->bcc($bcc)->subject($subject);
             $message->attach($file);
-        });
+        });*/
 
         $post->status = "ENVIADO";
         $post->save();
