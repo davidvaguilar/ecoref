@@ -1,13 +1,12 @@
-Se ha generado una nueva orden de trabajo. Se adjunta Orden de Trabajo en formato PDF.
+@component('mail::message')
+# Se genero una Orden de Trabajo desde {{ config('app.name') }}
 
+Se adjunta Archivo en Pdf del Reporte
 
-Si deseas cancelar tu suscripción a nuestro newsletter, haz click aquí
+Gracias,<br>
+{{ config('app.name') }}
 
+Si no desea recibir más información puede cancelar su suscripción en cualquier momento. <br>Cambie aquí la configuración del envio de correo: 
+    <a href="https://r.ashampoo.com/r.php?id=1596156&amp;ri=elea&amp;u=23746213&amp;lk=YQPtHbaW" name="m_-2373931488776779919_Dropout es" style="color:#7f7f7f;text-decoration:underline;font-weight:bold" target="_blank" data-saferedirecturl="https://www.google.com/url?q=https://r.ashampoo.com/r.php?id%3D1596156%26ri%3Delea%26u%3D23746213%26lk%3DYQPtHbaW&amp;source=gmail&amp;ust=1590065314746000&amp;usg=AFQjCNFI8Lq5JzQUyP_VJwqDCKk4vcpJ4A">Configurar boletín</a>
+@endcomponent
 
-<form id="null" action="?ui=html&amp;zy=c" method="post">
-    <input type="hidden" name="at" value="AF6bupMM7sILtfdpnXimkTGFSsun4kmxDA">
-        <font face=arial>Para utilizar Gmail en la vista estándar, tiene que estar habilitado JavaScript, pero parece que está inhabilitado o que no es compatible con tu navegador. Si quieres usar la vista estándar, cambia la configuración de tu navegador para habilitar JavaScript y 
-            <a href="">vuelve a intentarlo</a>.<p>Si prefieres utilizar la vista básica en HTML de Gmail, que no exige JavaScript, 
-            <input type="submit" value="haz clic aquí" class="submit_as_link">.</p>
-        </font>
-</form>

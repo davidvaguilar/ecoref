@@ -46,10 +46,10 @@ class SignatureController extends Controller
             $record->url = $url;
             $record->save();
           
-            $file = url($post->records->last()->url);
+         /*   $file = url($post->records->last()->url);
             $subject = 'OT'.$post->title.' firmado';          
             $data = ['nombre' => config('app.name', 'Laravel')];
-            $title = 'OT'.$post->title.'-'.$post->owner->name.'-'.$post->started_at->format('d-m-Y-H-i');
+            $title = 'OT'.$post->title.'-'.$post->owner->name.'-'.$post->started_at->format('d-m-Y-H-i');*/
         
           /*  Mail::send('emails.work-order', $data, function ($message) use ($pdf, $subject, $file) {
                   $message->from('postmaster@dyi.cl');
