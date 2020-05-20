@@ -14,6 +14,7 @@ use App\Problem;
 use App\Type;
 use App\Parameter;
 use Carbon\Carbon;
+use App\Mail\LoginCredentials;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StorePostRequest;
