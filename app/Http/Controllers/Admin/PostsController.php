@@ -145,7 +145,7 @@ class PostsController extends Controller
                 ['email' => 'david.aguilar@msn.com', 'name' => '']]; 
         $cc = $post->client->peoples->pluck('email')->toArray();
 
-        Mail::to($to)->bcc($bcc)->send(new WorkOrder($post))->subject($subject);
+        Mail::to($to)->bcc($bcc)->send(new WorkOrder($post))->attach($file);
 
         /*Mail::send('emails.work-order', $data, function ($message) use ($to, $cc, $bcc, $subject, $file) {
             $message->from('postmaster@dyi.cl');
