@@ -137,13 +137,10 @@ class PostsController extends Controller
         $data = ['email' => config('app.name', 'Laravel')];
         $file = url($post->records->last()->url);
 
-       //dd($to);   ->cc($cc)  ->bcc  // ot@ecorefchile.cl
-        $to = [['email' => 'ot@ecorefchile.cl', 'name' => 'Hugo Ortiz'],
-                ['email' => 'test-sk3r4anwl@srv1.mail-tester.com', 'name' => 'mail-tester']];   
-
-        $bcc = [['email' => 'davidvillegasag@santotomas.cl', 'name' => 'David Villegas Aguilar']]; 
-        $cc = $post->client->peoples->pluck('email')->toArray();  //FUNCIONA solo el GENERICO PARTICULAR
- 
+        $to = [['email' => 'ot@ecorefchile.cl', 'name' => 'Hugo Ortiz']];   
+        $bcc = [['email' => 'test-sk3r4anwl@srv1.mail-tester.com', 'name' => 'mail-tester']]; 
+        $cc = $post->client->peoples->pluck('email')->toArray();     //FUNCIONA solo el GENERICO PARTICULAR
+        
         Mail::to($to)->cc($cc)->bcc($bcc)->send(new WorkOrder($post, $subject, $file));
 
         $post->status = "ENVIADO";

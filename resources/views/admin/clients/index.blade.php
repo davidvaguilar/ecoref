@@ -44,7 +44,8 @@
                                 @foreach( $client->peoples as $people )
                                     <a href="mailto:{{ $people->email }}" target="_blank" class="btn btn-xs btn-success">
                                         {{ $people->email }}
-                                    </a>@if( !$loop->last ),@endif
+                                    </a>
+                                    @if( !$loop->last ),@endif
                                 @endforeach
                             </td>
                             <td>                                
