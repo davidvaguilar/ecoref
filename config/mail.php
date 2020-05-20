@@ -56,8 +56,8 @@ return [
     */
 
     'from' => [
-        'address' => env('MAIL_FROM_ADDRESS', 'dragoneselite@dyi.cl'),
-        'name' => env('MAIL_FROM_NAME', 'Dragones Elite'),
+        'address' => env('MAIL_FROM_ADDRESS', 'postmaster@dyi.cl'),
+        'name' => env('MAIL_FROM_NAME', 'Administrador'),
     ],
 
     /*

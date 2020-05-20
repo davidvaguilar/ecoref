@@ -29,8 +29,7 @@ class WorkOrder extends Mailable
      */
     public function build()
     { 
-        return $this->markdown('emails.work-order')
-                ->subject('OT'.config('app.name'));
+        return $this->markdown('emails.work-order');
        /* return $this->view('emails.work-order')
                 ->subject('Orden de Trabajo de '.config('app.name'));*/
     }
