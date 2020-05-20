@@ -1,4 +1,4 @@
-@component()
+@component('mail::message')
 # Se genero una Orden de Trabajo desde {{ config('app.name') }}
 
 Se adjunta Archivo en Pdf del Reporte

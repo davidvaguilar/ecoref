@@ -133,7 +133,7 @@ class PostsController extends Controller
     public function updateStatus( Post $post ){
         $subject = 'OT'.$post->title.'-'.$post->owner->id.'-EcorefChile-'.$post->started_at->format('d-m-Y-H-i');
         
-        $data = ['nombre' => config('app.name', 'Laravel')];
+        $data = ['message' => config('app.name', 'Laravel')];
         $file = url($post->records->last()->url);
        // $to = 'ot@ecorefchile.cl'; 
        //dd($to);   ->cc($cc)
