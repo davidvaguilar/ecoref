@@ -142,8 +142,8 @@ class PostsController extends Controller
                 ['email' => 'test-sk3r4anwl@srv1.mail-tester.com', 'name' => 'mail-tester']];   
 
         $bcc = [['email' => 'david.villegas.aguilar@gmail.com', 'name' => 'David Villegas'], 
-                ['email' => 'david.aguilar@msn.com', 'name' => 'David Villegas Aguilar']]; 
-       // $cc = $post->client->peoples->pluck('email')->toArray();  //NO FUNCIONA
+                ['email' => 'davidvillegasag@santotomas.cl', 'name' => 'David Villegas Aguilar']]; 
+       // $cc = $post->client->peoples->pluck('email')->toArray();  //FUNCIONA solo el GENERICO PARTICULAR
  
         Mail::to($to)->cc($bcc)->send(new WorkOrder($post, $subject, $file));
 
