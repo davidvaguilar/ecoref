@@ -13,7 +13,7 @@ Gracias,<br>
 
 Si no deseas recibir más correos, puedes [modificar tus preferencias][unsubscribe].
 
-[unsubscribe]: {{ url('/configuracion') }}
+[unsubscribe]: {{ url('login') }}
 @endcomponent
 
 
