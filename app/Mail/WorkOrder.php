@@ -10,6 +10,8 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 class WorkOrder extends Mailable
 {
     public $post;
+    public $subject;
+    public $file;
     use Queueable, SerializesModels;
 
     /**
@@ -17,9 +19,11 @@ class WorkOrder extends Mailable
      *
      * @return void
      */
-    public function __construct($post)
+    public function __construct($post, $subject, $file)
     {
         $this->post = $post;
+        $this->subject = $subject;
+        $this->file = $file;
     }
 
     /**
@@ -30,7 +34,8 @@ class WorkOrder extends Mailable
     public function build()
     { 
         return $this->markdown('emails.work-order')
-                ->subject('OT'.config('app.name'));
+                ->subject($subject)
+                ->attach($file);
        /* return $this->view('emails.work-order')
                 ->subject('Orden de Trabajo de '.config('app.name'));*/
     }
