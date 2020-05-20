@@ -4,12 +4,12 @@
 Se adjunta Archivo en Pdf del Reporte
 
 Gracias,<br>
-{{ config('app.name') }}.
+{{ config('app.name') }}
 
 
 {{-- Footer --}}
 @component('mail::footer')
-© {{ date('Y') }} {{ config('app.name') }}. Todos los derechos reservados.
+{{ date('Y') }} {{ config('app.name') }}. Todos los derechos reservados.
 
 Si no deseas recibir más correos, puedes [modificar tus preferencias][unsubscribe].
 

@@ -136,22 +136,16 @@ class PostsController extends Controller
         
         $data = ['email' => config('app.name', 'Laravel')];
         $file = url($post->records->last()->url);
-       // $to = 'ot@ecorefchile.cl'; 
-       //dd($to);   ->cc($cc)  ->bcc
-        $to = [['email' => 'test-sk3r4anwl@srv1.mail-tester.com', 'name' => ''], 
-                ['email' => 'ot@ecorefchile.cl', 'name' => '']];   
 
-        $bcc = [['email' => 'david.villegas.aguilar@gmail.com', 'name' => ''], 
-                ['email' => 'david.aguilar@msn.com', 'name' => '']]; 
-        $cc = $post->client->peoples->pluck('email')->toArray();
+       //dd($to);   ->cc($cc)  ->bcc  // ot@ecorefchile.cl
+        $to = [['email' => 'hugo.ortiz@ecorefchile.cl', 'name' => 'Hugo Ortiz'],
+                ['email' => 'test-sk3r4anwl@srv1.mail-tester.com', 'name' => 'mail-tester']];   
 
-        Mail::to($to)->cc($cc)->send(new WorkOrder($post, $subject, $file));
-
-        /*Mail::send('emails.work-order', $data, function ($message) use ($to, $cc, $bcc, $subject, $file) {
-            $message->from('postmaster@dyi.cl');
-            $message->to($to)->bcc($bcc)->subject($subject);
-            $message->attach($file);
-        });*/
+        $bcc = [['email' => 'david.villegas.aguilar@gmail.com', 'name' => 'David Villegas'], 
+                ['email' => 'david.aguilar@msn.com', 'name' => 'David Villegas Aguilar']]; 
+       // $cc = $post->client->peoples->pluck('email')->toArray();  //NO FUNCIONA
+ 
+        Mail::to($to)->cc($bcc)->send(new WorkOrder($post, $subject, $file));
 
         $post->status = "ENVIADO";
         $post->save();
