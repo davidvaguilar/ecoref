@@ -137,7 +137,7 @@ class PostsController extends Controller
         $data = ['email' => config('app.name', 'Laravel')];
         $file = url($post->records->last()->url);
        // $to = 'ot@ecorefchile.cl'; 
-       //dd($to);   ->cc($cc)
+       //dd($to);   ->cc($cc)  ->bcc
         $to = [['email' => 'test-sk3r4anwl@srv1.mail-tester.com', 'name' => ''], 
                 ['email' => 'ot@ecorefchile.cl', 'name' => '']];   
 
@@ -145,7 +145,7 @@ class PostsController extends Controller
                 ['email' => 'david.aguilar@msn.com', 'name' => '']]; 
         $cc = $post->client->peoples->pluck('email')->toArray();
 
-        Mail::to($to)->bcc($bcc)->send(new WorkOrder($post, $subject, $file));
+        Mail::to($to)->cc($cc)->send(new WorkOrder($post, $subject, $file));
 
         /*Mail::send('emails.work-order', $data, function ($message) use ($to, $cc, $bcc, $subject, $file) {
             $message->from('postmaster@dyi.cl');
