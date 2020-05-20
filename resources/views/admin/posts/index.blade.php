@@ -88,10 +88,10 @@
                             <td>{{ isset($post->type->id) ? $post->type->name : '' }}</td>
                             <td>{{ isset($post->problem->id) ? $post->problem->name : '' }}</td>
                             <td>
-                                <!--<a href="{{-- route('productos_pdf', $post) --}}" 
+                                <a href="{{ route('productos_pdf', $post) }}" 
                                     target="_blank" 
                                     class="btn btn-default"
-                                ><i class="fa fa-eye"></i></a>-->                                
+                                ><i class="fa fa-eye"></i></a>                         
                                 @if( $post->records->count() )
                                     @role('Admin')  
                                         @foreach ($post->records as $record)

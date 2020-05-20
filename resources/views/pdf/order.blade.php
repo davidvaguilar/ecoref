@@ -183,54 +183,45 @@
             border-collapse: collapse;
             margin-top: 2em;
             margin-bottom: 2em;">
-      <thead style="font-size: 10pt;">
-        <tr>
-          <th style="width:20%;">CANTIDAD</th>
-          <th>DETALLE DE MATERIALES</th>
-        </tr>
-      </thead>
-      <tbody style="text-align: center; border: 1px solid black;">
-        @if ($post->materials->count())
-          @foreach ($post->materials as $material)
+      @if ($post->materials->count())
+        <thead style="font-size: 10pt;">
+          <tr>
+            <th style="width:20%;">CANTIDAD</th>
+            <th>DETALLE DE MATERIALES</th>
+          </tr>
+        </thead>
+        <tbody style="text-align: center; border: 1px solid black;">
+            @foreach ($post->materials as $material)
               <tr class="even_row">
                 <td style="border-right: 1px solid black; padding: 0.3em;">{{ $material->quantity }}</td>
-                <td style="text-align: left; border-right: 1px solid black; padding: 0.3em;">{{ $material->detail }}</td>
+                <td style="text-align: left;">{{ $material->detail }}</td>
               </tr>        
             @endforeach
-        @endif
-
-        <!--<tr class="even_row">
-          <td style="text-align: center">1</td>
-          <td>Sprockets (13 tooth)</td>
-          <td style="text-align: center">50</td>
-          <td style="text-align: right; border-right-style: none;">$10.00</td>
-          <td class="change_order_unit_col" style="border-left-style: none;">Ea.</td>
-          <td class="change_order_total_col">$5,000.00</td>
-        </tr>-->
-
-        <!--<tr class="odd_row">
-          <td style="text-align: center">4</td>
-          <td>Leaf springs (13 N/m)</td>
-          <td style="text-align: center">6</td>
-          <td style="text-align: right; border-right-style: none;">$125.00</td>
-          <td class="change_order_unit_col" style="border-left-style: none;">Ea.</td>
-          <td class="change_order_total_col">$750.00</td>
-        </tr>-->
+      
+          <!--<tr class="even_row">
+            <td style="text-align: right; border-right-style: none;">$10.00</td>
+            <td class="change_order_unit_col" style="border-left-style: none;">Ea.</td>
+            <td class="change_order_total_col">$5,000.00</td>
+          </tr>-->
+          <!--<tr class="odd_row">
+          </tr>-->
+        </tbody>
+      @endif
+      <tbody>
+        <tr>
+          <td colspan="2" style="font-size: 10pt;">Observación: <strong>sadsd asda sdsa das das dsd asd asd sas da sdsas da sdasd sa ds dasd asd asdasd as dasdasd ass das das da ds ad asdsad as da sdsa da ds</strong></td>
+        </tr>
       </tbody>
-  
-      <tr>
-        <td colspan="2" style="font-size: 10pt;">Observación: <strong>{{ $post->observation }}</strong></td>
-      </tr>
     </table>
 
     <table style="width:100%; text-align: center; border: 1px solid #000;">
       <tbody>
         <tr>
-          <td style="width:50%;"><img src="{{ isset($post->owner->url) ? substr($post->owner->url, 1) : '' }}" width="150"> </td>
-          <td><img src="{{ isset($post->signature->id) ? substr($post->signature->url, 1) : '' }}" width="150"> </td>
+          <td style="width:50%; border-right: 1px solid black; padding: 0.3em;"><img src="{{ isset($post->owner->url) ? substr($post->owner->url, 1) : '' }}" width="150"> </td>
+          <td ><img src="{{ isset($post->signature->id) ? substr($post->signature->url, 1) : '' }}" width="150"> </td>
         </tr>
         <tr>
-          <td>{{ $post->owner->name }}</td>
+          <td style="border-right: 1px solid black; padding: 0.3em;">{{ $post->owner->name }}</td>
           <td>{{ isset($post->signature->id) ? $post->signature->title : '' }}</td>
         </tr>
       </tbody>
