@@ -90,6 +90,15 @@ class UsersTableSeeder extends Seeder
 
         $admin->assignRole($adminRole);
 
+        $admin = new User;
+        $admin->name = 'David Villegas A.';
+        $admin->email = 'david.villegas.aguilar@gmail.cl';
+        $admin->password = '123123';
+        $admin->url = '/img/users/test.png';
+        $admin->save();
+
+        $admin->assignRole($adminRole);
+
         $writer = new User;
         $writer->name = 'Tecnico a Prueba';
         $writer->email = 'tecnico@ecorefchile.cl';
@@ -116,5 +125,23 @@ class UsersTableSeeder extends Seeder
         $writer->save();
 
         $writer->assignRole($writerRole);
+
+        $writer = new User;
+        $writer->name = 'Luiz Pedraza';
+        $writer->email = 'luiz.pedraza@ecorefchile.cl';
+        $writer->password = '123123';
+        $writer->url = '/img/users/test.png';
+        $writer->save();
+
+        $writer->assignRole($writerRole);
+
+        $admin = new User;
+        $admin->name = 'Atencion Servicios';
+        $admin->email = 'atencionservicios@ecorefchile.cl';
+        $admin->password = '123123';
+        $admin->url = '/img/users/test.png';
+        $admin->save();
+
+        $admin->assignRole($adminRole);
     }
 }

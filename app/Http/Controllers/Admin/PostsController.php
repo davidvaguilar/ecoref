@@ -67,7 +67,9 @@ class PostsController extends Controller
     }
 
     public function show($id){
-        $post = Post::find($id);
+        $post = Post::with(['problem', 'type', 'parameter', 'owner', 'client', 'materials'])->where('id', $id)->get();
+      //  $refrigerant = $post->parameter->get();
+     //   dd($refrigerant);
         return[
             'post' => $post
         ];
@@ -214,6 +216,13 @@ class PostsController extends Controller
             'excerpt' => 'required'
         ]);
     }*/
+
+    
+    public function showMaterial(Post $post){ 
+      //  dd($post->materials);
+        return json_encode($post->materials);
+    }
+ 
 
     public function report(Post $post){ 
        /* $productos = Producto::join('categorias', 'productos.idcategoria', '=', 'categorias.id')

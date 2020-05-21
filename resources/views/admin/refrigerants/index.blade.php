@@ -29,7 +29,7 @@
                     @foreach($refrigerants as $refrigerant)
                         <tr> 
                             <td>
-                                <button
+                                <button 
                                     class="btn btn-info"
                                     data-toggle="modal" 
                                     data-target="#refrigerant-modal"

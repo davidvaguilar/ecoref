@@ -10,7 +10,6 @@ use App\Http\Controllers\Controller;
 class MaterialsController extends Controller
 {
     public function index(){
-        //dd("sdasd");
         return "no acceder";
     }
 
@@ -32,13 +31,13 @@ class MaterialsController extends Controller
         //dd("sdasd");
         /*$role = auth()->user()->role;
         return view( 'appointments.show', compact('appointment', 'role') );*/
-
         return "show";
     }
 
-    public function destroy(Material $material){
+    public function desactivar(Request $request){
+        $material = Material::findOrFail($request->id);
         $material->delete();
-        return back()->with('flash', 'El material ha sido eliminada.');
+        return json_encode("Material eliminado");
     }
 
 }

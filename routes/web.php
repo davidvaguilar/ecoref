@@ -62,7 +62,7 @@ function(){
     Route::resource('roles', 'RolesController', ['except' => 'show', 'as' => 'admin']);
     Route::resource('permissions', 'PermissionsController', ['only' => ['index', 'edit', 'update'], 'as' => 'admin']);
 
-    Route::resource('materials', 'MaterialsController', ['as' => 'admin']);
+    Route::resource('materials', 'MaterialsController', ['except' => 'destroy', 'as' => 'admin']);
     Route::resource('types', 'TypesController', ['as' => 'admin']);
     Route::resource('problems', 'ProblemsController', ['as' => 'admin']);    
     Route::resource('refrigerants', 'RefrigerantsController', ['as' => 'admin']);
@@ -84,17 +84,16 @@ function(){
     Route::put('posts/{post}', 'PostsController@update')->name('admin.posts.update');
     Route::delete('posts/{post}', 'PostsController@destroy')->name('admin.posts.destroy');*/
 
-    Route::post('posts/{post}/photos', 'PhotosController@store')->name('admin.posts.photos.store');
+   // Route::post('posts/photos', 'PhotosController@store')->name('admin.posts.photos.store');
+    Route::post('posts/photos', 'PhotosController@store')->name('admin.posts.photos.store');
     Route::post('posts/{post}/parameter', 'ParametersController@store')->name('admin.posts.parameter.store');
     
     Route::put('posts/{post}/client', 'PostsController@selectClient')->name('admin.posts.selectClient');
     Route::put('posts/{post}/title', 'PostsController@updateTitle')->name('admin.posts.updateTitle');
     Route::put('posts/{post}/finished', 'PostsController@updateFinished')->name('admin.posts.updateFinished');
-
-
     Route::put('posts/{post}/send', 'PostsController@updateStatus')->name('admin.posts.updateSend');
 
-
+    Route::get('posts/{post}/material', 'PostsController@showMaterial')->name('admin.posts.material');
 
     Route::put('users/{user}/signature', 'UsersController@signature')->name('admin.users.signature'); //ULTIMO
 
@@ -102,6 +101,8 @@ function(){
     Route::put('parameters/{parameter}', 'ParametersController@update')->name('admin.parameters.update');
     Route::post('posts/{post}/signature', 'SignatureController@store')->name('admin.posts.signature.store');
     Route::get('posts/{post}/report', 'PostsController@report')->name('productos_pdf');
+
+    Route::put('posts/materials/desactivar', 'MaterialsController@desactivar')->name('admin.materials.desactivar');
 
     Route::delete('photos/{photo}', 'PhotosController@destroy')->name('admin.photos.destroy');
 

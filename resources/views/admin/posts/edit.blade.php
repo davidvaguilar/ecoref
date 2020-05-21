@@ -58,8 +58,8 @@
                     <li id="li_order" class="active"><a href="#tab_order" data-toggle="tab">ANTECEDENTES</a></li>
                     <li id="li_parameter"><a href="#tab_parameter" data-toggle="tab">MEDICIONES</a></li>
                     <li id="li_material"><a href="#tab_material" data-toggle="tab">MATERIALES</a></li>
-                    <li id="li_photo"><a href="#tab_photo" data-toggle="tab">FOTOGRAFIAS</a></li>
-                    <li id="li_signature" onclick="selectSignature();"><a href="#tab_signature" data-toggle="tab">FIRMA</a></li>
+                    <li id="li_photo" onclick="seleccionar_foto();"><a href="#tab_photo" data-toggle="tab">FOTOGRAFIAS</a></li>
+                    <li id="li_signature" onclick="mostrar_order();"><a href="#tab_signature" data-toggle="tab">FIRMA</a></li>
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane active" id="tab_order">
@@ -70,7 +70,9 @@
                                 <label for="technical" class="col-sm-6 control-label">Tecnico Responsable: {{ $post->owner->name }}</label> 
                             </div>
                             <div class="form-group">
-                                <label class="col-sm-4 control-label">Empresa: <button id="client-button" type="button" class="btn btn-success">{{  isset($post->client->id) ? $post->client->name : '' }}</button> </label>
+                                <label class="col-sm-4 control-label">Empresa: 
+                                    <button data-toggle="modal" data-target="#client-modal" type="button" class="btn btn-success">{{ isset($post->client->id) ? $post->client->name : '' }}</button>
+                                </label>
                                 <label class="col-sm-4 control-label">Local: {{  isset($post->client->id) ? $post->client->title : '' }}</label>
                             </div>
 
@@ -149,7 +151,7 @@
                                     {!! $errors->first('job', '<span class="help-block">:message</span>' ) !!}   
                                 </div>
                             </div>
-                            <button id="btn_order" type="button" class="btn btn-primary btn-block">Guardar y Siguiente</button>  
+                            <button id="order-button" type="button" class="btn btn-primary btn-block">Guardar y Siguiente</button>  
                         </div>
                     </div>
                     <!-- /.tab-pane -->
@@ -282,8 +284,11 @@
                     </div>
 
                     <div class="tab-pane" id="tab_photo">
-                        <form method="post" action="{{ route('admin.posts.photos.store', $post->id) }}" enctype="multipart/form-data" class="form-horizontal"> <!-- /admin/products/4/images --><!-- admin/posts/{post}/photos -->
+                        <form method="post" action="{{ route('admin.posts.photos.store', '#photo') }}" enctype="multipart/form-data" class="form-horizontal"> <!-- /admin/products/4/images --><!-- admin/posts/{post}/photos -->
                             {{ csrf_field() }}   
+                                <input type="hidden" 
+                                    name="order" 
+                                    value="{{ $post->id }}"> 
                             <div class="form-group">
                                 <div class="col-xs-12 text-center">
                                     <label class="checkbox-inline">
@@ -325,7 +330,6 @@
                     </div>
                     <!-- /.tab-pane -->
                     <div class="tab-pane" id="tab_material">
-                    
                         <div id="quantity-div" class="form-group col-xs-3">
                             <label for="quantity">Cantidad</label>
                             <input id="quantity"
@@ -342,11 +346,14 @@
                                     type="text" 
                                     class="form-control"
                                     autocomplete="off">
-                        </div>  
-            
-                        <button onclick="addMaterial()" type="button" class="btn btn-success btn-block">Agregar</button> 
+                        </div>
+                            <button id="material-button"
+                                    data-id="{{ $post->id }}"
+                                    data-url="{{ route('admin.materials.store') }}"
+                                    type="button"
+                                    class="btn btn-success btn-block">Agregar</button> 
                         <div class="table-responsive">
-                            <table id="material-table" class="table table-bordered table-striped text-center">
+                            <table class="table table-bordered table-striped text-center">
                                 <thead>
                                     <tr>
                                         <th>Cantidad</th>
@@ -361,16 +368,10 @@
                                                 <td>{{ $material->quantity }}</td>
                                                 <td>{{ $material->detail }}</td>
                                                 <td>
-                                                    <form method="POST" 
-                                                        action="{{ route('admin.materials.destroy', $material) }}" 
-                                                        style="display: inline">
-                                                        {{ csrf_field() }}
-                                                        {{ method_field('DELETE') }}
-                                                        <button type="submit" 
-                                                            onclick="return confirm('¿Estas seguro de querer eliminar este material?')"
-                                                            class="btn btn-danger"
-                                                        ><i class="fa fa-times"></i></button>
-                                                    </form>
+                                                    <button class="btn btn-danger material-button"
+                                                            type="button"
+                                                            onclick="eliminar_material({{ $material->id }});"                                                           
+                                                        ><i class="fa fa-fw fa-times"></i></button>                                               
                                                 </td>
                                             </tr>        
                                         @endforeach
@@ -389,95 +390,86 @@
                             {{ csrf_field() }}
                             <div class="form-group">
                                 <div class="col-xs-5">
-                                    <p>Fecha Llegada: <label>{{ $post->started_at->format('d/m/Y H:i') }}</label></p>
+                                    <p>Fecha Llegada: <label id="resumen_fecha_llegada"></label></p>
                                 </div>
                                 <div class="col-xs-7">
-                                    <p>Tecnico Responsable: <label>{{ $post->owner->name }}</label></p>
+                                    <p>Tecnico Responsable: <label id="resumen_tecnico_nombre"></label></p>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="col-xs-4">
-                                    <p>Empresa: <label>{{ isset($post->client->id) ? $post->client->name : '' }}</label></p>
+                                    <p>Empresa: <label id="resumen_empresa_nombre"></label></p>
                                 </div>
                                 <div class="col-xs-4">
-                                    <p>Local: <label>{{ isset($post->client->id) ? $post->client->title : '' }}</label></p>
+                                    <p>Local: <label id="resumen_empresa_titulo"></label></p>
                                 </div>
                                 <div class="col-xs-4">
-                                    <p>Direccion: <label>{{ isset($post->client->id) ? $post->client->adress : '' }}</label></p>
+                                    <p>Direccion: <label id="resumen_empresa_direccion"></label></p>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="col-xs-5">
-                                    <p>Tipo de Orden: <label>{{ isset($post->type->id) ? $post->type->name : '' }}</label></p>
+                                    <p>Tipo de Orden: <label id="resumen_tipo_nombre"></label></p>
                                 </div>
                                 <div class="col-xs-7">
-                                    <p>Detalle de Orden: <label>{{ isset($post->type->id) ? $post->type_other : '' }}</label></p>
+                                    <p>Detalle de Orden: <label id="resumen_tipo_otro"></label></p>
                                 </div>
                             </div>
                         
                             <div class="form-group">
                                 <div class="col-xs-4">
-                                    <p>Equipo Interv: <label>{{ $post->equipment }}</label></p>
+                                    <p>Equipo Interv: <label id="resumen_orden_equipo"></label></p>
                                 </div>
                                 <div class="col-xs-4">
-                                    <p>Modelo: <label>{{ $post->model }}</label></p>
+                                    <p>Modelo: <label id="resumen_orden_modelo"></label></p>
                                 </div>
                                 <div class="col-xs-4">
-                                    <p>Serie: <label>{{ $post->serie }}</label></p>
+                                    <p>Serie: <label id="resumen_orden_serie"></label></p>
                                 </div>
                             </div>
 
                             <div class="form-group">
                                 <div class="col-xs-12">
-                                    <p>Problema: <label>{{ isset($post->problem->id) ? $post->problem->name : '' }}</label></p>
+                                    <p>Problema: <label id="resumen_problema_nombre"></label></p>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="col-xs-12">
-                                    <p>Trabajo realizado: <label>{{ $post->job }}</label></p>
+                                    <p>Trabajo realizado: <label id="resumen_orden_trabajo"></label></p>
                                 </div>
                             </div>
 
                             <div class="form-group">
                                 <div class="col-xs-12">
-                                    <p>Parametros/Mediciones de <label>{{ isset($post->parameter->id) && $post->parameter->type <> NULL ? $post->parameter->type.' TEMPERATURA' : '' }} </label></p>
+                                    <p>Parametros/Mediciones de <label id="resumen_parametros_tipo">{{ isset($post->parameter->id) && $post->parameter->type <> NULL ? $post->parameter->type.' TEMPERATURA' : '' }} </label></p>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="col-xs-12">
-                                    <p>Temperatura <label>{{ isset($post->parameter->id) && $post->parameter->temperature <> NULL ? $post->parameter->temperature.' CUMPLE' : '' }} </label></p>
+                                    <p>Temperatura <label id="resumen_parametros_temperatura">{{ isset($post->parameter->id) && $post->parameter->temperature <> NULL ? $post->parameter->temperature.' CUMPLE' : '' }} </label></p>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="col-xs-6">
-                                    <p>Presion Baja: <label>{{ isset($post->parameter->id) ? $post->parameter->pressure_low : '' }} </label></p>
+                                    <p>Presion Baja: <label id="resumen_parametros_presion_baja">{{ isset($post->parameter->id) ? $post->parameter->pressure_low : '' }} </label></p>
                                 </div>
                                 <div class="col-xs-6">
-                                    <p>Presion Alta: <label>{{ isset($post->parameter->id) ? $post->parameter->pressure_high : '' }} </label></p>
+                                    <p>Presion Alta: <label id="resumen_parametros_presion_alta">{{ isset($post->parameter->id) ? $post->parameter->pressure_high : '' }} </label></p>
                                 </div>
                             </div>
 
                             <div class="form-group">
                                 <div class="col-xs-6">
-                                    <p>Refrigerante: <label>
-                                        @if( isset($post->parameter->refrigerant_id) ) 
-                                            @foreach ($refrigerants as $refrigerant)
-                                                @if( $post->parameter->refrigerant_id == $refrigerant->id ) 
-                                                {{ $refrigerant->name }}
-                                                @endif
-                                            @endforeach   
-                                        @else 
-                                            {{ '' }}
-                                        @endif </label></p>
+                                    <p>Refrigerante: <label id="resumen_refrigerante_nombre"></label></p>
                                 </div>
 
                                 <div class="col-xs-6">
-                                    <p>Nivel: <label>{{ isset($post->parameter->id) ?  $post->parameter->refrigerant : '' }} </label></p>
+                                    <p>Ref. Nivel: <label id="resumen_refrigerante_nivel"></label></p>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="col-xs-12">
-                                    <p>Aceite: <label>{{ isset($post->parameter->id) ? $post->parameter->oil : '' }} </label></p>
+                                    <p>Aceite: <label id="resumen_parametro_aceite"></label></p>
                                 </div>
                             </div>
 
@@ -488,19 +480,7 @@
                                         <th>Detalle</th>
                                     </tr>
                                 </thead>
-                                <tbody id="material-body">
-                                    @if ($post->materials->count())
-                                        @foreach ($post->materials as $material)
-                                            <tr>
-                                                <td>{{ $material->quantity }}</td>
-                                                <td>{{ $material->detail }}</td>
-                                            </tr>        
-                                        @endforeach
-                                    @else
-                                        <tr> 
-                                            <td colspan="3">No hay materiales seleccionados</td>
-                                        </tr>
-                                    @endif
+                                <tbody id="resumen_materiales">
                                 </tbody>
                             </table>
                             <div class="form-group">
@@ -645,18 +625,16 @@
         }
 
         $(document).ready(function(){
+            var canvas = document.querySelector("canvas");
+            var signaturePad = new SignaturePad(canvas);
+            window.addEventListener('resize', resizeCanvas, false);
+            window.addEventListener('orientationchange', resizeCanvas, false);
+            resizeCanvas();
 
             $('#job').keyup(function() {
                 cantidad = $('#job').val().length;
                 $('.cont-job').html(cantidad);   
-            });
-
-            var canvas = document.querySelector("canvas");
-            var signaturePad = new SignaturePad(canvas);
-
-            window.addEventListener('resize', resizeCanvas, false);
-            window.addEventListener('orientationchange', resizeCanvas, false);
-            resizeCanvas();
+            });           
 
             document.getElementById('signature-clear').addEventListener('click', function () {
                 signaturePad.clear();
@@ -666,19 +644,14 @@
                 if (signaturePad.isEmpty()) {
                     alert("Por favor, proporcione una firma primero..");
                 } else {
-                    var image = canvas.toDataURL(); // data:image/png....
+                    var image = canvas.toDataURL();
                     document.getElementById("base64").value = image;
                     var form = document.getElementById('signature-form');
                     form.submit();
                 }
             });
             
-            
-            document.getElementById("client-button").addEventListener("click", function (event) {
-                $('#client-modal').modal('show');
-            }, false);
-
-            document.getElementById("btn_order").addEventListener("click", function (event) {
+            document.getElementById("order-button").addEventListener("click", function (event) {
                 this.disabled = false;
                 document.getElementById("type_div").classList.remove("has-error");
                 document.getElementById("problem_div").classList.remove("has-error");
@@ -690,7 +663,6 @@
                 var problem_id = document.getElementsByName("problem_id")[0].value;
                 var job = document.getElementsByName("job")[0].value;
                 var flag = true;
-
                 if( type_id.length == 0 ){
                     document.getElementById("type_div").classList.add("has-error");
                     flag = false;
@@ -699,7 +671,6 @@
                     document.getElementById("problem_div").classList.add("has-error");
                     flag = false;
                 }
-
                 if( flag ){
                     var url = "{{ route('admin.posts.update', $post) }}"
                     axios.put(url, {
@@ -728,9 +699,7 @@
                 var flag = true;
                 document.getElementById("pressure_high-div").classList.remove("has-error");
                 document.getElementById("pressure_low-div").classList.remove("has-error");
-                
                 var refrigerant_id = document.getElementsByName("refrigerant_id")[0].value;
-
                 var type = document.getElementsByName("type")[0].value;
                 var temperature_radio = document.getElementsByName("temperature");
                 var temperature = "";
@@ -750,8 +719,7 @@
                         flag = false;
                         document.getElementById("pressure_low-div").classList.add("has-error")
                     }
-                } 
-                
+                }
                 var refrigerant_radio = document.getElementsByName("refrigerant");  
                 var refrigerant = "";
                 for(var i=0; i<refrigerant_radio.length; i= i+1){
@@ -764,7 +732,6 @@
                     if(oil_radio[i].checked)
                         oil = oil_radio[i].value;
                 }
-
                 if( flag ){
                     var url = "{{ route('admin.parameters.update', $post->parameter->id) }}"
                     axios.put(url, {
@@ -779,7 +746,6 @@
                         console.log(response.data);
                         document.getElementById('li_parameter').classList.remove("active");
                         document.getElementById('li_material').classList.add("active");
-                        
                         document.getElementById('tab_parameter').classList.remove("active");
                         document.getElementById('tab_material').classList.add("active");
                     })
@@ -789,58 +755,75 @@
                 }   
             }, false);
 
-            var overlay = document.getElementsByClassName('overlay');
+
+
+            document.getElementById("material-button").addEventListener("click", function (event) {
+                document.getElementById('error-div').innerHTML= "";
+                document.getElementById("quantity-div").classList.remove("has-error");            
+                document.getElementById("detail-div").classList.remove("has-error");
+                var quantity = document.getElementsByName("quantity")[0].value;
+                var detail = document.getElementsByName("detail")[0].value;
+                var flag = true;
+                if( !(quantity > 0) ){
+                    flag = false;
+                    document.getElementById("quantity-div").classList.add("has-error")
+                } 
+                if( detail.length == 0 ){
+                    flag = false;
+                    document.getElementById("detail-div").classList.add("has-error")
+                }
+                if( flag ){
+                    var url = "{{ route('admin.materials.store') }}"
+                    axios.post(url, {
+                            'post_id': '{{ $post->id }}',
+                            'quantity': quantity,
+                            'detail': detail
+                    }).then(function(response){
+                        document.getElementsByName("quantity")[0].value = 1;
+                        document.getElementsByName("detail")[0].value = "";
+                        listMaterial();
+                        console.log(response.data);
+                    })
+                    .catch(function (error){
+                        var div = document.createElement('div');
+                        div.classList.add('alert');
+                        div.classList.add('alert-danger');
+                        div.classList.add('alert-dismissible');
+                        var span = document.createElement('span');
+                        span.innerHTML = "Error, al ingresar material";
+                        div.appendChild(span);
+                        document.getElementById('error-div').appendChild(div);
+                        console.log(typeof(error.response.data.errors.quantity[0]) !== 'undefined'); 
+                    });
+                }
+            }, false);
+
+
+          
+
+            var overlay = document.getElementsByClassName('overlay');  // ICONO DE ESPERA
             while (overlay.length > 0) overlay[0].remove();
 
         });
-
-        function addMaterial(){
-            document.getElementById('error-div').innerHTML= "";
-            document.getElementById("quantity-div").classList.remove("has-error");            
-            document.getElementById("detail-div").classList.remove("has-error");
-            var quantity = document.getElementsByName("quantity")[0].value;
-            var detail = document.getElementsByName("detail")[0].value;
-            var flag = true;
-            if( !(quantity > 0) ){
-                flag = false;
-                document.getElementById("quantity-div").classList.add("has-error")
-            } 
-            if( detail.length == 0 ){
-                flag = false;
-                document.getElementById("detail-div").classList.add("has-error")
-            }
-            if( flag ){
-                var url = "{{ route('admin.materials.store') }}"
-                axios.post(url, {
-                        'post_id': '{{ $post->id }}',
-                        'quantity': quantity,
-                        'detail': detail
-                }).then(function(response){
-                    document.getElementsByName("quantity")[0].value = 1;
-                    document.getElementsByName("detail")[0].value = "";
-                    listMaterial("{{ $post->id }}");
-                    console.log(response.data);
-                })
-                .catch(function (error){
-                    var div = document.createElement('div');
-                    div.classList.add('alert');
-                    div.classList.add('alert-danger');
-                    div.classList.add('alert-dismissible');
-                    var span = document.createElement('span');
-                    span.innerHTML = "Error, al ingresar material";
-                    div.appendChild(span);
-                    document.getElementById('error-div').appendChild(div);
-                    console.log(typeof(error.response.data.errors.quantity[0]) !== 'undefined'); 
-                });
-            }
+        
+        function eliminar_material(id){
+            var url = "{{ route('admin.materials.desactivar') }}";
+            axios.put(url, {
+                        'id': id
+            }).then(function(response){
+                console.log(response.data);                    //location.reload(true);
+                listMaterial();
+            })
+            .catch(function (error){
+                console.log(error); 
+            });
         }
 
-        function listMaterial(id) {
-            selectMaterial();
-            var post = id;
-            var url = '/admin/posts/' + post;
+        function listMaterial() {
+            var url = "{{ route('admin.posts.material', $post) }}";
             axios.get(url).then(function(response){
-                var total_registro = response.data.materials.length;
+                var total_registro = response.data.length; //materials
+                console.log(total_registro);
                 var body = document.getElementById("material-body");
                 document.getElementById("material-body").innerHTML = '';
 
@@ -849,24 +832,26 @@
                     var celda = document.createElement("td");
                     var spanTexto = document.createElement("span");
                
-                    spanTexto.textContent = response.data.materials[indice].quantity; 
+                    spanTexto.textContent = response.data[indice].quantity; 
                     celda.appendChild(spanTexto);
                     fila.appendChild(celda);
 
                     var celda = document.createElement("td");
                     var spanTexto = document.createElement("span");
-                    spanTexto.textContent = response.data.materials[indice].detail; 
+                    spanTexto.textContent = response.data[indice].detail; 
                     celda.appendChild(spanTexto);
                     fila.appendChild(celda);
 
                     var celda = document.createElement("td");
-                    celda.innerHTML = `<button type="submit" 
-                            onclick="return confirm('¿Estas seguro de querer eliminar este material?')" 
-                            class="btn btn-danger">
-	                            <i class="fa fa-times"></i></button>`;
+                    celda.innerHTML = `<button class="btn btn-danger"
+                                                type="button"
+                                                onclick="eliminar_material('${response.data[indice].id}')" >
+                                            <i class="fa fa-fw fa-times"></i>
+                                        </button>`;
                     fila.appendChild(celda);
 
                     body.appendChild(fila);
+                    //onclick="return confirm('¿Estas seguro de querer eliminar este material?')"
                 }
             })
             .catch(function (error){
@@ -874,40 +859,87 @@
             });
         }
 
-        function selectMaterial(){
-            window.location.hash = '#material';
-            location.reload(true);
+        function mostrar_order() {
+            var url = "{{ route('admin.posts.show', $post->id) }}";
+            axios.get(url).then(function(response){
+                var total_registro = response.data.post.length; //materials  response.data.post[0].job; 
+                
+                console.log(response.data);
+                if( total_registro > 0){
+                    document.getElementById("resumen_fecha_llegada").innerHTML = response.data.post[0].started_at;
+                    document.getElementById("resumen_tecnico_nombre").innerHTML = response.data.post[0].owner.name;
+                    document.getElementById("resumen_empresa_nombre").innerHTML = response.data.post[0].client.name;
+                    document.getElementById("resumen_empresa_titulo").innerHTML = response.data.post[0].client.title;
+                    document.getElementById("resumen_empresa_direccion").innerHTML = response.data.post[0].client.adress;
+                    document.getElementById("resumen_tipo_nombre").innerHTML = response.data.post[0].type.name;
+                    document.getElementById("resumen_tipo_otro").innerHTML = response.data.post[0].type_other;
+                    document.getElementById("resumen_orden_equipo").innerHTML = response.data.post[0].equipment;
+                    document.getElementById("resumen_orden_modelo").innerHTML = response.data.post[0].model;
+                    document.getElementById("resumen_orden_serie").innerHTML = response.data.post[0].serie;
+                    document.getElementById("resumen_problema_nombre").innerHTML = response.data.post[0].problem.name;
+                    document.getElementById("resumen_orden_trabajo").innerHTML = response.data.post[0].job;
+
+                    document.getElementById("resumen_parametros_tipo").innerHTML = response.data.post[0].parameter.type;
+                    document.getElementById("resumen_parametros_temperatura").innerHTML = response.data.post[0].parameter.temperature;
+                    document.getElementById("resumen_parametros_presion_baja").innerHTML = response.data.post[0].parameter.pressure_low;
+                    document.getElementById("resumen_parametros_presion_alta").innerHTML = response.data.post[0].parameter.pressure_high;
+               // document.getElementById("resumen_refrigerante_nombre").innerHTML = response.data.post[0].job;
+                    document.getElementById("resumen_refrigerante_nivel").innerHTML = response.data.post[0].parameter.refrigerant;
+                    document.getElementById("resumen_parametro_aceite").innerHTML = response.data.post[0].parameter.oil;
+                    total_materiales = response.data.post[0].materials.length;
+
+                    var body = document.getElementById("resumen_materiales");
+                    document.getElementById("resumen_materiales").innerHTML = '';
+                    for (let indice = 0; indice < total_materiales; indice++) {                    
+                        var fila = document.createElement("tr");
+                        var celda = document.createElement("td");
+                        var spanTexto = document.createElement("span");
+                
+                        spanTexto.textContent = response.data.post[0].materials[indice].quantity; 
+                        celda.appendChild(spanTexto);
+                        fila.appendChild(celda);
+
+                        var celda = document.createElement("td");
+                        var spanTexto = document.createElement("span");
+                        spanTexto.textContent = response.data.post[0].materials[indice].detail; 
+                        celda.appendChild(spanTexto);
+                        fila.appendChild(celda);
+
+                        body.appendChild(fila);
+                    }
+                }
+                console.log(total_materiales);
+         
+            })
+            .catch(function (error){
+                console.log(error);
+            });
         }
 
-        function selectSignature(){
-            window.location.hash = '#signature';
-            location.reload(true);
+        function seleccionar_firma(){
+            window.location.hash = '#signature';       //     location.reload(true);
+            mostrar_order();
+        }
+
+        function seleccionar_foto(){
+            window.location.hash = '#photo';
         }
 
 
         console.log(window.location.hash);
         switch (window.location.hash ) {
-            case '#signature':
+            case '#photo':
                     document.getElementById('li_order').classList.remove("active");
                     document.getElementById('li_parameter').classList.remove("active");            
                     document.getElementById('li_material').classList.remove("active");
-                    document.getElementById('li_signature').classList.add("active");
+                    document.getElementById('li_signature').classList.remove("active");                    
+                    document.getElementById('li_photo').classList.add("active");
                     
                     document.getElementById('tab_order').classList.remove("active");
                     document.getElementById('tab_parameter').classList.remove("active");
                     document.getElementById('tab_material').classList.remove("active");            
-                    document.getElementById('tab_signature').classList.add("active");
-                break;
-            case '#material':
-                    document.getElementById('li_order').classList.remove("active");
-                    document.getElementById('li_parameter').classList.remove("active");  
-                    document.getElementById('li_signature').classList.remove("active");          
-                    document.getElementById('li_material').classList.add("active");    
-                    
-                    document.getElementById('tab_order').classList.remove("active");
-                    document.getElementById('tab_parameter').classList.remove("active");      
-                    document.getElementById('tab_signature').classList.remove("active");                    
-                    document.getElementById('tab_material').classList.add("active");      
+                    document.getElementById('tab_signature').classList.remove("active");          
+                    document.getElementById('tab_photo').classList.add("active");
                 break;
             default:
                 break;
