@@ -8,7 +8,7 @@
     <div class="box box-primary">
         <div class="box-header">
             <h3 class="box-title">Listado de Ordenes</h3>
-            @can('update', $posts->first())
+            @can('create', new App\Post)
                 <button class="btn btn-primary pull-right" data-toggle="modal" data-target="#exampleModal">
                     <i class="fa fa-plus"></i> Crear reporte
                 </button>
@@ -49,7 +49,6 @@
                                     </a>
                                 </td> 
                             @endcan
-                            
                             @can('view', $post)
                             <td>
                                 @if( $post->records->count() )
