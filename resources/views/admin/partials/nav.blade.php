@@ -10,37 +10,11 @@
         </a>
     </li>
 <!-- Nuevo OT -->
-    <li class="{{ setActiveRoute('admin.posts.index') }}">
-        <a href="{{ route('admin.posts.index') }}">
-            <i class="fa fa-wrench"></i> <span>Ordenes de Trabajo</span>
-        </a>
-    </li>
-<!-- Nuevo OT 
-    <li class="treeview {{ setActiveRoute('admin.posts.index') }}">
-        <a href="#"><i class="fa fa-bars"></i> <span>Blog</span>
-        <span class="pull-right-container">
-            <i class="fa fa-angle-left pull-right"></i>
-            </span>
-        </a>
-        <ul class="treeview-menu">
-            @can('view', new App\Post)
-            <li class="{{ setActiveRoute('admin.posts.index') }}">
-                <a href="{{ route('admin.posts.index') }}">
-                    <i class="fa fa-eye"> Ver todos los posts</i>
-                </a>
-            </li>
-            @endcan
-            @can('view', new App\Post)
-                <li>
-                    @if (request()->is('admin/posts/*'))
-                        <a href="{{ route('admin.posts.index', '#create') }}"><i class="fa fa-pencil"> Crear un post</i></a>
-                    @else
-                        <a href="#" data-toggle="modal" data-target="#exampleModal"><i class="fa fa-pencil"> Crear un post</i></a>
-                    @endif
-                </li>
-            @endcan
-        </ul>   
-    </li>-->
+        <li class="{{ setActiveRoute('admin.posts.index') }}">
+            <a href="{{ route('admin.posts.index') }}">
+                <i class="fa fa-wrench"></i> <span>Ordenes de Trabajo</span>
+            </a>
+        </li>
     @can('view', new App\User)
         <li class="{{ setActiveRoute('admin.clients.index') }}">
             <a href="{{ route('admin.clients.index') }}">

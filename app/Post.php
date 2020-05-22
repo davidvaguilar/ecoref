@@ -85,7 +85,7 @@ class Post extends Model
     {
         if( auth()->user()->can('view', $this) ){   //if( auth()->user()->hasRole('Admin') ){
             return $query;
-        } 
+        }
         //return $query->where('user_id', auth()->id())->whereNull('finished_at');
         return $query->where('user_id', auth()->id())->where('status', 'PENDIENTE');
 

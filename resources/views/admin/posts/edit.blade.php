@@ -32,18 +32,18 @@
                         {{ csrf_field() }}
                         {{ method_field('DELETE') }}
                         <div class="col-xs-4">
-                            <button class="btn btn-danger" style="position:absolute">
-                                <i class="fa fa-remove"></i>
+                            <button type="submit"
+                                    onclick="return confirm('¿Estas seguro de querer eliminar esta foto?')"
+                                    class="btn btn-danger" 
+                                    style="position:absolute">
+                                <i class="fa fa-fw fa-times"></i>
                             </button>
                             <img src="{{ url($photo->url) }}" class="img-responsive" width="100px">
                         </div>
                     </form>
                 @endforeach
                 @if ($post->signature_id != null )
-                    <div class="col-md-2">
-                        <button class="btn btn-danger btn-xs" style="position:absolute">
-                            <i class="fa fa-remove"></i>
-                        </button>
+                    <div class="col-xs-4">
                         <img src="{{ url($post->signature->url) }}" class="img-responsive" width="100px"/>
                     </div>
                 @endif
@@ -807,16 +807,19 @@
         });
         
         function eliminar_material(id){
-            var url = "{{ route('admin.materials.desactivar') }}";
-            axios.put(url, {
-                        'id': id
-            }).then(function(response){
-                console.log(response.data);                    //location.reload(true);
-                listMaterial();
-            })
-            .catch(function (error){
-                console.log(error); 
-            });
+            var confirmacion = confirm('¿Estas seguro de querer eliminar este material?')
+            if( confirmacion ){
+                var url = "{{ route('admin.materials.desactivar') }}";
+                axios.put(url, {
+                            'id': id
+                }).then(function(response){
+                    console.log(response.data);                    //location.reload(true);
+                    listMaterial();
+                })
+                .catch(function (error){
+                    console.log(error); 
+                });
+            }            
         }
 
         function listMaterial() {
@@ -862,9 +865,8 @@
         function mostrar_order() {
             var url = "{{ route('admin.posts.show', $post->id) }}";
             axios.get(url).then(function(response){
-                var total_registro = response.data.post.length; //materials  response.data.post[0].job; 
-                
-                console.log(response.data);
+                //  console.log(response.data);
+                var total_registro = response.data.post.length;              
                 if( total_registro > 0){
                     document.getElementById("resumen_fecha_llegada").innerHTML = response.data.post[0].started_at;
                     document.getElementById("resumen_tecnico_nombre").innerHTML = response.data.post[0].owner.name;
@@ -878,12 +880,16 @@
                     document.getElementById("resumen_orden_serie").innerHTML = response.data.post[0].serie;
                     document.getElementById("resumen_problema_nombre").innerHTML = response.data.post[0].problem.name;
                     document.getElementById("resumen_orden_trabajo").innerHTML = response.data.post[0].job;
-
                     document.getElementById("resumen_parametros_tipo").innerHTML = response.data.post[0].parameter.type;
                     document.getElementById("resumen_parametros_temperatura").innerHTML = response.data.post[0].parameter.temperature;
                     document.getElementById("resumen_parametros_presion_baja").innerHTML = response.data.post[0].parameter.pressure_low;
                     document.getElementById("resumen_parametros_presion_alta").innerHTML = response.data.post[0].parameter.pressure_high;
-               // document.getElementById("resumen_refrigerante_nombre").innerHTML = response.data.post[0].job;
+                    total_refrigerantes = response.data.refrigerants.length;
+                    for (let indice = 0; indice < total_refrigerantes; indice++) {  
+                        if(response.data.post[0].parameter.refrigerant_id == response.data.refrigerants[indice].id ){
+                            document.getElementById("resumen_refrigerante_nombre").innerHTML = response.data.refrigerants[indice].name;
+                        }
+                    }
                     document.getElementById("resumen_refrigerante_nivel").innerHTML = response.data.post[0].parameter.refrigerant;
                     document.getElementById("resumen_parametro_aceite").innerHTML = response.data.post[0].parameter.oil;
                     total_materiales = response.data.post[0].materials.length;
@@ -894,11 +900,9 @@
                         var fila = document.createElement("tr");
                         var celda = document.createElement("td");
                         var spanTexto = document.createElement("span");
-                
                         spanTexto.textContent = response.data.post[0].materials[indice].quantity; 
                         celda.appendChild(spanTexto);
                         fila.appendChild(celda);
-
                         var celda = document.createElement("td");
                         var spanTexto = document.createElement("span");
                         spanTexto.textContent = response.data.post[0].materials[indice].detail; 
@@ -907,26 +911,18 @@
 
                         body.appendChild(fila);
                     }
-                }
-                console.log(total_materiales);
-         
+                }         
             })
             .catch(function (error){
                 console.log(error);
             });
         }
 
-        function seleccionar_firma(){
-            window.location.hash = '#signature';       //     location.reload(true);
-            mostrar_order();
-        }
-
         function seleccionar_foto(){
-            window.location.hash = '#photo';
+            window.location.hash = '#photo';  //     location.reload(true);
         }
 
-
-        console.log(window.location.hash);
+        //console.log(window.location.hash);
         switch (window.location.hash ) {
             case '#photo':
                     document.getElementById('li_order').classList.remove("active");

@@ -8,16 +8,21 @@
     <div class="box box-primary">
         <div class="box-header">
             <h3 class="box-title">Listado de Ordenes</h3>
-            <button class="btn btn-primary pull-right" data-toggle="modal" data-target="#exampleModal">
-                <i class="fa fa-plus"></i> Crear reporte
-            </button>
+            @can('update', $posts->first())
+                <button class="btn btn-primary pull-right" data-toggle="modal" data-target="#exampleModal">
+                    <i class="fa fa-plus"></i> Crear reporte
+                </button>
+            @endcan
         </div>
         <!-- /.box-header -->
         <div class="box-body table-responsive">
             <table id="posts-table" class="table table-bordered table-striped">
                 <thead>
                     <tr>
-                        <th></th>
+                        @can('update', $posts->first())<th></th>@endcan                      
+                        @can('view', $posts->first())
+                            <th style="min-width:70px">Enviar</th>
+                        @endcan
                         @role('Admin')
                             <th>Responsable</th>
                         @endrole
@@ -30,23 +35,73 @@
                         <th>Local</th>
                         <th>Tipo de Orden</th>
                         <th>Problema</th>
-                        <th style="min-width:170px">Archivos</th>
-                        @role('Admin')
-                            <th></th>
-                        @endrole
+                        @can('delete', $posts->first())<th></th>@endcan 
                     </tr>
                 </thead>
                 <tbody>
                     @foreach($posts as $post)
                         <tr>
-                            <td>
-                                @can('update', $post)
+                            @can('update', $post)
+                                <td>
                                     <a href="{{ route('admin.posts.edit', $post) }}" 
                                             class="btn btn-info" title="Editar OT">
-                                        <i class="fa fa-pencil"></i>
+                                        <i class="fa fa-fw fa-pencil"></i>
                                     </a>
-                                @endcan
-                            </td>   
+                                </td> 
+                            @endcan
+                            
+                            @can('view', $post)
+                            <td>
+                                @if( $post->records->count() )
+                                    <form method="POST" 
+                                        action="{{ route('admin.posts.updateSend', $post) }}" 
+                                        style="display: inline">
+                                        {{ csrf_field() }}
+                                        {{ method_field('PUT') }}
+                                        <div class="btn-group">
+                                            <button type="submit"
+                                                onclick="return confirm('¿Estas seguro de querer Enviar esta OT?')"
+                                                class="btn btn-success"
+                                                title="Enviar PDF al Cliente"
+                                            ><i class="fa fa-fw fa-envelope-o"></i></button>
+                                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                                <span class="caret"></span>
+                                                <span class="sr-only">Toggle Dropdown</span>
+                                            </button>
+                                            <ul class="dropdown-menu" role="menu">
+                                            @role('Admin') 
+                                                @foreach ($post->records as $record)
+                                                    <li>
+                                                        <a href="{{ url($record->url) }}"
+                                                                title="PDF creado el {{ $record->created_at->format('d-m-Y H:i') }}"
+                                                                class="btn btn-lg btn-default"
+                                                                target="_blank">
+                                                            <i class="fa fa-fw fa-file-pdf-o"></i>
+                                                            Creado {{ $record->created_at->diffForHumans() }}
+                                                        </a>
+                                                    </li>
+                                                @endforeach
+                                            @else 
+                                                @foreach ($post->records as $record)
+                                                    @if($loop->last)
+                                                        <li>
+                                                            <a href="{{ url($record->url) }}"
+                                                                    title="PDF creado el {{ $record->created_at->format('d-m-Y H:i') }}"
+                                                                    class="btn btn-lg btn-default"
+                                                                    target="_blank">
+                                                                <i class="fa fa-fw fa-file-pdf-o"></i>
+                                                                Creado {{ $record->created_at->diffForHumans() }}
+                                                            </a>
+                                                        </li>
+                                                    @endif
+                                                @endforeach
+                                            @endrole
+                                            </ul>
+                                        </div>
+                                    </form>
+                                @endif
+                            </td>
+                            @endcan 
                             @role('Admin')  
                                 <td>{{ $post->owner->name }}</td>
                             @endrole
@@ -87,58 +142,14 @@
                             </td>
                             <td>{{ isset($post->type->id) ? $post->type->name : '' }}</td>
                             <td>{{ isset($post->problem->id) ? $post->problem->name : '' }}</td>
+                            
+
+                            @can('delete', $post)
                             <td>
                                 <!--<a href="{{ route('productos_pdf', $post) }}" 
                                     target="_blank" 
                                     class="btn btn-default"
-                                ><i class="fa fa-eye"></i></a>-->                   
-                                @if( $post->records->count() )
-                                    @role('Admin')  
-                                        @foreach ($post->records as $record)
-                                            <a href="{{ url($record->url) }}" 
-                                                title="PDF creado el {{ $record->created_at->format('d-m-Y H:i') }}"
-                                                target="_blank" 
-                                                class="btn btn-default"
-                                            ><i class="fa fa-file-pdf-o"></i></a>
-                                        @endforeach
-                                        <form method="POST" 
-                                            action="{{ route('admin.posts.updateSend', $post) }}" 
-                                            style="display: inline">
-                                            {{ csrf_field() }}
-                                            {{ method_field('PUT') }}
-                                            <button type="submit"
-                                                onclick="return confirm('¿Estas seguro de querer volver a enviar este reporte?')"
-                                                class="btn btn-success"
-                                                title="Enviar PDF al Cliente"
-                                            ><i class="fa fa-envelope-o"></i></button>
-                                        </form>
-                                    @else 
-                                        @foreach ($post->records as $record)
-                                            @if($loop->last)
-                                                <a href="{{ url($record->url) }}" 
-                                                    title="PDF creado el {{ $record->created_at->format('d-m-Y H:i') }}"
-                                                    target="_blank" 
-                                                    class="btn btn-default"
-                                                ><i class="fa fa-file-pdf-o"></i></a>
-                                            @endif
-                                        @endforeach
-                                        <form method="POST" 
-                                            action="{{ route('admin.posts.updateSend', $post) }}" 
-                                            style="display: inline">
-                                            {{ csrf_field() }}
-                                            {{ method_field('PUT') }}
-                                            <button type="submit"
-                                                onclick="return confirm('¿Estas seguro de querer volver a enviar este reporte?')"
-                                                class="btn btn-success"
-                                                title="Enviar PDF al Cliente"
-                                            ><i class="fa fa-envelope-o"></i></button>
-                                        </form>
-                                    @endrole
-                                @endif
-                            </td>
-
-                            @role('Admin')
-                            <td>
+                                ><i class="fa fa-eye"></i></a>--> 
                                 <form method="POST" 
                                     action="{{ route('admin.posts.destroy', $post) }}" 
                                     style="display: inline">
@@ -148,10 +159,10 @@
                                         onclick="return confirm('¿Estas seguro de querer eliminar esta publicación?')"
                                         class="btn btn-danger"
                                         title="Eliminar OT"
-                                    ><i class="fa fa-times"></i></button>
+                                    ><i class="fa fa-fw fa-times"></i></button>
                                 </form>
                             </td>
-                            @endrole 
+                            @endcan 
                         </tr>
                     @endforeach
                 </tbody>

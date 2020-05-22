@@ -67,11 +67,13 @@ class PostsController extends Controller
     }
 
     public function show($id){
-        $post = Post::with(['problem', 'type', 'parameter', 'owner', 'client', 'materials'])->where('id', $id)->get();
-      //  $refrigerant = $post->parameter->get();
-     //   dd($refrigerant);
+        $refrigerants = Refrigerant::all();
+        $post = Post::with(['problem', 'type', 'parameter', 'owner', 'client', 'materials'])
+                    ->where('id', $id)->get();
+       // dd($refrigerants);
         return[
-            'post' => $post
+            'post' => $post,
+            'refrigerants' => $refrigerants
         ];
     }
 

@@ -26,7 +26,7 @@ class PostPolicy
     public function view(User $user, Post $post)
     {
         return $user->id === $post->user_id
-            || $user->hasPermissionTo('View posts');
+            && $user->hasPermissionTo('View posts');
     }
 
     /**
