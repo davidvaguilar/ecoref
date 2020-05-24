@@ -96,6 +96,7 @@
                                 <div class="col-xs-8">
                                     <input id="type_other" 
                                             name="type_other" 
+                                            maxlength="80"
                                             type="text" 
                                             class="form-control" 
                                             value="{{ old('type_other', $post->type_other) }}">
@@ -106,18 +107,33 @@
                             <div class="form-group">
                                 <label for="equipment" class="col-sm-2 control-label">Equipo Intervenido</label>
                                 <div class="col-sm-10">
-                                    <input id="equipment" name="equipment" type="text" class="form-control" value="{{ old('equipment', $post->equipment) }}">
+                                    <input id="equipment" 
+                                            name="equipment"                                            
+                                            maxlength="45"
+                                            type="text" 
+                                            class="form-control" 
+                                            value="{{ old('equipment', $post->equipment) }}">
                                 </div>
                             </div>
 
                             <div class="form-group">
                                 <label for="model" class="col-sm-2 control-label">Modelo</label>        
                                 <div class="col-sm-4">
-                                    <input id="model" name="model" type="text" class="form-control" value="{{ old('model', $post->model) }}">
+                                    <input id="model" 
+                                            name="model" 
+                                            maxlength="30"
+                                            type="text" 
+                                            class="form-control" 
+                                            value="{{ old('model', $post->model) }}">
                                 </div>
                                 <label for="serie" class="col-sm-2 control-label">Serie</label>        
                                 <div class="col-sm-4">
-                                    <input id="serie" name="serie" type="text" class="form-control" value="{{ old('serie', $post->serie) }}">
+                                    <input id="serie" 
+                                            name="serie" 
+                                            maxlength="30"
+                                            type="text" 
+                                            class="form-control" 
+                                            value="{{ old('serie', $post->serie) }}">
                                 </div>
                             </div>
 
@@ -198,6 +214,7 @@
                                     <input id="pressure_low"
                                             name="pressure_low" 
                                             type="number" 
+                                            min="1" max="999"
                                             class="form-control" 
                                             placeholder="BAJA"
                                             min="0"
@@ -207,6 +224,7 @@
                                     <input id="pressure_high"
                                             name="pressure_high" 
                                             type="number" 
+                                            min="1" max="999"
                                             class="form-control" 
                                             placeholder="ALTA" 
                                             min="0"
@@ -308,7 +326,8 @@
                                 <label for="title" class="col-xs-3 control-label">Titulo</label>
                                 <div class="col-xs-9">
                                     <input id="title" 
-                                            name="title" 
+                                            name="title"
+                                            maxlength="20"
                                             type="text" 
                                             class="form-control" 
                                             autocomplete="off" />
@@ -334,15 +353,17 @@
                             <label for="quantity">Cantidad</label>
                             <input id="quantity"
                                     name="quantity"  
-                                    type="number" 
-                                    class="form-control" 
-                                    min="1" max="99" maxlength="2"
+                                    type="number"  
+                                    min="1" max="99"
+                                    maxlength="2"
+                                    class="form-control"
                                     value="1">
                         </div>
                         <div id="detail-div" class="form-group col-xs-9">
                             <label for="detail">Material</label>
                             <input id="detail"
                                     name="detail" 
+                                    maxlength="50"
                                     type="text" 
                                     class="form-control"
                                     autocomplete="off">
@@ -682,7 +703,7 @@
                             'problem_id': problem_id,
                             'job': job
                     }).then(function(response){
-                        console.log(response.data);
+                       // console.log(response.data);
                         document.getElementById('li_order').classList.remove("active");
                         document.getElementById('li_parameter').classList.add("active");
                         
@@ -755,8 +776,6 @@
                 }   
             }, false);
 
-
-
             document.getElementById("material-button").addEventListener("click", function (event) {
                 document.getElementById('error-div').innerHTML= "";
                 document.getElementById("quantity-div").classList.remove("has-error");            
@@ -797,9 +816,6 @@
                     });
                 }
             }, false);
-
-
-          
 
             var overlay = document.getElementsByClassName('overlay');  // ICONO DE ESPERA
             while (overlay.length > 0) overlay[0].remove();
@@ -854,7 +870,6 @@
                     fila.appendChild(celda);
 
                     body.appendChild(fila);
-                    //onclick="return confirm('¿Estas seguro de querer eliminar este material?')"
                 }
             })
             .catch(function (error){
@@ -868,7 +883,11 @@
                 //  console.log(response.data);
                 var total_registro = response.data.post.length;              
                 if( total_registro > 0){
-                    document.getElementById("resumen_fecha_llegada").innerHTML = response.data.post[0].started_at;
+                    var year =  response.data.post[0].started_at.substring(0, 4);                    
+                    var month =  response.data.post[0].started_at.substring(5,7);                    
+                    var day = response.data.post[0].started_at.substring(8, 10);
+                    var hour =  response.data.post[0].started_at.substring(11, 16);
+                    document.getElementById("resumen_fecha_llegada").innerHTML = day+'/'+month+'/'+year+' '+hour;
                     document.getElementById("resumen_tecnico_nombre").innerHTML = response.data.post[0].owner.name;
                     document.getElementById("resumen_empresa_nombre").innerHTML = response.data.post[0].client.name;
                     document.getElementById("resumen_empresa_titulo").innerHTML = response.data.post[0].client.title;
@@ -919,10 +938,9 @@
         }
 
         function seleccionar_foto(){
-            window.location.hash = '#photo';  //     location.reload(true);
+            window.location.hash = '#photo';
         }
 
-        //console.log(window.location.hash);
         switch (window.location.hash ) {
             case '#photo':
                     document.getElementById('li_order').classList.remove("active");

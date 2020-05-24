@@ -69,7 +69,7 @@
                                             </button>
                                             <ul class="dropdown-menu" role="menu">
                                             @role('Admin') 
-                                                @foreach ($post->records as $record)
+                                                @foreach ($post->records->reverse() as $record)
                                                     <li>
                                                         <a href="{{ url($record->url) }}"
                                                                 title="PDF creado el {{ $record->created_at->format('d-m-Y H:i') }}"
@@ -81,19 +81,15 @@
                                                     </li>
                                                 @endforeach
                                             @else 
-                                                @foreach ($post->records as $record)
-                                                    @if($loop->last)
-                                                        <li>
-                                                            <a href="{{ url($record->url) }}"
-                                                                    title="PDF creado el {{ $record->created_at->format('d-m-Y H:i') }}"
-                                                                    class="btn btn-lg btn-default"
-                                                                    target="_blank">
-                                                                <i class="fa fa-fw fa-file-pdf-o"></i>
-                                                                Creado {{ $record->created_at->diffForHumans() }}
-                                                            </a>
-                                                        </li>
-                                                    @endif
-                                                @endforeach
+                                                <li>
+                                                    <a href="{{ url($post->records->last()->url) }}"
+                                                            title="PDF creado el {{ $post->records->last()->created_at->format('d-m-Y H:i') }}"
+                                                            class="btn btn-lg btn-default"
+                                                            target="_blank">
+                                                        <i class="fa fa-fw fa-file-pdf-o"></i>
+                                                        Creado {{ $post->records->last()->created_at->diffForHumans() }}
+                                                    </a>
+                                                </li>
                                             @endrole
                                             </ul>
                                         </div>
@@ -141,8 +137,6 @@
                             </td>
                             <td>{{ isset($post->type->id) ? $post->type->name : '' }}</td>
                             <td>{{ isset($post->problem->id) ? $post->problem->name : '' }}</td>
-                            
-
                             @can('delete', $post)
                             <td>
                                 <!--<a href="{{ route('productos_pdf', $post) }}" 
