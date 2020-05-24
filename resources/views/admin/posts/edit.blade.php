@@ -830,7 +830,7 @@
                 var body = document.getElementById("material-body");
                 document.getElementById("material-body").innerHTML = '';
 
-                for (let indice = 0; indice < total_registro; indice++) {                    
+                for (let indice = total_registro-1; indice >= 0; indice--) {                    
                     var fila = document.createElement("tr");
                     var celda = document.createElement("td");
                     var spanTexto = document.createElement("span");

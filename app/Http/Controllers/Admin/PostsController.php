@@ -122,7 +122,7 @@ class PostsController extends Controller
 
         $refrigerants = Refrigerant::all();
         $pdf = PDF::loadView('pdf.order', ['post'=> $post, 'refrigerants'=> $refrigerants]);   
-        $url = 'pdf/order/OT'.$post->title.'-'.$post->owner->id.'-'.config('app.name', 'Laravel').'-'.Carbon::now()->format('d-m-Y-H-i').'.pdf';
+        $url = 'pdf/order/OT'.$post->title.'-'.$post->owner->id.'-EcorefChile-'.Carbon::now()->format('d-m-Y-H-i').'.pdf';
         $pdf->save($url);
 
         $record = new Record;
