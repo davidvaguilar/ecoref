@@ -42,7 +42,7 @@
         </li>
 
         <li class="treeview {{ setActiveRoute(['admin.types.index', 'admin.problems.index', 'admin.refrigerants.index']) }}">
-            <a href="#"><i class="fa fa-cog"></i> <span>Administración</span>
+            <a href="#"><i class="fa fa-cog"></i> <span>Configuraciones</span>
             <span class="pull-right-container">
                 <i class="fa fa-angle-left pull-right"></i>
                 </span>
