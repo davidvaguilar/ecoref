@@ -67,24 +67,16 @@
         <span class="glyphicon glyphicon-lock form-control-feedback"></span>
       </div>
       <div class="row">
-        <div class="col-xs-8">
-          <div class="checkbox icheck">
-            <label>
-              <input type="checkbox" 
-                  name="remember" {{ old('remember') ? 'checked' : '' }}> 
-              Recuérdame
-            </label>
-          </div>
-        </div>
+        
         <!-- /.col -->
-        <div class="col-xs-4">
+        <div class="col-xs-4 col-md-offset-8">
           <button type="submit" class="btn btn-primary btn-block btn-flat">Entrar</button>
         </div>
         <!-- /.col -->
       </div>
     </form>
 
-    <a href="{{ route('password.request') }}">Reestablecer contraseña</a><br>
+    <!--<a href="{{-- route('password.request') --}}">Reestablecer contraseña</a><br>-->
     <!--<a href="register.html" class="text-center">Register a new membership</a>-->
   </div>
   <!-- /.login-box-body -->

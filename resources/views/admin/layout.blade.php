@@ -61,7 +61,7 @@ desired effect
     <!-- Logo -->
     <div class="logo">
       <!-- mini logo for sidebar mini 50x50 pixels -->
-      <span class="logo-mini"><b>A</b>{{ config('app.name', 'Laravel') }}</span>
+      <span class="logo-mini"><b>EC</b></span>
       <!-- logo for regular state and mobile devices -->
       <span class="logo-lg">{{ config('app.name', 'Laravel') }}</span>
     </div>
