@@ -18,6 +18,7 @@ class UsersTableSeeder extends Seeder
         Role::truncate();
         User::truncate();
         $adminRole = Role::create(['name' => 'Admin', 'display_name' => 'Administrador']);
+        $supervisorRole = Role::create(['name' => 'Supervisor', 'display_name' => 'Supervisor']);  //Writer
         $writerRole = Role::create(['name' => 'Writer', 'display_name' => 'Tecnico']);  //Writer
 
         $viewPostsPermission = Permission::create([
@@ -142,6 +143,6 @@ class UsersTableSeeder extends Seeder
         $admin->url = '/img/users/test.png';
         $admin->save();
 
-        $admin->assignRole($adminRole);
+        $admin->assignRole($supervisorRole);
     }
 }

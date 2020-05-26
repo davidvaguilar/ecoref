@@ -9,18 +9,19 @@
             <i class="fa fa-home"></i> <span>Inicio</span>
         </a>
     </li>
-<!-- Nuevo OT -->
+
         <li class="{{ setActiveRoute('admin.posts.index') }}">
             <a href="{{ route('admin.posts.index') }}">
                 <i class="fa fa-wrench"></i> <span>Ordenes de Trabajo</span>
             </a>
         </li>
-    @can('view', new App\User)
+    
         <li class="{{ setActiveRoute('admin.clients.index') }}">
             <a href="{{ route('admin.clients.index') }}">
                 <i class="fa fa-users"></i> <span>Clientes</span>
             </a>
         </li>
+    @can('view', new App\User)
         <li class="treeview {{ setActiveRoute(['admin.users.index', 'admin.users.create']) }}">
             <a href="#"><i class="fa fa-user"></i> <span>Usuarios</span>
             <span class="pull-right-container">

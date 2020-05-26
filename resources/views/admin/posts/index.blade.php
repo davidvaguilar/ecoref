@@ -20,7 +20,7 @@
                 <thead>
                     <tr>
                         @can('update', $posts->first())<th></th>@endcan                      
-                        @can('view', $posts->first())
+                        @can('update', $posts->first())
                             <th style="min-width:70px">Enviar</th>
                         @endcan
                         @role('Admin')
@@ -49,7 +49,7 @@
                                     </a>
                                 </td> 
                             @endcan
-                            @can('view', $post)
+                            @can('update', $post)
                             <td>
                                 @if( $post->records->count() )
                                     <form method="POST" 
@@ -139,7 +139,7 @@
                             <td>{{ isset($post->problem->id) ? $post->problem->name : '' }}</td>
                             @can('delete', $post)
                             <td>
-                                <!--<a href="{{ route('productos_pdf', $post) }}" 
+                                <!--<a href="{{-- route('productos_pdf', $post) --}}" 
                                     target="_blank" 
                                     class="btn btn-default"
                                 ><i class="fa fa-eye"></i></a>--> 

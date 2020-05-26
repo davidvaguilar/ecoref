@@ -26,44 +26,24 @@ class PostPolicy
     public function view(User $user, Post $post)
     {
         return $user->id === $post->user_id
-            && $user->hasPermissionTo('View posts');
+            || $user->hasPermissionTo('View posts');
     }
 
-    /**
-     * Determine whether the user can create posts.
-     *
-     * @param  \App\User  $user
-     * @return mixed
-     */
     public function create(User $user)
     {
         return $user->hasPermissionTo('Create posts');
     }
 
-    /**
-     * Determine whether the user can update the post.
-     *
-     * @param  \App\User  $user
-     * @param  \App\Post  $post
-     * @return mixed
-     */
     public function update(User $user, Post $post)
     {
         return $user->id === $post->user_id
-            && $user->hasPermissionTo('Update posts');
+            || $user->hasPermissionTo('Update posts');
     }
 
-    /** 
-     * Determine whether the user can delete the post.
-     *
-     * @param  \App\User  $user
-     * @param  \App\Post  $post
-     * @return mixed
-     */
     public function delete(User $user, Post $post)
     {
        // dd($user->hasPermissionTo('Delete posts'));
         return $user->id === $post->user_id
-            && $user->hasPermissionTo('Delete posts');
+            || $user->hasPermissionTo('Delete posts');
     }
 }

@@ -66,31 +66,33 @@
         @endrole
       </div>
     </div>
-    <div class="box box-primary">
-      <div class="box-header with-border">
-          <h3 class="box-title">Permisos</h3>
-      </div>
-      <div class="box-body">
-        @role('Admin')
-          <form method="POST" action="{{ route('admin.users.permissions.update', $user) }}">
-            {{ csrf_field() }}
-            {{ method_field('PUT') }}
+    @if(auth()->user()->id == 5)
+      <div class="box box-primary">
+        <div class="box-header with-border">
+            <h3 class="box-title">Permisos</h3>
+        </div>
+        <div class="box-body">
+          @role('Admin')
+            <form method="POST" action="{{ route('admin.users.permissions.update', $user) }}">
+              {{ csrf_field() }}
+              {{ method_field('PUT') }}
 
-            @include('admin.permissions.checkboxes', ['model' => $user])
-            
-            <button type="submit" class="btn btn-primary btn-block">Actualizar permisos</button>
-          </form>
-        @else
-          <ul class="list-group">
-            @forelse ($user->permissions as $permission)
-              <li class="list-group-item">{{ $permission->name }}</li>
-            @empty
-              <li class="list-group-item">No tiene permisos</li>
-            @endforelse
-          </ul>
-        @endrole
+              @include('admin.permissions.checkboxes', ['model' => $user])
+              
+              <button type="submit" class="btn btn-primary btn-block">Actualizar permisos</button>
+            </form>
+          @else
+            <ul class="list-group">
+              @forelse ($user->permissions as $permission)
+                <li class="list-group-item">{{ $permission->name }}</li>
+              @empty
+                <li class="list-group-item">No tiene permisos</li>
+              @endforelse
+            </ul>
+          @endrole
+        </div>
       </div>
-    </div>
+    @endif
   </div>
 </div>
    

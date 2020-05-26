@@ -1,10 +1,10 @@
-@foreach ($permissions as $key => $values)
+@foreach ($permissions as $id => $name)
     <div class="checkbox">
         <label>
-        <input name="permissions[]" type="checkbox" value="{{ $key+1 }}" 
-            {{ $model->permissions->contains($values->id) 
-                    || collect(old('permission'))->contains($values->name) ? 'checked': ''}}>
-            {{ $values->display_name }}
+        <input name="permissions[]" type="checkbox" value="{{ $name }}" 
+            {{ $model->permissions->contains($id) 
+                    || collect(old('permission'))->contains($name) ? 'checked': ''}}>
+            {{ $name }}
         </label>
     </div>
 @endforeach

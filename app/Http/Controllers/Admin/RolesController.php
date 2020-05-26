@@ -78,6 +78,7 @@ class RolesController extends Controller
             'role' => $role,
             'permissions' => Permission::pluck('name', 'id'),  
         ]);
+      
     }
 
     /**

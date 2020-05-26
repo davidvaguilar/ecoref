@@ -8,32 +8,36 @@
     <div class="box box-primary">
         <div class="box-header">
             <h3 class="box-title">Listado de Clientes</h3>
-            <button class="btn btn-primary pull-right" data-toggle="modal" data-target="#client-modal">
-                <i class="fa fa-fw fa-plus"></i>Nuevo cliente
-            </button>
+            @role('Admin')  
+                <button class="btn btn-primary pull-right" data-toggle="modal" data-target="#client-modal">
+                    <i class="fa fa-fw fa-plus"></i>Nuevo cliente
+                </button>
+            @endrole
         </div>
         <div class="box-body table-responsive">
             <table id="clients-table" class="table table-bordered table-striped">
                 <thead>
                     <tr>
-                        <th></th>
+                        @role('Admin')<th></th>@endrole
                         <th>Id</th>
                         <th>Empresa</th>                        
                         <th>Local</th>                        
                         <th>Direccion</th>                   
                         <th>Ciudad</th>
                         <th>Emails</th>
-                        <th></th>
+                        @role('Admin')<th></th>@endrole
                     </tr>
                 </thead>
                 <tbody>
                     @foreach($clients as $client)
-                        <tr> 
-                            <td>
-                                <a href="{{ route('admin.clients.edit', $client) }}" 
-                                        class="btn btn-info"
-                                ><i class="fa fa-pencil"></i></a>
-                            </td>    
+                        <tr>    
+                            @role('Admin')                         
+                                <td>
+                                    <a href="{{ route('admin.clients.edit', $client) }}" 
+                                            class="btn btn-info"
+                                    ><i class="fa fa-pencil"></i></a>
+                                </td>    
+                            @endrole
                             <td>{{ $client->code }}</td>
                             <td>{{ $client->name }}</td>
                             <td>{{ $client->title }}</td>
@@ -48,6 +52,7 @@
                                     @if( !$loop->last ),@endif
                                 @endforeach
                             </td>
+                            @role('Admin')  
                             <td>                                
                                 <form method="POST" 
                                     action="{{ route('admin.clients.destroy', $client) }}" 
@@ -59,8 +64,8 @@
                                         class="btn btn-danger"
                                     ><i class="fa fa-times"></i></button>
                                 </form>
-                                 
                             </td>
+                            @endrole
                         </tr>
                     @endforeach
                 </tbody>

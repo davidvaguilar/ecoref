@@ -26,7 +26,7 @@ class UserPolicy
     public function view(User $authUser, User $user)
     {
         return $authUser->id === $user->id
-            || $user->hasPermissionTo('View users');
+            && $user->hasPermissionTo('View users');
     }
 
     /**
@@ -50,7 +50,7 @@ class UserPolicy
     public function update(User $authUser, User $user)
     {
         return $authUser->id === $user->id
-            || $user->hasPermissionTo('Update users');
+            && $user->hasPermissionTo('Update users');
     }
 
     /**
@@ -63,6 +63,6 @@ class UserPolicy
     public function delete(User $authUser, User $user)
     {
         return $authUser->id === $user->id
-            || $user->hasPermissionTo('Delete users');
+            && $user->hasPermissionTo('Delete users');
     }
 }
