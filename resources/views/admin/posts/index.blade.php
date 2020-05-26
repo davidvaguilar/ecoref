@@ -35,7 +35,7 @@
                         <th>Local</th>
                         <th>Tipo de Orden</th>
                         <th>Problema</th>
-                        @can('delete', $posts->first())<th></th>@endcan 
+                        @role('Admin')<th></th>@endrole
                     </tr>
                 </thead>
                 <tbody>
@@ -137,7 +137,7 @@
                             </td>
                             <td>{{ isset($post->type->id) ? $post->type->name : '' }}</td>
                             <td>{{ isset($post->problem->id) ? $post->problem->name : '' }}</td>
-                            @can('delete', $post)
+                            @role('Admin')
                             <td>
                                 <!--<a href="{{-- route('productos_pdf', $post) --}}" 
                                     target="_blank" 
@@ -155,7 +155,7 @@
                                     ><i class="fa fa-fw fa-times"></i></button>
                                 </form>
                             </td>
-                            @endcan 
+                            @endrole   
                         </tr>
                     @endforeach
                 </tbody>
