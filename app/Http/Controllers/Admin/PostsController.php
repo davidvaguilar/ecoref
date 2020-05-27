@@ -70,7 +70,7 @@ class PostsController extends Controller
         $refrigerants = Refrigerant::all();
         $post = Post::with(['problem', 'type', 'parameter', 'owner', 'client', 'materials'])
                     ->where('id', $id)->get();
-       // dd($refrigerants);
+      
         return[
             'post' => $post,
             'refrigerants' => $refrigerants

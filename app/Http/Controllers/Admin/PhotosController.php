@@ -12,18 +12,6 @@ use Illuminate\Support\Facades\Storage;
 
 class PhotosController extends Controller
 {
-   /* public function store(Post $post){
-        $this->validate(request(), [
-            'photo' => 'required|image|max:2048'   //|dimensions:min_height
-        ]);
-        $photo = request()->file('photo');
-
-        $photoStore = $photo->store('posts'); 
-        $post->photos()->create([
-            'url' => '/img/'.$photoStore,
-        ]);
-    }*/
-
     public function store(Request $request){
        // dd($request->order);
         ini_set('memory_limit', '256M');  // Temporalmente aumento de memoria hasta 256
@@ -45,26 +33,19 @@ class PhotosController extends Controller
           $photo->save();
         }
         return back();*/
- 
-        /*Image::make($request->file('photo'))
-            ->resize(500, 500)
-            ->save('img/orders/'.$file_name);  */
-        // no sirve   ini_set('post_max_size', '40M');  
-        // no sirve  ini_set('upload_max_filesize', '20M');  //Temporalmente  post_max_size = 10M
        
         $post = Post::find($request->order);
         
         $file = $request->file('photo');
         $image_name = 'ot'.$post->title.'-'.Carbon::now()->format('dmYHis').'.'.$file->getClientOriginalExtension();
-        $image = Image::make($file);
+        $image = Image::make($file)->orientate();
 
         switch ($request->get('type')) {
             case 'PROBLEMA':
                     $image->resize(600, 600);
                 break;
             case 'ORDEN':
-                    $image->resize(1224, 1584);
-                    //$image->resize(1836, 2376);
+                    $image->resize(1584, 1224);                     //$image->resize(1836, 2376);
                 break;
         }
         $image->save('img/orders/'.$image_name);
