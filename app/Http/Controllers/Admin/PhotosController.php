@@ -38,14 +38,14 @@ class PhotosController extends Controller
         
         $file = $request->file('photo');
         $image_name = 'ot'.$post->title.'-'.Carbon::now()->format('dmYHis').'.'.$file->getClientOriginalExtension();
-        $image = Image::make($file)->orientate();
+        $image = Image::make($file);    //->orientate()
 
         switch ($request->get('type')) {
             case 'PROBLEMA':
                     $image->resize(600, 600);
                 break;
             case 'ORDEN':
-                    $image->resize(1584, 1224);                     //$image->resize(1836, 2376);
+                    $image->resize(1224, 1584);                     //$image->resize(1836, 2376);
                 break;
         }
         $image->save('img/orders/'.$image_name);
