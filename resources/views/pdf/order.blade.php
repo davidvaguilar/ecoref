@@ -207,11 +207,11 @@
           </tr>-->
         </tbody>
       @endif
-      <tbody>
+      <!--<tbody>
         <tr>
-          <td colspan="2" style="font-size: 10pt;">Observación: <strong>sadsd asda sdsa das das dsd asd asd sas da sdsas da sdasd sa ds dasd asd asdasd as dasdasd ass das das da ds ad asdsad as da sdsa da ds</strong></td>
+          <td colspan="2" style="font-size: 10pt;">Observación: <strong></strong></td>
         </tr>
-      </tbody>
+      </tbody>-->
     </table>
 
     <table style="width:100%; text-align: center; border: 1px solid #000;">
