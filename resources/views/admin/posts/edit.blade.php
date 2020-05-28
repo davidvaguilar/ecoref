@@ -48,6 +48,9 @@
                     </div>
                 @endif
             </div>
+            <div id="overlay-photo" class="overlay">
+                <i class="fa fa-refresh fa-spin"></i>
+            </div>
         </div>
     @endif
 
@@ -343,7 +346,7 @@
                                             accept="image/*" required />
                                 </div>                                    
                             </div>
-                            <button type="submit" class="btn btn-primary btn-block">Subir nueva imagen</button>
+                            <button type="submit" onclick="cargando()" class="btn btn-primary btn-block">Subir nueva imagen</button>
                         </form>
 
                     </div>
@@ -535,11 +538,11 @@
             <!-- /.tab-content -->
             </div>
         </div>
-        <div class="overlay">
+   
+        <div id="overlay-body" class="overlay">
             <i class="fa fa-refresh fa-spin"></i>
         </div>
     </div>
-   
 </div>
 
 <div class="modal fade" id="client-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -817,10 +820,15 @@
                 }
             }, false);
 
-            var overlay = document.getElementsByClassName('overlay');  // ICONO DE ESPERA
-            while (overlay.length > 0) overlay[0].remove();
-
+           
+            document.getElementById("overlay-body").style.display = "none";
+            document.getElementById("overlay-photo").style.display = "none";
         });
+
+        function cargando() {
+            document.getElementById("overlay-body").style.display = "block";  
+            document.getElementById("overlay-photo").style.display = "block";         
+        }
         
         function eliminar_material(id){
             var confirmacion = confirm('¿Estas seguro de querer eliminar este material?')
