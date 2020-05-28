@@ -71,20 +71,18 @@
             <a href="{{ route('admin.users.show', auth()->user()) }}">
                 <i class="fa fa-user"></i> <span>Perfil</span>
             </a>
-        </li>
+        </li> 
     @endcan
-    @can('view', new \Spatie\Permission\Models\Role)
+    @if(auth()->user()->id == 5)
         <li class="{{ setActiveRoute(['admin.roles.index', 'admin.roles.edit']) }}">
             <a href="{{ route('admin.roles.index') }}">
                 <i class="fa fa-gear"></i> <span>Roles</span>
             </a>
         </li>
-    @endcan
-    @can('view', new \Spatie\Permission\Models\Permission)
         <li class="{{ setActiveRoute(['admin.permissions.index', 'admin.permissions.edit']) }}">
             <a href="{{ route('admin.permissions.index') }}">
                 <i class="fa fa-gear"></i> <span>Permisos</span>
             </a>
         </li>
-    @endcan
+    @endif
 </ul>

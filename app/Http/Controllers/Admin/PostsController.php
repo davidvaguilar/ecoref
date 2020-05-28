@@ -122,7 +122,7 @@ class PostsController extends Controller
 
         $refrigerants = Refrigerant::all();
         $pdf = PDF::loadView('pdf.order', ['post'=> $post, 'refrigerants'=> $refrigerants]);   
-        $url = 'pdf/order/OT'.$post->title.'-'.$post->owner->id.'-EcorefChile-'.Carbon::now()->format('d-m-Y-H-i').'.pdf';
+        $url = 'pdf/order/OT'.$post->title.'-'.$post->client->code.'-EcorefChile-'.Carbon::now()->format('d-m-Y-H-i').'.pdf';
         $pdf->save($url);
 
         $record = new Record;
@@ -136,7 +136,7 @@ class PostsController extends Controller
     }
 
     public function updateStatus( Post $post ){
-        $subject = 'OT'.$post->title.'-'.$post->owner->id.'-EcorefChile-'.$post->started_at->format('d-m-Y-H-i');
+        $subject = 'OT'.$post->title.'-'.$post->client->code.'-EcorefChile-'.$post->started_at->format('d-m-Y-H-i');
         
         $data = ['email' => config('app.name', 'Laravel')];
         $file = url($post->records->last()->url);
