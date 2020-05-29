@@ -57,13 +57,13 @@
     <div class="box box-default">
         <div class="box-body">
             <div class="nav-tabs-custom">
-                <ul class="nav nav-tabs nav-justified">
+                <!--<ul class="nav nav-tabs nav-justified">
                     <li id="li_order" class="active"><a href="#tab_order" data-toggle="tab">ANTECEDENTES</a></li>
                     <li id="li_parameter"><a href="#tab_parameter" data-toggle="tab">MEDICIONES</a></li>
                     <li id="li_material"><a href="#tab_material" data-toggle="tab">MATERIALES</a></li>
-                    <li id="li_photo" onclick="seleccionar_foto();"><a href="#tab_photo" data-toggle="tab">FOTOGRAFIAS</a></li>
+                    <li id="li_photo"><a href="#tab_photo" data-toggle="tab">FOTOGRAFIAS</a></li>
                     <li id="li_signature" onclick="mostrar_order();"><a href="#tab_signature" data-toggle="tab">FIRMA</a></li>
-                </ul>
+                </ul>-->
                 <div class="tab-content">
                     <div class="tab-pane active" id="tab_order">
 
@@ -170,7 +170,7 @@
                                     {!! $errors->first('job', '<span class="help-block">:message</span>' ) !!}   
                                 </div>
                             </div>
-                            <button id="order-button" type="button" class="btn btn-primary btn-block">Guardar y Siguiente</button>  
+                            <button id="order-button" type="button" class="btn btn-primary btn-block">Guardar y Avanzar</button>  
                         </div>
                     </div>
                     <!-- /.tab-pane -->
@@ -248,8 +248,7 @@
                                                 {{ $refrigerant->name }}
                                             </option>
                                         @endforeach  
-                                    </select> 
-                                           
+                                    </select>
                                 </div>
                             </div>
 
@@ -299,9 +298,70 @@
                                                 {{ isset($post->parameter->id) && $post->parameter->oil == 'BAJA' ? 'checked' : '' }}> BAJA
                                     </label>
                                 </div>
-                            </div>
-                            <button id="parameter-button" type="button" class="btn btn-primary btn-block">Guardar y Siguiente</button>
+                            </div>       
                         </div>            
+                        <a href="#tab_order" data-toggle="tab" class="btn btn-default pull-left">Retroceder</a>
+                        <a id="parameter-button" type="button" class="btn btn-primary btn-block">Guardar y avanzar</a>    
+                    </div>
+
+                    <div class="tab-pane" id="tab_material">
+                        <div id="quantity-div" class="form-group col-xs-3">
+                            <label for="quantity">Cantidad</label>
+                            <input id="quantity"
+                                    name="quantity"  
+                                    type="number"  
+                                    min="1" max="99"
+                                    maxlength="2"
+                                    class="form-control"
+                                    value="1">
+                        </div>
+                        <div id="detail-div" class="form-group col-xs-9">
+                            <label for="detail">Material</label>
+                            <input id="detail"
+                                    name="detail" 
+                                    maxlength="50"
+                                    type="text" 
+                                    class="form-control"
+                                    autocomplete="off">
+                        </div>
+                            <button id="material-button"
+                                    data-id="{{ $post->id }}"
+                                    data-url="{{ route('admin.materials.store') }}"
+                                    type="button"
+                                    class="btn btn-success btn-block">Agregar</button> 
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped text-center">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Materiales</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="material-body">
+                                    @if ($post->materials->count())
+                                        @foreach ($post->materials as $material)
+                                            <tr>
+                                                <td>{{ $material->quantity }}</td>
+                                                <td>{{ $material->detail }}</td>
+                                                <td>
+                                                    <button class="btn btn-danger material-button"
+                                                            type="button"
+                                                            onclick="eliminar_material({{ $material->id }});"                                                           
+                                                        ><i class="fa fa-fw fa-times"></i></button>                                               
+                                                </td>
+                                            </tr>        
+                                        @endforeach
+                                    @else
+                                        <tr> 
+                                            <td colspan="3">No hay materiales seleccionados</td>
+                                        </tr>
+                                    @endif
+                                </tbody>
+                            </table>
+                        </div>
+                        <a href="#tab_parameter" data-toggle="tab" class="btn btn-default pull-left">Retroceder</a>
+                        <a onclick="seleccionar_foto();" href="#tab_photo" data-toggle="tab" class="btn btn-primary btn-block">Guardar y Avanzar</a>
                     </div>
 
                     <div class="tab-pane" id="tab_photo">
@@ -346,67 +406,12 @@
                                             accept="image/*" required />
                                 </div>                                    
                             </div>
-                            <button type="submit" onclick="cargando()" class="btn btn-primary btn-block">Subir nueva imagen</button>
+                            <div class="form-group">
+                                <button type="submit" onclick="cargando()" class="btn btn-primary btn-block">Subir nueva imagen</button>
+                            </div>
                         </form>
-
-                    </div>
-                    <!-- /.tab-pane -->
-                    <div class="tab-pane" id="tab_material">
-                        <div id="quantity-div" class="form-group col-xs-3">
-                            <label for="quantity">Cantidad</label>
-                            <input id="quantity"
-                                    name="quantity"  
-                                    type="number"  
-                                    min="1" max="99"
-                                    maxlength="2"
-                                    class="form-control"
-                                    value="1">
-                        </div>
-                        <div id="detail-div" class="form-group col-xs-9">
-                            <label for="detail">Material</label>
-                            <input id="detail"
-                                    name="detail" 
-                                    maxlength="50"
-                                    type="text" 
-                                    class="form-control"
-                                    autocomplete="off">
-                        </div>
-                            <button id="material-button"
-                                    data-id="{{ $post->id }}"
-                                    data-url="{{ route('admin.materials.store') }}"
-                                    type="button"
-                                    class="btn btn-success btn-block">Agregar</button> 
-                        <div class="table-responsive">
-                            <table class="table table-bordered table-striped text-center">
-                                <thead>
-                                    <tr>
-                                        <th>Cantidad</th>
-                                        <th>Detalle</th>
-                                        <th>Acciones</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="material-body">
-                                    @if ($post->materials->count())
-                                        @foreach ($post->materials as $material)
-                                            <tr>
-                                                <td>{{ $material->quantity }}</td>
-                                                <td>{{ $material->detail }}</td>
-                                                <td>
-                                                    <button class="btn btn-danger material-button"
-                                                            type="button"
-                                                            onclick="eliminar_material({{ $material->id }});"                                                           
-                                                        ><i class="fa fa-fw fa-times"></i></button>                                               
-                                                </td>
-                                            </tr>        
-                                        @endforeach
-                                    @else
-                                        <tr> 
-                                            <td colspan="3">No hay materiales seleccionados</td>
-                                        </tr>
-                                    @endif
-                                </tbody>
-                            </table>
-                        </div>             
+                        <a href="#tab_material" data-toggle="tab" class="btn btn-default pull-left">Retroceder</a>
+                        <a onclick="mostrar_order();" href="#tab_signature" data-toggle="tab" class="btn btn-primary btn-block">Guardar y avanzar</a>
                     </div>
 
                     <div class="tab-pane" id="tab_signature">
@@ -497,14 +502,14 @@
                                 </div>
                             </div>
 
-                            <table class="table table-bordered table-striped text-center">
+                            <table id="resumen_table" class="table table-bordered table-striped text-center invisible">
                                 <thead>
                                     <tr>
                                         <th>Cantidad</th>
-                                        <th>Detalle</th>
+                                        <th>Materiales</th>
                                     </tr>
                                 </thead>
-                                <tbody id="resumen_materiales">
+                                <tbody id="resumen_body">
                                 </tbody>
                             </table>
                             <div class="form-group">
@@ -518,12 +523,13 @@
                                 </div>
                             </div>
                             <div id="signature-area" class="col-sm-offset-3 col-sm-6">
+                                <input type="hidden" name="base64" id="base64">
                                 <canvas id="signature" class="signature-pad" style="border: 2px dashed #ccc" width="800px" height="200px"></canvas>
                             </div>
                             
                             <div class="form-group">
                                 <div class="col-sm-12">
-                                    <input type="hidden" name="base64" id="base64">
+                                    <a href="#tab_photo" data-toggle="tab" class="btn btn-default pull-left">Retroceder</a>
                                     <button id="signature-clear" type="button" class="btn btn-info pull-left">Borrar Firma</button>   <!--  data-action="clear"-->              
                                     <button id="signature-finished" 
                                         type="button" 
@@ -532,8 +538,6 @@
                             </div>
                         </form>
                     </div>
-
-                    <!-- /.tab-pane -->
                 </div>
             <!-- /.tab-content -->
             </div>
@@ -707,9 +711,8 @@
                             'job': job
                     }).then(function(response){
                        // console.log(response.data);
-                        document.getElementById('li_order').classList.remove("active");
-                        document.getElementById('li_parameter').classList.add("active");
-                        
+                        /*document.getElementById('li_order').classList.remove("active");
+                        document.getElementById('li_parameter').classList.add("active");*/
                         document.getElementById('tab_order').classList.remove("active");
                         document.getElementById('tab_parameter').classList.add("active");
                     })
@@ -768,8 +771,8 @@
                             'oil': oil
                     }).then(function(response){
                         console.log(response.data);
-                        document.getElementById('li_parameter').classList.remove("active");
-                        document.getElementById('li_material').classList.add("active");
+                       /* document.getElementById('li_parameter').classList.remove("active");
+                        document.getElementById('li_material').classList.add("active");*/
                         document.getElementById('tab_parameter').classList.remove("active");
                         document.getElementById('tab_material').classList.add("active");
                     })
@@ -819,7 +822,6 @@
                     });
                 }
             }, false);
-
            
             document.getElementById("overlay-body").style.display = "none";
             document.getElementById("overlay-photo").style.display = "none";
@@ -889,6 +891,7 @@
             var url = "{{ route('admin.posts.show', $post->id) }}";
             axios.get(url).then(function(response){
                 //  console.log(response.data);
+                document.getElementById("resumen_table").classList.add("invisible");     
                 var total_registro = response.data.post.length;              
                 if( total_registro > 0){
                     var year =  response.data.post[0].started_at.substring(0, 4);                    
@@ -921,9 +924,11 @@
                     document.getElementById("resumen_parametro_aceite").innerHTML = response.data.post[0].parameter.oil;
                     total_materiales = response.data.post[0].materials.length;
 
-                    var body = document.getElementById("resumen_materiales");
-                    document.getElementById("resumen_materiales").innerHTML = '';
-                    for (let indice = 0; indice < total_materiales; indice++) {                    
+                    var body = document.getElementById("resumen_body");
+                    document.getElementById("resumen_body").innerHTML = '';
+                    for (let indice = 0; indice < total_materiales; indice++) {  
+                        
+                        document.getElementById("resumen_table").classList.remove("invisible");           
                         var fila = document.createElement("tr");
                         var celda = document.createElement("td");
                         var spanTexto = document.createElement("span");
@@ -951,11 +956,11 @@
 
         switch (window.location.hash ) {
             case '#photo':
-                    document.getElementById('li_order').classList.remove("active");
+                   /*document.getElementById('li_order').classList.remove("active");
                     document.getElementById('li_parameter').classList.remove("active");            
                     document.getElementById('li_material').classList.remove("active");
                     document.getElementById('li_signature').classList.remove("active");                    
-                    document.getElementById('li_photo').classList.add("active");
+                    document.getElementById('li_photo').classList.add("active");*/
                     
                     document.getElementById('tab_order').classList.remove("active");
                     document.getElementById('tab_parameter').classList.remove("active");
