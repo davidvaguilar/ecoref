@@ -365,7 +365,7 @@
                     </div>
 
                     <div class="tab-pane" id="tab_photo">
-                        <form method="post" action="{{ route('admin.posts.photos.store', '#photo') }}" enctype="multipart/form-data" class="form-horizontal"> <!-- /admin/products/4/images --><!-- admin/posts/{post}/photos -->
+                        <form id="photo-form" method="post" action="{{ route('admin.posts.photos.store', '#photo') }}" enctype="multipart/form-data" class="form-horizontal"> <!-- /admin/products/4/images --><!-- admin/posts/{post}/photos -->
                             {{ csrf_field() }}   
                                 <input type="hidden" 
                                     name="order" 
@@ -836,8 +836,14 @@
         });
 
         function cargando() {
-            document.getElementById("overlay-body").style.display = "block";  
-            document.getElementById("overlay-photo").style.display = "block";         
+            var photo = document.getElementById("photo").value;
+            var form = document.getElementById('photo-form');
+            if( photo.length > 0 ){
+                document.getElementById("overlay-body").style.display = "block";
+                form.submit();  
+                document.getElementById("overlay-photo").style.display = "block";
+            }
+  
         }
         
         function eliminar_material(id){
