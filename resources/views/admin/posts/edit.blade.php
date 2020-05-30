@@ -95,7 +95,7 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="type_other" class="col-xs-4 control-label">Detalle de Orden</label>
+                                <label id="other" for="type_other" class="col-xs-4 control-label">{{ isset($post->type->id) && $post->type->id == 5 ? 'N° de Presupuesto:' : 'Detalle de Orden:' }}</label>
                                 <div class="col-xs-8">
                                     <input id="type_other" 
                                             name="type_other" 
@@ -666,6 +666,14 @@
 
             document.getElementById('signature-clear').addEventListener('click', function () {
                 signaturePad.clear();
+            });
+
+            document.getElementById('type_id').addEventListener('change', function () {
+                if( this.value == '5' ){
+                    document.getElementById("other").innerHTML= "N° de Presupuesto";
+                } else {
+                    document.getElementById("other").innerHTML= "Detalle de Orden";
+                }
             });
 
             document.getElementById('signature-finished').addEventListener('click', function () {

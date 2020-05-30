@@ -115,6 +115,8 @@
     <table style="width: 100%; border-top: 1px solid black; border-bottom: 1px solid black; font-size: 10pt;">
       <tr>
         <td>Tipo de Orden: <strong>{{ isset($post->type->id) ? $post->type->name : '' }}</strong></td>
+        <td>{{ isset($post->type->id) && $post->type->id == 5 ? 'N° de Presupuesto:' : 'Detalle de Orden:' }}
+          <strong>{{ isset($post->type->id) ? $post->type_other : '' }}</strong></td>
       </tr>
     </table>
 
