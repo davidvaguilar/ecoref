@@ -47,7 +47,7 @@ class PostsController extends Controller
                             
         if($client_id == NULL){
             return back()->with('flash', 'Cliente no existe');
-        }
+        } 
         $this->validate($request, [
             'title' => 'required|min:3',
             'code' => 'required'

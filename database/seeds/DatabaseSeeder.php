@@ -20,6 +20,6 @@ class DatabaseSeeder extends Seeder
         $this->call(EmailsTableSeeder::class);
         $this->call(ParametersTableSeeder::class);
         $this->call(RefrigerantsTableSeeder::class);
-        $this->call(PostsTableSeeder::class);
+      // $this->call(PostsTableSeeder::class);
     }
 }
