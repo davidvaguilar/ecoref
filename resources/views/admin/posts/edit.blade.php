@@ -112,7 +112,7 @@
                                 <div class="col-sm-10">
                                     <input id="equipment" 
                                             name="equipment"                                            
-                                            maxlength="63"
+                                            maxlength="80"
                                             type="text" 
                                             class="form-control" 
                                             value="{{ old('equipment', $post->equipment) }}">
