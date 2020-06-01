@@ -95,7 +95,7 @@
                             </div>
 
                             <div class="form-group">
-                                <label id="other" for="type_other" class="col-xs-4 control-label">{{ isset($post->type->id) && $post->type->id == 5 ? 'N° de Presupuesto:' : 'Detalle de Orden:' }}</label>
+                                <label id="other" for="type_other" class="col-xs-4 control-label">{{ isset($post->type->id) && $post->type->id == 5 ? 'N° de Presupuesto' : 'Detalle de Orden' }}</label>
                                 <div class="col-xs-8">
                                     <input id="type_other" 
                                             name="type_other" 
@@ -112,7 +112,7 @@
                                 <div class="col-sm-10">
                                     <input id="equipment" 
                                             name="equipment"                                            
-                                            maxlength="45"
+                                            maxlength="63"
                                             type="text" 
                                             class="form-control" 
                                             value="{{ old('equipment', $post->equipment) }}">
@@ -124,7 +124,7 @@
                                 <div class="col-sm-4">
                                     <input id="model" 
                                             name="model" 
-                                            maxlength="30"
+                                            maxlength="35"
                                             type="text" 
                                             class="form-control" 
                                             value="{{ old('model', $post->model) }}">
@@ -133,7 +133,7 @@
                                 <div class="col-sm-4">
                                     <input id="serie" 
                                             name="serie" 
-                                            maxlength="30"
+                                            maxlength="35"
                                             type="text" 
                                             class="form-control" 
                                             value="{{ old('serie', $post->serie) }}">
@@ -301,7 +301,7 @@
                             </div>       
                         </div>            
                         <a href="#tab_order" data-toggle="tab" class="btn btn-default pull-left">Retroceder</a>
-                        <a id="parameter-button" type="button" class="btn btn-primary btn-block">Guardar y avanzar</a>    
+                        <a id="parameter-button" type="button" class="btn btn-primary btn-block">Guardar y Avanzar</a>    
                     </div>
 
                     <div class="tab-pane" id="tab_material">
@@ -411,7 +411,7 @@
                             </div>
                         </form>
                         <a href="#tab_material" data-toggle="tab" class="btn btn-default pull-left">Retroceder</a>
-                        <a onclick="mostrar_order();" href="#tab_signature" data-toggle="tab" class="btn btn-primary btn-block">Guardar y avanzar</a>
+                        <a onclick="mostrar_order();" href="#tab_signature" data-toggle="tab" class="btn btn-primary btn-block">Guardar y Avanzar</a>
                     </div>
 
                     <div class="tab-pane" id="tab_signature">

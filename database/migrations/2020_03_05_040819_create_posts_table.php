@@ -21,7 +21,7 @@ class CreatePostsTable extends Migration
             $table->dateTime('finished_at')->nullable();
                 $table->unsignedInteger('type_id')->nullable(); 
             $table->string('type_other', 140)->nullable();
-            $table->string('equipment', 50)->nullable();
+            $table->string('equipment', 100)->nullable();
             $table->string('model', 50)->nullable();
             $table->string('serie', 50)->nullable();
                 $table->unsignedInteger('problem_id')->nullable();

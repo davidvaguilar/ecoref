@@ -124,20 +124,22 @@
     <table style="width: 100%; ">
       <thead>
         <tr>
-          <th colspan="3">IDENTIFICACION DEL PROBLEMA</th>
+          <th colspan="2">IDENTIFICACION DEL PROBLEMA</th>
         </tr>
       </thead>
       <tbody style="border-top: 1px solid black; border-bottom: 1px solid black; font-size: 10pt;">
         <tr>
-          <td>Equipo Intervenido: <strong>{{ $post->equipment }}</strong></td>
+          <td colspan="2">Equipo Intervenido: <strong>{{ $post->equipment }}</strong></td>
+        </tr>
+        <tr>
           <td>Modelo: <strong>{{ $post->model }}</strong></td>
           <td>N° Serie: <strong>{{ $post->serie }}</strong></td>
         </tr>
         <tr>
-          <td colspan="3">Problema: <strong>{{ isset($post->problem->id) ? $post->problem->name : '' }}</strong></td>
+          <td colspan="2">Problema: <strong>{{ isset($post->problem->id) ? $post->problem->name : '' }}</strong></td>
         </tr>
         <tr>
-          <td colspan="3">Trabajo Realizado: <strong>{{ $post->job }}</strong></td>
+          <td colspan="2">Trabajo Realizado: <strong>{{ $post->job }}</strong></td>
         </tr>
       </tbody>
     </table>

@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 class DashboardController extends Controller
 {
     public function show(){
-        $anio = date('Y');
+        $anio = date('Y'); 
 
         /*$compras = DB::table('compras as c')
             ->select(DB::raw('MONTHNAME(c.fecha_compra) as mes'),
