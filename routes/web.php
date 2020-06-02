@@ -23,7 +23,9 @@ Route::get('email', function(){
     return new App\Mail\LoginCredentials(App\User::first(), 'asd123');
 });
 
-Route::get('/', 'PagesController@home')->name('pages.home');
+//Route::get('/', 'PagesController@home')->name('pages.home');
+Route::get('/', 'Auth\LoginController@showLoginForm')->name('pages.home');
+
 Route::get('nosotros', 'PagesController@about')->name('pages.about');
 Route::get('archivo', 'PagesController@archive')->name('pages.archive');
 Route::get('contacto', 'PagesController@contact')->name('pages.contact');
