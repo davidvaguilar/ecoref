@@ -8,7 +8,7 @@
         }
     </style>
     <h1>
-        Orden de Trabajo Folio N° <button type="button" data-toggle="modal" data-target="#order-modal" class="btn btn-primary">{{ $post->title }}</button>
+        OT Folio N° <button type="button" data-toggle="modal" data-target="#order-modal" class="btn btn-primary">{{ $post->title }}</button>
     </h1>
 @stop
 
@@ -48,9 +48,9 @@
                     </div>
                 @endif
             </div>
-            <div id="overlay-photo" class="overlay">
+            <!--<div id="overlay-photo" class="overlay">
                 <i class="fa fa-refresh fa-spin"></i>
-            </div>
+            </div>-->
         </div>
     @endif
 
@@ -370,48 +370,55 @@
                                 <input type="hidden" 
                                     name="order" 
                                     value="{{ $post->id }}"> 
-                            <div class="form-group">
-                                <div class="col-xs-12 text-center">
-                                    <label class="checkbox-inline">
-                                        <input type="radio" 
-                                                name="type" 
-                                                value="PROBLEMA" 
-                                                checked> Foto Trabajo
-                                    </label>
-                                    <label class="checkbox-inline">
-                                        <input type="radio" 
-                                                name="type" 
-                                                value="ORDEN"> Foto Reporte
-                                    </label>                          
+                            <div class="col-xs-9">
+                                <div class="form-group">
+                                    <div class="col-xs-9 text-center">
+                                        <label class="checkbox-inline">
+                                            <input type="radio" 
+                                                    name="type" 
+                                                    value="PROBLEMA" 
+                                                    checked> Foto Trabajo
+                                        </label>
+                                        <label class="checkbox-inline">
+                                            <input type="radio" 
+                                                    name="type" 
+                                                    value="ORDEN"> Foto Reporte
+                                        </label>                          
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="title" class="col-xs-3 control-label">Titulo</label>
+                                    <div class="col-xs-9">
+                                        <input id="title" 
+                                                name="title"
+                                                maxlength="20"
+                                                type="text" 
+                                                class="form-control" 
+                                                autocomplete="off" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="photo" class="col-xs-3 control-label">Fotografia</label>
+                                    <div class="col-xs-9">
+                                        <input id="photo" 
+                                                name="photo" 
+                                                type="file" 
+                                                class="form-control" 
+                                                accept="image/*" required />
+                                    </div>     
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label for="title" class="col-xs-3 control-label">Titulo</label>
-                                <div class="col-xs-9">
-                                    <input id="title" 
-                                            name="title"
-                                            maxlength="20"
-                                            type="text" 
-                                            class="form-control" 
-                                            autocomplete="off" />
-                                </div>
+                            <div class="col-xs-3">
+                                <img id="photo-image"  class="img-responsive"/>
                             </div>
                             <div class="form-group">
-                                <label for="photo" class="col-xs-3 control-label">Fotografia</label>
-                                <div class="col-xs-9">
-                                    <input id="photo" 
-                                            name="photo" 
-                                            type="file" 
-                                            class="form-control" 
-                                            accept="image/*" required />
-                                </div>                                    
-                            </div>
-                            <div class="form-group">
-                                <button type="submit" onclick="cargando()" class="btn btn-primary btn-block">Subir nueva imagen</button>
+                                <button type="submit" onclick="cargando()" class="btn btn-success btn-block">Subir nueva fotografia</button>
                             </div>
                         </form>
+          
                         <a href="#tab_material" data-toggle="tab" class="btn btn-default pull-left">Retroceder</a>
                         <a onclick="mostrar_order();" href="#tab_signature" data-toggle="tab" class="btn btn-primary btn-block">Guardar y Avanzar</a>
+                      
                     </div>
 
                     <div class="tab-pane" id="tab_signature">
@@ -644,6 +651,22 @@
 @push('scripts')
     <script src="{{ asset('js/signature_pad/signature_pad.min.js') }}"></script>
     <script>
+        var reader = new FileReader();
+        reader.onload = function (e) {
+            $('#photo-image').attr('src', e.target.result);
+        }
+        
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                reader.readAsDataURL(input.files[0]);
+            } else {
+                $('#photo-image').attr('src',"");
+            }
+        }
+            
+        $("#photo").change(function(){
+            readURL(this);
+        });
 
         function resizeCanvas () {
             var gameArea = document.getElementById('signature-area');
@@ -875,7 +898,7 @@
             }
 
             document.getElementById("overlay-body").style.display = "none";
-            document.getElementById("overlay-photo").style.display = "none";
+            //document.getElementById("overlay-photo").style.display = "none";
 
             
         });
@@ -886,7 +909,7 @@
             if( photo.length > 0 ){
                 document.getElementById("overlay-body").style.display = "block";
                 form.submit();  
-                document.getElementById("overlay-photo").style.display = "block";
+            //    document.getElementById("overlay-photo").style.display = "block";
             }
         }
         
