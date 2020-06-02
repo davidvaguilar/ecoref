@@ -81,8 +81,6 @@ class Post extends Model
             ->latest('published_at');    //Ordenar desendennte        
     }
 
-  
-
     public function scopeAllowed($query)
     {
         if( auth()->user()->can('view', $this) ){   //if( auth()->user()->hasRole('Admin') ){

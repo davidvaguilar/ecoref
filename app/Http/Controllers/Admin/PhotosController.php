@@ -13,8 +13,7 @@ use Illuminate\Support\Facades\Storage;
 class PhotosController extends Controller
 {
     public function store(Request $request){
-       // dd($request->order);
-        ini_set('memory_limit', '256M');  // Temporalmente aumento de memoria hasta 256
+        ini_set('memory_limit', '256M');  // Temporalmente aumento de memoria
       
         $this->validate($request, [
             'photo' => 'required|image'
@@ -31,8 +30,7 @@ class PhotosController extends Controller
           $photo->title = $request->get('title');
           $photo->post_id = $id;
           $photo->save();
-        }
-        return back();*/
+        } */
        
         $post = Post::find($request->order);
         
@@ -42,14 +40,13 @@ class PhotosController extends Controller
 
         switch ($request->get('type')) {
             case 'PROBLEMA':
-                 //   $image->resize(600, 600);
                     $image->resize(600, 600, function($constraint) {
                         $constraint->aspectRatio();
                     });
                 break;
             case 'ORDEN':
                   //  $image->resize(1224, 1584);                     //$image->resize(1836, 2376);
-                    $image->resize(1224, null, function ($constraint) {
+                    $image->resize(1224, 1584, function ($constraint) {
                         $constraint->aspectRatio();
                     });                    
                 break;
@@ -65,21 +62,12 @@ class PhotosController extends Controller
         $photo->save();
       
         return redirect()->route('admin.posts.edit', $post);
-        //return back();
-        //return back().'#'.http_build_query("photo");
-       // return redirect()->route('admin.posts.edit', $post);
     }
 
 
 
     public function destroy(Photo $photo){
         $photo->delete();
-
-        /*$photoPath = str_replace('storage', 'public', $photo->url);
-        Storage::delete($photoPath);*/
-        //dd($photoPath);
-        
-        //Storage::disk('public')->delete($photo->url);
         return back()->with('flash', 'Foto eliminada');
     }
 }

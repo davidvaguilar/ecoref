@@ -110,7 +110,6 @@ class PostsController extends Controller
         $this->validate($request, [
             'title' => 'required',
         ]);
-       
         $post->title = $request->get('title');
         $post->save();
         return back()->with('flash', 'Folio cambiado');
@@ -166,65 +165,12 @@ class PostsController extends Controller
         $post->job = $request->get('job');
 
         $post->save();
-
-        return json_encode("ok2");
-    
-        //dd($request->filled('published_at'));
-        //$this->validatePost($request);
-
-        /*$post->title = $request->get('title');
-        $post->published_at = $request->get('published_at');  //hacia un accesor
-        $post->category_id = $request->get('category_id');
-        $post->save();*/
-
-        //$post->update($request->except('tags'));
-//$this->authorize('update', $post);
-//$post->update($request->all());
-
-//$post->syncTags($request->get('tags'));
-
-        /*$tags = collect($request->get('tags'))->map(function($tag){
-            return Tag::find($tag)
-            ? $tag
-            : Tag::create(['name' => $tag])->id;
-        });*/
-
-        /*$tags = []; //ES LO MISMO QU ARRIBA
-        foreach ($request->get('tags') as $tag){
-            $tags[] = Tag::find($tag)
-                    ? $tag
-                    : Tag::create(['name' => $tag])->id;
-        }*/
-        //$post->tags()->sync($tags);
-
-//return redirect()->route('admin.posts.edit', $post)->with('flash', 'La publicacion ha sido guardada');
-        //return back()->with('flash', 'Tu publicacion ha sido guardada');
+        return json_encode("ok");
     }
-
-  /*  public function update_folio( Post $post, Request $request ){
-       
-        $post->title = $request->get('title');
-        $post->save();
-
-        return back();
-    }**/
-
-    /*public function validatePost($request){
-        return $this->validate($request, [
-            'title' => 'required',
-            'body' => 'required',
-            'category' => 'required',
-            'tags' => 'required',
-            'excerpt' => 'required'
-        ]);
-    }*/
-
     
     public function showMaterial(Post $post){ 
-      //  dd($post->materials);
         return json_encode($post->materials);
     }
- 
 
     public function report(Post $post){ 
        /* $productos = Producto::join('categorias', 'productos.idcategoria', '=', 'categorias.id')
@@ -246,16 +192,6 @@ class PostsController extends Controller
     }
 
     public function destroy(Post $post){
-        //$post->tags()->detach();
-        //$post->photos()->delete();
-        /*foreach ($post->photos as $photo){
-            $photo->delete();
-        }*/
-        /*$post->photos->each(function($photo){  //LO MISMO QUE ARRIBA
-            $photo->delete();
-        });*/
-        //$post->photos->each->delete();
-
         $this->authorize('delete', $post);
         $post->delete();
         return redirect()
