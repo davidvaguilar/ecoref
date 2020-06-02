@@ -45,8 +45,8 @@ class PhotosController extends Controller
                     });
                 break;
             case 'ORDEN':
-                  //  $image->resize(1224, 1584);                     //$image->resize(1836, 2376);
-                    $image->resize(1224, 1584, function ($constraint) {
+                  //  $image->resize(1224, 1584);    //$image->resize(1836, 2376);
+                    $image->resize(null, 1584, function ($constraint) {
                         $constraint->aspectRatio();
                     });                    
                 break;

@@ -257,7 +257,7 @@
     @foreach( $post->photos as $photo )
       @if( $photo->type == 'ORDEN' )
         <div style="page-break-after:always;"></div>
-        <img src="{{ substr($photo->url, 1) }}" height="100%" width="100%"> 
+        <img src="{{ substr($photo->url, 1) }}" height="950px" width="100%"> 
       @endif
     @endforeach
   @endif
