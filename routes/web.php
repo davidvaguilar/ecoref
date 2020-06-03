@@ -54,7 +54,6 @@ Route::group([
     'namespace' => 'Admin', 
     'middleware' => 'auth'], 
 function(){
-
     Route::get('/', 'AdminController@index')->name('dashboard');
 
     Route::resource('posts', 'PostsController', ['as' => 'admin']);

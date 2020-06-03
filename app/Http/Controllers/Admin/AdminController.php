@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Post;
+use App\Client;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -15,8 +16,14 @@ class AdminController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
+    public function index(){
+
+        if( auth()->user()->hasRole('Writer') ){
+                $clients = Client::groupBy('name')->orderBy('name', 'desc')->get(['name']);
+                $posts = Post::allowed()->orderBy('started_at', 'desc')->get();
+                return view('admin.posts.index', compact('posts', 'clients'));
+        }
+
         $anio = date('Y');
 
         $orders = DB::table('posts as p')
