@@ -21,14 +21,14 @@
             <label for="email">Email:</label>
             <input name="email" value="{{ old('email') }}" class="form-control">
           </div>
-          <div class="form-group col-md-6"> 
+          <div class="form-group col-md-12"> 
               <label>Roles</label>
               @include('admin.roles.checkboxes')
           </div>
-          <div class="form-group col-md-6"> 
+          <!--<div class="form-group col-md-6"> 
               <label>Permisos</label>
-              @include('admin.permissions.checkboxes', ['model' => $user])
-          </div>
+              {{-- @include('admin.permissions.checkboxes', ['model' => $user]) --}}
+          </div>-->
           <span class="help-block">La contraseña será generada y enviada al nuevo usuario via email</span>
           <button class="btn btn-primary btn-block">Crear usuario</button>
         </form>

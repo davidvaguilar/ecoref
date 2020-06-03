@@ -23,11 +23,19 @@
         @endforeach
     @endif
 </div>
+@php
+    $photo_order = False;
+@endphp
 <div class="row">
     @if ($post->photos->count() || $post->signature_id != null )
         <div class="box box-default">
             <div class="box-body">
                 @foreach ($post->photos as $photo)
+                    @if( $photo->type == 'ORDEN' )
+                        @php
+                            $photo_order = True;
+                        @endphp
+                    @endif
                     <form method="POST" action="{{ route('admin.photos.destroy', $photo) }}" style="display: inline">
                         {{ csrf_field() }}
                         {{ method_field('DELETE') }}
@@ -379,11 +387,14 @@
                                                     value="PROBLEMA" 
                                                     checked> Foto Trabajo
                                         </label>
-                                        <label class="checkbox-inline">
-                                            <input type="radio" 
-                                                    name="type" 
-                                                    value="ORDEN"> Foto Reporte
-                                        </label>                          
+                                        @if( !$photo_order )
+                                            <label class="checkbox-inline">
+                                                <input type="radio" 
+                                                        name="type" 
+                                                        value="ORDEN"> Foto Reporte
+                                            </label>     
+                                        @endif
+                                                            
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -417,8 +428,7 @@
                         </form>
           
                         <a href="#tab_material" data-toggle="tab" class="btn btn-default pull-left">Retroceder</a>
-                        <a onclick="mostrar_order();" href="#tab_signature" data-toggle="tab" class="btn btn-primary btn-block">Guardar y Avanzar</a>
-                      
+                        <a onclick="mostrar_order();" data-toggle="tab" class="btn btn-primary btn-block">Guardar y Avanzar</a>  <!-- href="#tab_signature" -->
                     </div>
 
                     <div class="tab-pane" id="tab_signature">
@@ -742,9 +752,6 @@
                             'problem_id': problem_id,
                             'job': job
                     }).then(function(response){
-                       // console.log(response.data);
-                        /*document.getElementById('li_order').classList.remove("active");
-                        document.getElementById('li_parameter').classList.add("active");*/
                         document.getElementById('tab_order').classList.remove("active");
                         document.getElementById('tab_parameter').classList.add("active");
                     })
@@ -804,8 +811,6 @@
                             'oil': oil
                     }).then(function(response){
                         console.log(response.data);
-                       /* document.getElementById('li_parameter').classList.remove("active");
-                        document.getElementById('li_material').classList.add("active");*/
                         document.getElementById('tab_parameter').classList.remove("active");
                         document.getElementById('tab_material').classList.add("active");
                     })
@@ -873,12 +878,6 @@
                         document.getElementById('tab_signature').classList.remove("active");   
                     break;
                 case '#photo':
-                    /*document.getElementById('li_order').classList.remove("active");
-                        document.getElementById('li_parameter').classList.remove("active");            
-                        document.getElementById('li_material').classList.remove("active");
-                        document.getElementById('li_signature').classList.remove("active");                    
-                        document.getElementById('li_photo').classList.add("active");*/
-                        
                         document.getElementById('tab_order').classList.remove("active");
                         document.getElementById('tab_parameter').classList.remove("active");
                         document.getElementById('tab_material').classList.remove("active");          
@@ -896,11 +895,7 @@
                 default:
                     break;
             }
-
             document.getElementById("overlay-body").style.display = "none";
-            //document.getElementById("overlay-photo").style.display = "none";
-
-            
         });
 
         function cargando() {
@@ -909,7 +904,6 @@
             if( photo.length > 0 ){
                 document.getElementById("overlay-body").style.display = "block";
                 form.submit();  
-            //    document.getElementById("overlay-photo").style.display = "block";
             }
         }
         
@@ -932,7 +926,7 @@
         function listMaterial() {
             var url = "{{ route('admin.posts.material', $post) }}";
             axios.get(url).then(function(response){
-                var total_registro = response.data.length; //materials
+                var total_registro = response.data.length;
                 console.log(total_registro);
                 var body = document.getElementById("material-body");
                 document.getElementById("material-body").innerHTML = '';
@@ -968,80 +962,88 @@
             });
         }
 
-        function mostrar_order() {
-            window.location.hash = '#resumen';
-            var url = "{{ route('admin.posts.show', $post->id) }}";
-            axios.get(url).then(function(response){
-                //  console.log(response.data);
-                document.getElementById("resumen_table").classList.add("invisible");     
-                var total_registro = response.data.post.length;              
-                if( total_registro > 0){
-                    var year =  response.data.post[0].started_at.substring(0, 4);                    
-                    var month =  response.data.post[0].started_at.substring(5,7);                    
-                    var day = response.data.post[0].started_at.substring(8, 10);
-                    var hour =  response.data.post[0].started_at.substring(11, 16);
-                    document.getElementById("resumen_fecha_llegada").innerHTML = day+'/'+month+'/'+year+' '+hour;
-                    document.getElementById("resumen_tecnico_nombre").innerHTML = response.data.post[0].owner.name;
-                    document.getElementById("resumen_empresa_nombre").innerHTML = response.data.post[0].client.name;
-                    document.getElementById("resumen_empresa_titulo").innerHTML = response.data.post[0].client.title;
-                    document.getElementById("resumen_empresa_direccion").innerHTML = response.data.post[0].client.adress;
-                    document.getElementById("resumen_tipo_nombre").innerHTML = response.data.post[0].type.name;
-                   // alert(response.data.post[0].type.id)
-                    if( response.data.post[0].type.id == 5 ){
-                        document.getElementById("resumen_tipo").innerHTML = "N° de Presupuesto:";
-                    } else {
-                        document.getElementById("resumen_tipo").innerHTML = "Detalle de Orden:";
-                    }
-                    document.getElementById("resumen_tipo_otro").innerHTML = response.data.post[0].type_other;
-                    document.getElementById("resumen_orden_equipo").innerHTML = response.data.post[0].equipment;
-                    document.getElementById("resumen_orden_modelo").innerHTML = response.data.post[0].model;
-                    document.getElementById("resumen_orden_serie").innerHTML = response.data.post[0].serie;
-                    document.getElementById("resumen_problema_nombre").innerHTML = response.data.post[0].problem.name;
-                    document.getElementById("resumen_orden_trabajo").innerHTML = response.data.post[0].job;
-                    document.getElementById("resumen_parametros_tipo").innerHTML = response.data.post[0].parameter.type;
-                    document.getElementById("resumen_parametros_temperatura").innerHTML = response.data.post[0].parameter.temperature;
-                    document.getElementById("resumen_parametros_presion_baja").innerHTML = response.data.post[0].parameter.pressure_low;
-                    document.getElementById("resumen_parametros_presion_alta").innerHTML = response.data.post[0].parameter.pressure_high;
-                    total_refrigerantes = response.data.refrigerants.length;
-                    for (let indice = 0; indice < total_refrigerantes; indice++) {  
-                        if(response.data.post[0].parameter.refrigerant_id == response.data.refrigerants[indice].id ){
-                            document.getElementById("resumen_refrigerante_nombre").innerHTML = response.data.refrigerants[indice].name;
+        function mostrar_order( ) {
+            var confirmacion = true;
+            @if( !$photo_order )
+                var confirmacion = confirm('Foto de OT no subida ¿Desea continuar?');
+            @endif
+            if( confirmacion ){
+                window.location.hash = '#resumen';
+                var url = "{{ route('admin.posts.show', $post->id) }}";
+                axios.get(url).then(function(response){
+                    //  console.log(response.data);
+                    document.getElementById("resumen_table").classList.add("invisible");     
+                    var total_registro = response.data.post.length;              
+                    if( total_registro > 0){
+                        var year =  response.data.post[0].started_at.substring(0, 4);                    
+                        var month =  response.data.post[0].started_at.substring(5,7);                    
+                        var day = response.data.post[0].started_at.substring(8, 10);
+                        var hour =  response.data.post[0].started_at.substring(11, 16);
+                        document.getElementById("resumen_fecha_llegada").innerHTML = day+'/'+month+'/'+year+' '+hour;
+                        document.getElementById("resumen_tecnico_nombre").innerHTML = response.data.post[0].owner.name;
+                        document.getElementById("resumen_empresa_nombre").innerHTML = response.data.post[0].client.name;
+                        document.getElementById("resumen_empresa_titulo").innerHTML = response.data.post[0].client.title;
+                        document.getElementById("resumen_empresa_direccion").innerHTML = response.data.post[0].client.adress;
+                        document.getElementById("resumen_tipo_nombre").innerHTML = response.data.post[0].type.name;
+                        if( response.data.post[0].type.id == 5 ){
+                            document.getElementById("resumen_tipo").innerHTML = "N° de Presupuesto:";
+                        } else {
+                            document.getElementById("resumen_tipo").innerHTML = "Detalle de Orden:";
                         }
-                    }
-                    document.getElementById("resumen_refrigerante_nivel").innerHTML = response.data.post[0].parameter.refrigerant;
-                    document.getElementById("resumen_parametro_aceite").innerHTML = response.data.post[0].parameter.oil;
-                    total_materiales = response.data.post[0].materials.length;
+                        document.getElementById("resumen_tipo_otro").innerHTML = response.data.post[0].type_other;
+                        document.getElementById("resumen_orden_equipo").innerHTML = response.data.post[0].equipment;
+                        document.getElementById("resumen_orden_modelo").innerHTML = response.data.post[0].model;
+                        document.getElementById("resumen_orden_serie").innerHTML = response.data.post[0].serie;
+                        document.getElementById("resumen_problema_nombre").innerHTML = response.data.post[0].problem.name;
+                        document.getElementById("resumen_orden_trabajo").innerHTML = response.data.post[0].job;
+                        document.getElementById("resumen_parametros_tipo").innerHTML = response.data.post[0].parameter.type;
+                        document.getElementById("resumen_parametros_temperatura").innerHTML = response.data.post[0].parameter.temperature;
+                        document.getElementById("resumen_parametros_presion_baja").innerHTML = response.data.post[0].parameter.pressure_low;
+                        document.getElementById("resumen_parametros_presion_alta").innerHTML = response.data.post[0].parameter.pressure_high;
+                        total_refrigerantes = response.data.refrigerants.length;
+                        for (let indice = 0; indice < total_refrigerantes; indice++) {  
+                            if(response.data.post[0].parameter.refrigerant_id == response.data.refrigerants[indice].id ){
+                                document.getElementById("resumen_refrigerante_nombre").innerHTML = response.data.refrigerants[indice].name;
+                            }
+                        }
+                        document.getElementById("resumen_refrigerante_nivel").innerHTML = response.data.post[0].parameter.refrigerant;
+                        document.getElementById("resumen_parametro_aceite").innerHTML = response.data.post[0].parameter.oil;
+                        total_materiales = response.data.post[0].materials.length;
 
-                    var body = document.getElementById("resumen_body");
-                    document.getElementById("resumen_body").innerHTML = '';
-                    for (let indice = 0; indice < total_materiales; indice++) {  
-                        
-                        document.getElementById("resumen_table").classList.remove("invisible");           
-                        var fila = document.createElement("tr");
-                        var celda = document.createElement("td");
-                        var spanTexto = document.createElement("span");
-                        spanTexto.textContent = response.data.post[0].materials[indice].quantity; 
-                        celda.appendChild(spanTexto);
-                        fila.appendChild(celda);
-                        var celda = document.createElement("td");
-                        var spanTexto = document.createElement("span");
-                        spanTexto.textContent = response.data.post[0].materials[indice].detail; 
-                        celda.appendChild(spanTexto);
-                        fila.appendChild(celda);
+                        var body = document.getElementById("resumen_body");
+                        document.getElementById("resumen_body").innerHTML = '';
+                        for (let indice = 0; indice < total_materiales; indice++) {  
+                            document.getElementById("resumen_table").classList.remove("invisible");           
+                            var fila = document.createElement("tr");
+                            var celda = document.createElement("td");
+                            var spanTexto = document.createElement("span");
+                            spanTexto.textContent = response.data.post[0].materials[indice].quantity; 
+                            celda.appendChild(spanTexto);
+                            fila.appendChild(celda);
+                            var celda = document.createElement("td");
+                            var spanTexto = document.createElement("span");
+                            spanTexto.textContent = response.data.post[0].materials[indice].detail; 
+                            celda.appendChild(spanTexto);
+                            fila.appendChild(celda);
 
-                        body.appendChild(fila);
-                    }
-                }         
-            })
-            .catch(function (error){
-                console.log(error);
-            });
+                            body.appendChild(fila);
+                        }
+                        document.getElementById('tab_order').classList.remove("active");
+                        document.getElementById('tab_parameter').classList.remove("active");
+                        document.getElementById('tab_material').classList.remove("active");           
+                        document.getElementById('tab_photo').classList.remove("active");
+                        document.getElementById('tab_signature').classList.add("active");  
+                    }         
+                })
+                .catch(function (error){
+                    console.log(error);
+                });
+            }
         }
 
         function seleccionar_foto(){
             window.location.hash = '#photo';
         }
-
         
     </script>
 @endpush
