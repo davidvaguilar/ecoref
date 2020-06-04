@@ -40,15 +40,20 @@ class PhotosController extends Controller
 
         switch ($request->get('type')) {
             case 'PROBLEMA':
-                    $image->resize(600, 600, function($constraint) {
+                   /*$image->resize(600, 600, function($constraint) {
                         $constraint->aspectRatio();
+                    });*/
+                    $image->heighten(600, function ($constraint) {
+                        $constraint->upsize();
                     });
                 break;
             case 'ORDEN':
-                  //  $image->resize(1224, 1584);    //$image->resize(1836, 2376);
-                    $image->resize(1224, 1584, function ($constraint) {
+                    $image->heighten(1584, function ($constraint) {
+                        $constraint->upsize();
+                    });
+                    /*$image->resize(1224, 1584, function ($constraint) {
                         $constraint->aspectRatio();
-                    });                    
+                    });      */              
                 break;
         }
         $image->save('img/orders/'.$image_name);
