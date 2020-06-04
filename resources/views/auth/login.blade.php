@@ -58,6 +58,7 @@
             class="form-control" 
             placeholder="Contraseña" 
             name="password" 
+            autocomplete="on"
             required>
         @if ($errors->has('password'))
             <span class="help-block">

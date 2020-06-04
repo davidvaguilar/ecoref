@@ -4,9 +4,12 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Photo extends Model
 {
+    use SoftDeletes;
+
     protected $guarded = [];  //sacar al proteccion 
 
     public function setTitleAttribute($title){
