@@ -16,7 +16,7 @@ class Photo extends Model
         $this->attributes['title'] = mb_strtoupper($title);
     }
 
-    protected static function boot(){
+  /*  protected static function boot(){
         parent::boot();
         static::deleting(function($photo){
             //dd($photo->url);
@@ -24,5 +24,5 @@ class Photo extends Model
             unlink(public_path().$photo->url);
             //dd(Storage::delete($photo->url));
         });
-    }
+    }*/
 }
