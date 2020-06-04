@@ -36,29 +36,28 @@ class PhotosController extends Controller
         
         $file = $request->file('photo');
         $image_name = 'ot'.$post->title.'-'.Carbon::now()->format('dmYHis').'.'.$file->getClientOriginalExtension();
-        $image = Image::make($file);    //->orientate()
 
+     //   Image::configure(array('driver' => 'imagick'));
+
+        $image = Image::make($request->file('photo'));
+       
         switch ($request->get('type')) {
             case 'PROBLEMA':
-                   /*$image->resize(600, 600, function($constraint) {
+                    $image->resize(600, 600, function($constraint) {
                         $constraint->aspectRatio();
-                    });*/
-                    $image->widen(600, function ($constraint) {
                         $constraint->upsize();
                     });
                 break;
             case 'ORDEN':
-                    /*$image->heighten(1584, function ($constraint) {
-                        $constraint->upsize();
-                    });*/
                     $image->resize(1224, 1584, function ($constraint) {
                         $constraint->aspectRatio();
-                    });            
+                        $constraint->upsize();
+                    });         
                 break;
         }
         $image->orientate();
         $image->save('img/orders/'.$image_name);
-
+      
         $photo = new Photo();
         $photo->url = '/img/orders/'.$image_name;
         $photo->title = $request->get('title');
