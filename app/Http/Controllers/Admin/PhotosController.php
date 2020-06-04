@@ -43,7 +43,7 @@ class PhotosController extends Controller
        
         switch ($request->get('type')) {
             case 'PROBLEMA':
-                    $image->resize(600, 600, function($constraint) {
+                    $image->resize(600, null, function($constraint) {
                         $constraint->aspectRatio();
                         $constraint->upsize();
                     });
