@@ -43,19 +43,20 @@ class PhotosController extends Controller
                    /*$image->resize(600, 600, function($constraint) {
                         $constraint->aspectRatio();
                     });*/
-                    $image->heighten(600, function ($constraint) {
+                    $image->widen(600, function ($constraint) {
                         $constraint->upsize();
                     });
                 break;
             case 'ORDEN':
-                    $image->heighten(1584, function ($constraint) {
+                    /*$image->heighten(1584, function ($constraint) {
                         $constraint->upsize();
-                    });
-                    /*$image->resize(1224, 1584, function ($constraint) {
+                    });*/
+                    $image->resize(1224, 1584, function ($constraint) {
                         $constraint->aspectRatio();
-                    });      */              
+                    });            
                 break;
         }
+        $image->orientate();
         $image->save('img/orders/'.$image_name);
 
         $photo = new Photo();
