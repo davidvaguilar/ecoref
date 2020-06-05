@@ -46,13 +46,13 @@
                                     style="position:absolute">
                                 <i class="fa fa-fw fa-times"></i>
                             </button>
-                            <img src="{{ url($photo->url) }}" class="img-responsive" width="100px">
+                            <img src="{{ url($photo->url) }}" class="img-responsive" width="100px" height="100px" />
                         </div>
                     </form>
                 @endforeach
                 @if ($post->signature_id != null )
                     <div class="col-xs-4">
-                        <img src="{{ url($post->signature->url) }}" class="img-responsive" width="100px"/>
+                        <img src="{{ url($post->signature->url) }}" class="img-responsive" width="100px" height="100px" />
                     </div>
                 @endif
             </div>
