@@ -54,6 +54,8 @@ Route::group([
     'namespace' => 'Admin', 
     'middleware' => 'auth'], 
 function(){
+    Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index', ['as' => 'admin']);
+
     Route::get('/', 'AdminController@index')->name('dashboard');
 
     Route::resource('posts', 'PostsController', ['as' => 'admin']);
