@@ -58,6 +58,8 @@ class UsersController extends Controller
         $data['password'] = str_random(8);
 
         $user = User::create($data);
+        $user->phone = $request->get('phone');
+        $user->save();
 
         if ($request->filled('roles')){
             $user->assignRole($request->roles);
@@ -124,6 +126,8 @@ class UsersController extends Controller
         //$data = $request->validate($rules);
         $data = $request->validated();
         $user->update($data);
+        $user->phone = $request->get('phone');
+        $user->save();
         return redirect()->route('admin.users.edit', $user)->withFlash('Usuario actualizado');
     }
 

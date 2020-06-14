@@ -21,6 +21,10 @@
             <label for="email">Email:</label>
             <input name="email" value="{{ old('email') }}" class="form-control">
           </div>
+          <div class="form-group">
+            <label for="phone">Telefono:</label>
+            <input name="phone" value="{{ old('phone') }}" class="form-control">
+          </div>
           <div class="form-group col-md-12"> 
               <label>Roles</label>
               @include('admin.roles.checkboxes')

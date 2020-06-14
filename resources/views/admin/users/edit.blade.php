@@ -22,6 +22,10 @@
             <label for="email">Email:</label>
             <input name="email" value="{{ old('email', $user->email) }}" class="form-control">
           </div>
+          <div class="form-group">
+            <label for="phone">Telefono:</label>
+            <input name="phone" value="{{ old('phone', $user->phone) }}" class="form-control">
+          </div>
 
           <div class="form-group">
             <label for="password">Contraseña:</label>

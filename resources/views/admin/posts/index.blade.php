@@ -4,15 +4,24 @@
     <h1>Ordenes de Trabajo</h1>    
 @stop
 
+
+
 @section('content')
     <div class="box box-primary">
         <div class="box-header">
             <h3 class="box-title">Listado de Ordenes</h3>
-            @can('create', new App\Post)
-                <button class="btn btn-primary pull-right" data-toggle="modal" data-target="#exampleModal">
-                    <i class="fa fa-plus"></i> Crear reporte
+            @if(@Auth::user()->hasRole('Writer'))
+
+                @can('create', new App\Post)
+                    <button class="btn btn-primary pull-right" data-toggle="modal" data-target="#exampleModal">
+                        <i class="fa fa-plus"></i> Crear OT
+                    </button>
+                @endcan
+            @else
+                <button class="btn btn-primary pull-right" data-toggle="modal" data-target="#createModal">
+                    <i class="fa fa-plus"></i> Crear Orden de Trabajo
                 </button>
-            @endcan
+            @endif
         </div>
         <!-- /.box-header -->
         <div class="box-body table-responsive">
@@ -23,6 +32,9 @@
                         @can('update', $posts->first())
                             <th style="min-width:70px">Enviar</th>
                         @endcan
+                        @if(!@Auth::user()->hasRole('Writer'))
+                            <th style="min-width:70px">WhatsApp</th>
+                        @endif
                         @role('Admin')
                             <th>Responsable</th>
                         @endrole
@@ -60,7 +72,7 @@
                                         <div class="btn-group">
                                             <button type="submit"
                                                 onclick="return confirm('¿Estas seguro de querer Enviar esta OT?')"
-                                                class="btn btn-success"
+                                                class="btn btn-primary"
                                                 title="Enviar PDF al Cliente"
                                             ><i class="fa fa-fw fa-envelope-o"></i></button>
                                             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
@@ -97,6 +109,17 @@
                                 @endif
                             </td>
                             @endcan 
+                            @if(!@Auth::user()->hasRole('Writer'))     
+                                <td>
+                                @if( $post->owner->phone != NULL )
+                                    <a href="https://api.whatsapp.com/send?phone={{ $post->owner->phone }}&text=OT%20{{ $post->title }}%20Tecnico%20{{ str_replace(" ","%20",$post->owner->name) }}%20Cliente%20{{ str_replace(" ","%20",$post->client->name) }}%20Local%20{{ str_replace(" ","%20",$post->client->title) }}"
+                                        target="_blank"
+                                        class="btn btn-success"
+                                        title="Enviar Whatapp">
+                                    <i class="fa fa-fw fa-phone"></i></a>
+                                @endif
+                                </td>
+                            @endif
                             @role('Admin')  
                                 <td>{{ $post->owner->name }}</td>
                             @endrole
@@ -191,6 +214,14 @@
             
             var overlay = document.getElementsByClassName('overlay');
             while (overlay.length > 0) overlay[0].remove();
+
+            @if (session()->has('whatsapp'))
+                var confirmacion = confirm('¿Estas seguro de querer eliminar este material?')
+                if( confirmacion ){ 
+                    window.open('{{ session("whatsapp") }}'.replace("amp;",""), '_blank');
+                }   
+          //      window.open('https://api.whatsapp.com/send?phone={{ $post->owner->phone }}&text=OT%20{{ $post->title }}%20Tecnico%20{{ str_replace(" ","%20",$post->owner->name) }}%20Cliente%20{{ str_replace(" ","%20",$post->client->name) }}%20Local%20{{ str_replace(" ","%20",$post->client->title) }}', '_blank');
+            @endif
         })
 
         $.extend( true, $.fn.dataTable.defaults, {

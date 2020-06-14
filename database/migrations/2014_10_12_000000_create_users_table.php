@@ -18,10 +18,14 @@ class CreateUsersTable extends Migration
             $table->string('name', 50);
             $table->string('email', 70)->unique();
             $table->string('password',100);
+          //  $table->string('phone', 30);
             $table->string('url', 70)->nullable();
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();
+
+            //ALTER TABLE `users` ADD `phone` VARCHAR(30) NOT NULL AFTER `deleted_at`;
+           // ALTER TABLE `users`  ADD `phone` VARCHAR(30) NULL DEFAULT NULL  AFTER `email`;
         });
     }
 

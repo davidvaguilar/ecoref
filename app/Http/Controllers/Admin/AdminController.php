@@ -7,6 +7,7 @@ use App\Client;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Spatie\Permission\Models\Role;
 
 class AdminController extends Controller
 {
@@ -20,8 +21,9 @@ class AdminController extends Controller
 
         if( auth()->user()->hasRole('Writer') ){
                 $clients = Client::groupBy('name')->orderBy('name', 'desc')->get(['name']);
+                $users = Role::where('name', 'Writer')->first()->users()->get();
                 $posts = Post::allowed()->orderBy('started_at', 'desc')->get();
-                return view('admin.posts.index', compact('posts', 'clients'));
+                return view('admin.posts.index', compact('posts', 'clients', 'users'));
         }
 
         $anio = date('Y');

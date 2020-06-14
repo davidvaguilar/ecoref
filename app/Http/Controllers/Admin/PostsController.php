@@ -7,6 +7,7 @@ use App\Client;
 use App\Category;
 use App\Tag;
 use App\Record;
+use App\User;
 use Mail;
 use App\Material;
 use App\Refrigerant;
@@ -19,6 +20,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StorePostRequest;
 use Barryvdh\DomPDF\Facade as PDF;
+use Illuminate\Http\RedirectResponse;
+use Spatie\Permission\Models\Role;
 
 class PostsController extends Controller
 {
@@ -28,10 +31,16 @@ class PostsController extends Controller
 
         //$clients = Client::distinct()->get(['name']);
         $clients = Client::groupBy('name')->orderBy('name', 'desc')->get(['name']);
-
+  //      $users = User::all();
+        $users = Role::where('name', 'Writer')->first()->users()->get();
+     
        // dd($clients);
         $posts = Post::allowed()->orderBy('started_at', 'desc')->get();
-        return view('admin.posts.index', compact('posts', 'clients'));
+
+
+        return view('admin.posts.index', compact('posts', 'clients', 'users'));
+      // $id = 5;  //, ['id'=>$id]
+        //return redirect()->route('admin.posts.index')->with('posts', 'clients', 'users');
     }
 
     public function store(Request $request){ 
@@ -48,22 +57,54 @@ class PostsController extends Controller
         if($client_id == NULL){
             return back()->with('flash', 'Cliente no existe');
         } 
-        $this->validate($request, [
-            'title' => 'required|min:3',
-            'code' => 'required'
-        ]);
-        $post = Post::create([
-            'title' => $request->get('title'),  
-            'client_id' => $client_id,  
-            'user_id' => auth()->id(),
-            'started_at' => Carbon::now()
-        ]);
+        
 
+        $user = $request->get('user');
+        if( $user == NULL ){
+            $this->validate($request, [
+                'title' => 'required|min:3',
+                'code' => 'required'
+            ]);
+            $post = Post::create([
+                'title' => $request->get('title'),  
+                'client_id' => $client_id,  
+                'user_id' => auth()->id(),
+                'started_at' => Carbon::now()
+            ]);
+        } else {
+            $this->validate($request, [
+                'title' => 'required|min:3',
+                'code' => 'required',
+                'user' => 'required'
+            ]);
+            $post = Post::create([
+                'title' => $request->get('title'),  
+                'client_id' => $client_id,  
+                'user_id' => $user,
+                'started_at' => Carbon::now()
+            ]);
+        }
+   
         $parameter = new Parameter();
         $parameter->save();
         $post->parameter_id = $parameter->id;
-        $post->save();
-        return redirect()->route('admin.posts.edit', $post);
+        $post->save(); 
+        if( $user == NULL ){
+            return redirect()->route('admin.posts.edit', $post);
+        } else {
+            return back()->with('whatsapp', 'https://api.whatsapp.com/send?phone='
+                                                .$post->owner->phone.'&text=OT%20'
+                                                .$post->title.'%20Tecnico%20'
+                                                .str_replace(" ","%20",$post->owner->name).'%20Cliente%20'
+                                                .str_replace(" ","%20",$post->client->name).'%20Local%20'
+                                                .str_replace(" ","%20",$post->client->title));
+
+// https://api.whatsapp.com/send?phone={{ $post->owner->phone }}&text=OT%20{{ $post->title }}%20Tecnico%20{{ str_replace(" ","%20",$post->owner->name) }}%20Cliente%20{{ str_replace(" ","%20",$post->client->name) }}%20Local%20{{ str_replace(" ","%20",$post->client->title) }}
+        //    $url = "https://api.whatsapp.com/send?phone=56976400180&text=OT%201234%20Tecnico%20Hugo%20Cliente%20Unimarc%20Local%20bilbao";
+            //return redirect()->away('https://www.google.com');
+            //return Redirect::to('http://www.google.com');
+           // return redirect()->to($url);
+        }
     }
 
     public function show($id){
