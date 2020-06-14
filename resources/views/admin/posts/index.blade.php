@@ -116,7 +116,7 @@
                                         target="_blank"
                                         class="btn btn-success"
                                         title="Enviar Whatapp">
-                                    <i class="fa fa-fw fa-phone"></i></a>
+                                    <i class="fa fa-fw fa-whatsapp"></i></a>
                                 @endif
                                 </td>
                             @endif
@@ -216,7 +216,7 @@
             while (overlay.length > 0) overlay[0].remove();
 
             @if (session()->has('whatsapp'))
-                var confirmacion = confirm('¿Estas seguro de querer eliminar este material?')
+                var confirmacion = confirm('¿Desea enviar Whatsapp?')
                 if( confirmacion ){ 
                     window.open('{{ session("whatsapp") }}'.replace("amp;",""), '_blank');
                 }   
