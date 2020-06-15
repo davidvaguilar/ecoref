@@ -13,6 +13,9 @@ composer dump-autoload
 composer require barryvdh/laravel-debugbar --dev INSTALAR BARRA PARA MONITOR DESARROLLO
 
 
+LOG VIEWER
+composer require rap2hpoutre/laravel-log-viewer
+
 
 public function sendmail(Request $request){
         $data["email"]=$request->get("email");
