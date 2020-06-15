@@ -232,12 +232,13 @@
         $(function () {
 
             $('#posts-table').DataTable({
-            'paging'      : false,
+            'paging'      : true,
             'lengthChange': false,
             'searching'   : true,
             'ordering'    : false,
             'info'        : true,
-            'autoWidth'   : false
+            'autoWidth'   : false,
+            'pageLength'  : 50,
             });
             
             var overlay = document.getElementsByClassName('overlay');
