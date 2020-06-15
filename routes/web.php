@@ -58,6 +58,7 @@ function(){
 
     Route::get('/', 'AdminController@index')->name('dashboard');
 
+
     Route::resource('posts', 'PostsController', ['as' => 'admin']);
     Route::resource('clients', 'ClientsController', ['as' => 'admin']);
 
@@ -100,10 +101,14 @@ function(){
 
     Route::put('users/{user}/signature', 'UsersController@signature')->name('admin.users.signature'); //ULTIMO
 
+
+    Route::get('posts/show/{post}', 'PostsController@view')->name('admin.posts.view');
     //nuevo
     Route::put('parameters/{parameter}', 'ParametersController@update')->name('admin.parameters.update');
     Route::post('posts/{post}/signature', 'SignatureController@store')->name('admin.posts.signature.store');
     Route::get('posts/{post}/report', 'PostsController@report')->name('productos_pdf');
+
+    
 
     Route::put('posts/materials/desactivar', 'MaterialsController@desactivar')->name('admin.materials.desactivar');
 

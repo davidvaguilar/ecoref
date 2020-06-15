@@ -112,11 +112,10 @@
                             @if(!@Auth::user()->hasRole('Writer'))     
                                 <td>
                                 @if( $post->owner->phone != NULL )
-                                    <a href="https://api.whatsapp.com/send?phone={{ $post->owner->phone }}&text=OT%20{{ $post->title }}%20Tecnico%20{{ str_replace(" ","%20",$post->owner->name) }}%20Cliente%20{{ str_replace(" ","%20",$post->client->name) }}%20Local%20{{ str_replace(" ","%20",$post->client->title) }}"
-                                        target="_blank"
+                                    <button onclick="lista_whatsapp( {{ $post->id }} );"
                                         class="btn btn-success"
                                         title="Enviar Whatapp">
-                                    <i class="fa fa-fw fa-whatsapp"></i></a>
+                                    <i class="fa fa-fw fa-whatsapp"></i></button>
                                 @endif
                                 </td>
                             @endif
@@ -188,6 +187,35 @@
             <i class="fa fa-refresh fa-spin"></i>
         </div>
     </div>
+
+
+<div class="modal fade" id="whatsapp-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document"> <!-- modal-sm -->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="exampleModalLabel">Envio de Notificación</h4>
+            </div>
+            
+            <div class="modal-body">
+                <div id="gro_whatsapp" class="btn-group-vertical btn-block">
+                    <button type="button" class="btn btn-default">Botón</button>
+                    
+                    <button type="button" class="btn btn-default">Botón</button>
+                </div>                       
+            
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary pull-left" data-dismiss="modal">Cerrar</button>
+              <!--  <button type="submit" class="btn btn-primary">Buscar Cliente</button> -->
+            </div>
+        </div>
+    </div>
+</div>
+
+
 @stop
 
 @push('styles')
@@ -215,14 +243,52 @@
             var overlay = document.getElementsByClassName('overlay');
             while (overlay.length > 0) overlay[0].remove();
 
-            @if (session()->has('whatsapp'))
-                var confirmacion = confirm('¿Desea enviar Whatsapp?')
-                if( confirmacion ){ 
-                    window.open('{{ session("whatsapp") }}'.replace("amp;",""), '_blank');
-                }   
-          //      window.open('https://api.whatsapp.com/send?phone={{ $post->owner->phone }}&text=OT%20{{ $post->title }}%20Tecnico%20{{ str_replace(" ","%20",$post->owner->name) }}%20Cliente%20{{ str_replace(" ","%20",$post->client->name) }}%20Local%20{{ str_replace(" ","%20",$post->client->title) }}', '_blank');
+            @if (session()->has('code'))
+                lista_whatsapp({{ session('code') }})      
             @endif
         })
+
+        function lista_whatsapp(id) {
+            var url = "{{ route('admin.posts.view', '/' ) }}"+'/'+id;
+            var group = document.getElementById("gro_whatsapp");
+            document.getElementById("gro_whatsapp").innerHTML = '';
+
+            axios.get(url).then(function(response){
+                //console.log(response.data);
+                var total_registro = response.data.post.length;
+                if( total_registro > 0){
+                    var bandera = false;
+                    if( response.data.post[0].owner.phone != null && response.data.post[0].owner.phone != ''){
+                        var button = document.createElement("a");
+                        button.href = "https://api.whatsapp.com/send?phone="+response.data.post[0].owner.phone+"&text=OT%20"+response.data.post[0].title+"%20Tecnico%20"+response.data.post[0].owner.name.replace(" ", "%20")+"%20Cliente%20"+response.data.post[0].client.name.replace(" ", "%20")+"%20Local%20"+response.data.post[0].client.title.replace(" ", "%20");
+                        button.target="_blank";
+                        button.classList.add("btn");
+                        button.classList.add("btn-block");
+                        button.classList.add("btn-success");            
+                        button.textContent = response.data.post[0].owner.name;
+                        group.appendChild(button);
+                        var bandera = true;
+                    }
+                    if( response.data.post[0].client.phone != null && response.data.post[0].client.phone != ''){
+                        var button = document.createElement("a");
+                        button.href = "https://api.whatsapp.com/send?phone="+response.data.post[0].client.phone+"&text=OT%20"+response.data.post[0].title+"%20Tecnico%20"+response.data.post[0].owner.name.replace(" ", "%20")+"%20Cliente%20"+response.data.post[0].client.name.replace(" ", "%20")+"%20Local%20"+response.data.post[0].client.title.replace(" ", "%20");
+                        button.target="_blank";
+                        button.classList.add("btn");
+                        button.classList.add("btn-block");
+                        button.classList.add("btn-success");            
+                        button.textContent = response.data.post[0].client.name;
+                        group.appendChild(button);
+                        var bandera = true;
+                    }
+                    if( bandera ){
+                        $("#whatsapp-modal").modal("show");
+                    }
+                }
+            })
+            .catch(function (error){
+                console.log(error);        
+            });
+        }
 
         $.extend( true, $.fn.dataTable.defaults, {
             "language": {
@@ -273,7 +339,6 @@
             }           
         } );    
 
-        
     </script>
 
 @endpush

@@ -92,12 +92,7 @@ class PostsController extends Controller
         if( $user == NULL ){
             return redirect()->route('admin.posts.edit', $post);
         } else {
-            return back()->with('whatsapp', 'https://api.whatsapp.com/send?phone='
-                                                .$post->owner->phone.'&text=OT%20'
-                                                .$post->title.'%20Tecnico%20'
-                                                .str_replace(" ","%20",$post->owner->name).'%20Cliente%20'
-                                                .str_replace(" ","%20",$post->client->name).'%20Local%20'
-                                                .str_replace(" ","%20",$post->client->title));
+            return back()->with('code', $post->id);
 
 // https://api.whatsapp.com/send?phone={{ $post->owner->phone }}&text=OT%20{{ $post->title }}%20Tecnico%20{{ str_replace(" ","%20",$post->owner->name) }}%20Cliente%20{{ str_replace(" ","%20",$post->client->name) }}%20Local%20{{ str_replace(" ","%20",$post->client->title) }}
         //    $url = "https://api.whatsapp.com/send?phone=56976400180&text=OT%201234%20Tecnico%20Hugo%20Cliente%20Unimarc%20Local%20bilbao";
@@ -115,6 +110,15 @@ class PostsController extends Controller
         return[
             'post' => $post,
             'refrigerants' => $refrigerants
+        ];
+    }
+
+    public function view($id)
+    {
+        $post = Post::with(['owner', 'client'])
+                        ->where('id', $id)->get();
+        return[
+            'post' => $post,
         ];
     }
 
