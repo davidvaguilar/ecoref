@@ -27,14 +27,18 @@ class AdminController extends Controller
         }
 
         $anio = date('Y');
+        $mes = date('m');
 
         $orders = DB::table('posts as p')
                 ->select(DB::raw("CONCAT(DAY(p.finished_at),'-',MONTHNAME(p.finished_at)) as mes"),
-                        DB::raw('YEAR(p.finished_at) as anio'),
+                        DB::raw('DAY(p.finished_at)'),
                         DB::raw('COUNT(p.id) as cantidad'))
                 ->whereYear('p.finished_at', $anio)
-                ->whereNull('deleted_at')
-                ->groupBy( DB::raw("CONCAT(DAY(p.finished_at),'-',MONTHNAME(p.finished_at))"), DB::raw('YEAR(p.finished_at)') )
+                ->whereMonth('p.finished_at', $mes)
+                ->whereNull('p.deleted_at')
+                ->groupBy( DB::raw("CONCAT(DAY(p.finished_at),'-',MONTHNAME(p.finished_at))"), 
+                                        DB::raw('DAY(p.finished_at)'))
+                ->orderBy(DB::raw('DAY(p.finished_at)'))        
                 ->get();
 
         $orders_dates = $orders->pluck('mes');  
