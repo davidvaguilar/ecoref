@@ -49,6 +49,13 @@
             </div>
 
             <div class="form-group">
+                <label for="phone" class="col-sm-2 control-label">Telefono</label>        
+                <div class="col-sm-5">
+                    <input id="phone" name="phone" type="text" class="form-control" value="{{ old('phone', $client->phone) }}">
+                </div>
+            </div>
+
+            <div class="form-group">
                 <label for="adress" class="col-sm-2 control-label">Direccion</label>        
                 <div class="col-sm-5">
                     <input id="adress" name="adress" type="text" class="form-control" value="{{ old('adress', $client->adress) }}">

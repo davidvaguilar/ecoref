@@ -77,6 +77,8 @@ class ClientsController extends Controller
         $client->code = $request->get('code');
         $client->name = $request->get('name');
         $client->title = $request->get('title');
+        
+        $client->phone = $request->get('phone');
         $client->adress = $request->get('adress');
         $client->city = $request->get('city');
         $client->save();
