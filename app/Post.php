@@ -114,6 +114,7 @@ class Post extends Model
     public function generateUrl()
     {
         $url = str_slug($this->title);
+        
         if($this->where('url', $url)->exists()){
             $url = "{$url}-{$this->id}";
             

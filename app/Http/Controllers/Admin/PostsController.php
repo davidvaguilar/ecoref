@@ -45,6 +45,13 @@ class PostsController extends Controller
 
     public function store(Request $request){ 
         $this->authorize('create', new Post);
+   
+        $this->validate($request, [
+            'title' => 'required|unique:posts',
+        ],[
+            'title.unique' => 'El folio '.$request->get('title').' ya ha sido registrado anteriormente'
+        ]);
+        
 
         $code = $request->get('code');
         $name = $request->get('name');

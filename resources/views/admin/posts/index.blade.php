@@ -5,13 +5,22 @@
 @stop
 
 
-
 @section('content')
+
+@if ($errors->any())
+    <ul class="list-group">
+    @foreach ($errors->all() as $error)
+        <li class="list-group-item list-group-item-danger">
+        {{ $error }}
+        </li>
+    @endforeach
+    </ul>
+@endif
+
     <div class="box box-primary">
         <div class="box-header">
             <h3 class="box-title">Listado de Ordenes</h3>
             @if(@Auth::user()->hasRole('Writer'))
-
                 @can('create', new App\Post)
                     <button class="btn btn-primary pull-right" data-toggle="modal" data-target="#exampleModal">
                         <i class="fa fa-plus"></i> Crear OT
@@ -201,9 +210,9 @@
             
             <div class="modal-body">
                 <div id="gro_whatsapp" class="btn-group-vertical btn-block">
-                    <button type="button" class="btn btn-default">Botón</button>
+                    <!--<button type="button" class="btn btn-default">Botón</button>
                     
-                    <button type="button" class="btn btn-default">Botón</button>
+                    <button type="button" class="btn btn-default">Botón</button>-->
                 </div>                       
             
             </div>
