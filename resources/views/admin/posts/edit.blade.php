@@ -71,7 +71,7 @@
 
                         <div class="form-horizontal">
                             <div class="form-group"><!-- H:i -->
-                                <label for="started_date_at" class="col-sm-4 control-label">Fecha Llegada: {{ $post->started_at->format('d/m/Y') }}</label>
+                                <!--<label for="started_date_at" class="col-sm-4 control-label">Fecha Llegada: {{-- $post->started_at->format('d/m/Y') --}}</label>-->
                                 <label for="technical" class="col-sm-6 control-label">Tecnico Responsable: {{ $post->owner->name }}</label> 
                             </div>
 
