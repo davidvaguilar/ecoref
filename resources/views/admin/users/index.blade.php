@@ -29,6 +29,7 @@
                         <th>Id</th>
                         <th>Nombre</th>
                         <th>Email</th>
+                        <th>Telefono</th>
                         <th>Roles</th>
                         <th>Acciones</th>
                     </tr>
@@ -38,7 +39,8 @@
                         <tr> 
                             <td>{{ $user->id }}</td>
                             <td>{{ $user->name }}</td>
-                            <td>{{ $user->email }}</td>                            
+                            <td>{{ $user->email }}</td>      
+                            <td>{{ $user->phone }}</td>                            
                             <td>{{ $user->getRoleDisplayName() }}</td> <!--<td>{{ $user->getRoleNames()->implode(', ') }}</td>-->
                             <td>
                             @can('view', $user)

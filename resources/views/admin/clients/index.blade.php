@@ -24,6 +24,7 @@
                         <th>Local</th>                        
                         <th>Direccion</th>                   
                         <th>Ciudad</th>
+                        <th>Telefono</th>
                         <th>Emails</th>
                         @role('Admin')<th></th>@endrole
                     </tr>
@@ -43,6 +44,7 @@
                             <td>{{ $client->title }}</td>
                             <td>{{ $client->adress }}</td>
                             <td>{{ $client->city }}</td>
+                            <td>{{ $client->phone }}</td>
                             <td>
                             <!-- ?Subject=Interesado%20en%20el%20curso-->
                                 @foreach( $client->peoples as $people )

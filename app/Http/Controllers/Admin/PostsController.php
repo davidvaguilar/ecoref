@@ -76,7 +76,8 @@ class PostsController extends Controller
                 'title' => $request->get('title'),  
                 'client_id' => $client_id,  
                 'user_id' => auth()->id(),
-                'started_at' => Carbon::now()
+                'started_at' => Carbon::now(),
+                'finished_at' => Carbon::now(),
             ]);
         } else {
             $this->validate($request, [
@@ -88,7 +89,8 @@ class PostsController extends Controller
                 'title' => $request->get('title'),  
                 'client_id' => $client_id,  
                 'user_id' => $user,
-                'started_at' => Carbon::now()
+                'started_at' => Carbon::now(),
+                'finished_at' => Carbon::now(),
             ]);
         }
    
@@ -168,8 +170,8 @@ class PostsController extends Controller
     }
 
     public function updateFinished( Post $post ){
-        $post->finished_at = Carbon::now();
-        $post->save();
+        /*$post->finished_at = Carbon::now();
+        $post->save();*/
 
         $refrigerants = Refrigerant::all();
         $pdf = PDF::loadView('pdf.order', ['post'=> $post, 'refrigerants'=> $refrigerants]);   
@@ -208,6 +210,9 @@ class PostsController extends Controller
     public function update( Post $post, Request $request ){
         if( !$request->ajax()) return redirect('/');
        
+        $post->started_at = $request->get('started_at');
+        $post->finished_at = $request->get('finished_at');
+       // dd($post->finished_at);
         $post->type_id = $request->get('type_id');
         $post->type_other = $request->get('type_other');
         $post->equipment = $request->get('equipment');

@@ -30,7 +30,7 @@ class SignatureController extends Controller
             $signature->url = '/img/signatures/'.$fileName;
             $signature->save();
             
-            $post->finished_at = Carbon::now();
+         //   $post->finished_at = Carbon::now();
             $post->observation = $request->observation;
             $post->signature_id = $signature->id;
             $post->save();

@@ -65,21 +65,58 @@
     <div class="box box-default">
         <div class="box-body">
             <div class="nav-tabs-custom">
-                <!--<ul class="nav nav-tabs nav-justified">
-                    <li id="li_order" class="active"><a href="#tab_order" data-toggle="tab">ANTECEDENTES</a></li>
-                    <li id="li_parameter"><a href="#tab_parameter" data-toggle="tab">MEDICIONES</a></li>
-                    <li id="li_material"><a href="#tab_material" data-toggle="tab">MATERIALES</a></li>
-                    <li id="li_photo"><a href="#tab_photo" data-toggle="tab">FOTOGRAFIAS</a></li>
-                    <li id="li_signature" onclick="mostrar_order();"><a href="#tab_signature" data-toggle="tab">FIRMA</a></li>
-                </ul>-->
+          
                 <div class="tab-content">
                     <div class="tab-pane active" id="tab_order">
 
                         <div class="form-horizontal">
-                            <div class="form-group">
-                                <label for="started_date_at" class="col-sm-4 control-label">Fecha Llegada: {{ $post->started_at->format('d/m/Y  H:i') }}</label>
+                            <div class="form-group"><!-- H:i -->
+                                <label for="started_date_at" class="col-sm-4 control-label">Fecha Llegada: {{ $post->started_at->format('d/m/Y') }}</label>
                                 <label for="technical" class="col-sm-6 control-label">Tecnico Responsable: {{ $post->owner->name }}</label> 
                             </div>
+
+                            <div class="form-group">
+                              <label class="col-xs-2 control-label">Fecha Llegada</label>        
+                              <div class="col-xs-4">                                 
+                                <input id="started_at_date" 
+                                        name="started_at_date" 
+                                        maxlength="5"
+                                        type="date" 
+                                        class="form-control" 
+                                        value="{{ $post->started_at->format('Y-m-d') }}">
+                              </div>
+                              <label class="col-xs-2 control-label">Hora Llegada</label>        
+                              <div class="col-xs-4">
+                                <input id="started_at_hour" 
+                                        name="started_at_hour"
+                                        maxlength="5"
+                                        type="text" 
+                                        class="form-control timepicker" 
+                                        value="{{ $post->started_at->format('H:i') }}">
+                              </div>
+                            </div>
+
+                            <div class="form-group">
+                              <label class="col-xs-2 control-label">Fecha Termino</label>        
+                              <div class="col-xs-4">                                 
+                                <input id="finished_at_date" 
+                                        name="finished_at_date" 
+                                        maxlength="5"
+                                        type="date" 
+                                        class="form-control" 
+                                        value="{{ $post->finished_at->format('Y-m-d') }}">
+                              </div>
+                              <label class="col-xs-2 control-label">Hora Termino</label>        
+                              <div class="col-xs-4">
+                                <input id="finished_at_hour" 
+                                        name="finished_at_hour"
+                                        maxlength="5"
+                                        type="text" 
+                                        class="form-control timepicker" 
+                                        value="{{ $post->finished_at->format('H:i') }}">
+                              </div>
+                            </div>
+
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">Empresa: 
                                     <button data-toggle="modal" data-target="#client-modal" type="button" class="btn btn-success">{{ isset($post->client->id) ? $post->client->name : '' }}</button>
@@ -435,51 +472,47 @@
                         <form id="signature-form" method="POST" action="{{ route('admin.posts.signature.store', $post->id) }}" class="form-horizontal" >
                             {{ csrf_field() }}
                             <div class="form-group">
-                                <div class="col-xs-5">
-                                    <p>Fecha Llegada: <label id="resumen_fecha_llegada"></label></p>
-                                </div>
-                                <div class="col-xs-7">
+                                <div class="col-xs-12">
                                     <p>Tecnico Responsable: <label id="resumen_tecnico_nombre"></label></p>
                                 </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="col-xs-4">
+                                <div class="col-xs-12">
+                                    <p>Fecha Llegada: <label id="resumen_fecha_llegada"></label></p>
+                                </div>
+                                <div class="col-xs-12">
+                                    <p>Fecha Termino: <label id="resumen_fecha_termino"></label></p>
+                                </div>
+
+                                <div class="col-xs-12">
                                     <p>Empresa: <label id="resumen_empresa_nombre"></label></p>
-                                </div>
-                                <div class="col-xs-4">
+                                </div>                            
+                                <div class="col-xs-12">
                                     <p>Local: <label id="resumen_empresa_titulo"></label></p>
-                                </div>
-                                <div class="col-xs-4">
+                                </div>                           
+                                <div class="col-xs-12">
                                     <p>Direccion: <label id="resumen_empresa_direccion"></label></p>
                                 </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="col-xs-5">
+                          
+                                <div class="col-xs-12">
                                     <p>Tipo de Orden: <label id="resumen_tipo_nombre"></label></p>
                                 </div>
-                                <div class="col-xs-7">
+                                <div class="col-xs-12">
                                     <p><span id="resumen_tipo">Detalle de Orden: </span><label id="resumen_tipo_otro"></label></p>
                                 </div>
-                            </div>
-                        
-                            <div class="form-group">
-                                <div class="col-xs-4">
+                            
+                                <div class="col-xs-12">
                                     <p>Equipo Interv: <label id="resumen_orden_equipo"></label></p>
                                 </div>
-                                <div class="col-xs-4">
+                                <div class="col-xs-12">
                                     <p>Modelo: <label id="resumen_orden_modelo"></label></p>
                                 </div>
-                                <div class="col-xs-4">
+                                <div class="col-xs-12">
                                     <p>Serie: <label id="resumen_orden_serie"></label></p>
                                 </div>
-                            </div>
-
-                            <div class="form-group">
+                        
                                 <div class="col-xs-12">
                                     <p>Problema: <label id="resumen_problema_nombre"></label></p>
                                 </div>
-                            </div>
-                            <div class="form-group">
+                       
                                 <div class="col-xs-12">
                                     <p>Trabajo realizado: <label id="resumen_orden_trabajo"></label></p>
                                 </div>
@@ -655,10 +688,19 @@
 @stop
 
 @push('styles')
-    
+    <!-- bootstrap datepicker -->
+    <link rel="stylesheet" href="{{ asset('adminlte/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css') }}">
+    <!-- Bootstrap time Picker -->
+    <link rel="stylesheet" href="{{ asset('adminlte/plugins/timepicker/bootstrap-timepicker.min.css') }}">
 @endpush
 
 @push('scripts')
+    <!-- bootstrap datepicker -->
+    <script src="{{ asset('adminlte/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js') }}"></script>
+    <!-- bootstrap time picker -->
+    <script src="{{ asset('adminlte/plugins/timepicker/bootstrap-timepicker.min.js') }}"></script>
+
+
     <script src="{{ asset('js/signature_pad/signature_pad.min.js') }}"></script>
     <script>
         var reader = new FileReader();
@@ -725,6 +767,12 @@
                 this.disabled = false;
                 document.getElementById("type_div").classList.remove("has-error");
                 document.getElementById("problem_div").classList.remove("has-error");
+                
+                var started_at_date = document.getElementsByName("started_at_date")[0].value;
+                var started_at_hour = document.getElementsByName("started_at_hour")[0].value;
+                var finished_at_date = document.getElementsByName("finished_at_date")[0].value;
+                var finished_at_hour = document.getElementsByName("finished_at_hour")[0].value;
+              
                 var type_id = document.getElementsByName("type_id")[0].value;
                 var type_other = document.getElementsByName("type_other")[0].value;
                 var equipment = document.getElementsByName("equipment")[0].value;
@@ -744,6 +792,8 @@
                 if( flag ){
                     var url = "{{ route('admin.posts.update', $post) }}"
                     axios.put(url, {
+                            'started_at': started_at_date+started_at_hour,
+                            'finished_at': finished_at_date+finished_at_hour,
                             'type_id': type_id,
                             'type_other': type_other,
                             'equipment': equipment,
@@ -895,6 +945,24 @@
                 default:
                     break;
             }
+
+            //Timepicker
+            $('.timepicker').timepicker({
+              showInputs: false,
+              minuteStep: 5,
+              showMeridian: false,
+            });
+
+            /*$('#started_at_date').datepicker({
+              autoclose: true,
+              format: 'dd/mm/yyyy'
+            });*/
+
+            /*$('#finished_at_date').datepicker({
+              autoclose: true,
+              format: 'dd/mm/yyyy'
+            });*/
+
             document.getElementById("overlay-body").style.display = "none";
         });
 
@@ -980,6 +1048,12 @@
                         var day = response.data.post[0].started_at.substring(8, 10);
                         var hour =  response.data.post[0].started_at.substring(11, 16);
                         document.getElementById("resumen_fecha_llegada").innerHTML = day+'/'+month+'/'+year+' '+hour;
+                        var year =  response.data.post[0].finished_at.substring(0, 4);                    
+                        var month =  response.data.post[0].finished_at.substring(5,7);                    
+                        var day = response.data.post[0].finished_at.substring(8, 10);
+                        var hour =  response.data.post[0].finished_at.substring(11, 16);
+                        document.getElementById("resumen_fecha_termino").innerHTML = day+'/'+month+'/'+year+' '+hour;
+
                         document.getElementById("resumen_tecnico_nombre").innerHTML = response.data.post[0].owner.name;
                         document.getElementById("resumen_empresa_nombre").innerHTML = response.data.post[0].client.name;
                         document.getElementById("resumen_empresa_titulo").innerHTML = response.data.post[0].client.title;
