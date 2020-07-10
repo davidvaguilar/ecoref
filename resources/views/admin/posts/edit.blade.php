@@ -77,19 +77,19 @@
 
                             <div class="form-group">
                               <label class="col-xs-2 control-label">Fecha Llegada</label>        
-                              <div class="col-xs-4">                                 
+                              <div class="col-xs-6">                                 
                                 <input id="started_at_date" 
                                         name="started_at_date" 
-                                        maxlength="5"
+                                        maxlength="0"
                                         type="date" 
                                         class="form-control" 
                                         value="{{ $post->started_at->format('Y-m-d') }}">
                               </div>
-                              <label class="col-xs-2 control-label">Hora Llegada</label>        
+                                    
                               <div class="col-xs-4">
                                 <input id="started_at_hour" 
                                         name="started_at_hour"
-                                        maxlength="5"
+                                        maxlength="0"
                                         type="text" 
                                         class="form-control timepicker" 
                                         value="{{ $post->started_at->format('H:i') }}">
@@ -98,19 +98,19 @@
 
                             <div class="form-group">
                               <label class="col-xs-2 control-label">Fecha Termino</label>        
-                              <div class="col-xs-4">                                 
+                              <div class="col-xs-6">                                 
                                 <input id="finished_at_date" 
                                         name="finished_at_date" 
-                                        maxlength="5"
+                                        maxlength="0"
                                         type="date" 
                                         class="form-control" 
                                         value="{{ $post->finished_at->format('Y-m-d') }}">
                               </div>
-                              <label class="col-xs-2 control-label">Hora Termino</label>        
+                                     
                               <div class="col-xs-4">
                                 <input id="finished_at_hour" 
                                         name="finished_at_hour"
-                                        maxlength="5"
+                                        maxlength="0"
                                         type="text" 
                                         class="form-control timepicker" 
                                         value="{{ $post->finished_at->format('H:i') }}">
