@@ -92,7 +92,7 @@
                                         maxlength="0"
                                         type="text" 
                                         class="form-control timepicker" 
-                                        value="{{ $post->started_at->format('H:i') }}">
+                                        value="{{ $post->started_at->format('H:i') }}" readonly>
                               </div>
                             </div>
 
@@ -104,7 +104,7 @@
                                         maxlength="0"
                                         type="date" 
                                         class="form-control" 
-                                        value="{{ $post->finished_at->format('Y-m-d') }}">
+                                        value="{{ $post->finished_at->format('Y-m-d') }}" >
                               </div>
                                      
                               <div class="col-xs-4">
@@ -113,7 +113,7 @@
                                         maxlength="0"
                                         type="text" 
                                         class="form-control timepicker" 
-                                        value="{{ $post->finished_at->format('H:i') }}">
+                                        value="{{ $post->finished_at->format('H:i') }}" readonly>
                               </div>
                             </div>
 
