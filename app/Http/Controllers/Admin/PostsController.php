@@ -34,9 +34,7 @@ class PostsController extends Controller
   //      $users = User::all();
         $users = Role::where('name', 'Writer')->first()->users()->get();
      
-       // dd($clients);
-        $posts = Post::allowed()->orderBy('started_at', 'desc')->get();
-
+        $posts = Post::allowed()->orderBy('id', 'desc')->orderBy('started_at', 'desc')->get();
 
         return view('admin.posts.index', compact('posts', 'clients', 'users'));
       // $id = 5;  //, ['id'=>$id]
@@ -76,9 +74,9 @@ class PostsController extends Controller
                 'title' => $request->get('title'),  
                 'client_id' => $client_id,  
                 'user_id' => auth()->id(),
-                'started_at' => Carbon::now(),
-                'finished_at' => Carbon::now(),
             ]);
+            /*'started_at' => Carbon::now(),
+            'finished_at' => Carbon::now(),*/
         } else {
             $this->validate($request, [
                 'title' => 'required|min:3',
@@ -88,10 +86,10 @@ class PostsController extends Controller
             $post = Post::create([
                 'title' => $request->get('title'),  
                 'client_id' => $client_id,  
-                'user_id' => $user,
-                'started_at' => Carbon::now(),
-                'finished_at' => Carbon::now(),
+                'user_id' => $user,                
             ]);
+            /*'started_at' => Carbon::now(),
+                'finished_at' => Carbon::now(),*/
         }
    
         $parameter = new Parameter();

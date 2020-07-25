@@ -155,7 +155,7 @@
                                     @endswitch
                                 </td>
                             @endrole      
-                            <td><span title="{{ $post->started_at->format('d-m-Y H:i') }}">{{ $post->started_at->diffForHumans() }}</span></td>
+                            <td><span title="{{ isset( $post->started_at ) ? $post->started_at->format('d-m-Y H:i') : '' }}">{{ isset( $post->started_at ) ? $post->started_at->diffForHumans() : '' }}</span></td>
                             <td>
                                 @if( isset($post->client->id) )
                                     {{ $post->client->name }}

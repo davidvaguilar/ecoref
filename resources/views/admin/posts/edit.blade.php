@@ -63,81 +63,81 @@
     @endif
 
     <div class="box box-default">
-        <div class="box-body">
-            <div class="nav-tabs-custom">
+			<div class="box-body">
+				<div class="nav-tabs-custom">
           
-                <div class="tab-content">
-                    <div class="tab-pane active" id="tab_order">
+					<div class="tab-content">
+						<div class="tab-pane active" id="tab_order">
 
-                        <div class="form-horizontal">
-                            <div class="form-group"><!-- H:i -->
-                                <!--<label for="started_date_at" class="col-sm-4 control-label">Fecha Llegada: {{-- $post->started_at->format('d/m/Y') --}}</label>-->
-                                <label for="technical" class="col-sm-6 control-label">Tecnico Responsable: {{ $post->owner->name }}</label> 
-                            </div>
+							<div class="form-horizontal">
+									<div class="form-group"><!-- H:i -->
+											<!--<label for="started_date_at" class="col-sm-4 control-label">Fecha Llegada: {{-- $post->started_at->format('d/m/Y') --}}</label>-->
+											<label for="technical" class="col-sm-6 control-label">Tecnico Responsable: {{ $post->owner->name }}</label> 
+									</div>
 
-                            <div class="form-group">
-                              <label class="col-xs-2 control-label">Fecha Llegada</label>        
-                              <div class="col-xs-6">                                 
-                                <input id="started_at_date" 
-                                        name="started_at_date" 
-                                        maxlength="0"
-                                        type="date" 
-                                        class="form-control" 
-                                        value="{{ $post->started_at->format('Y-m-d') }}">
-                              </div>
+									<div id="started_date_div" class="form-group">
+										<label class="col-xs-2 control-label">Fecha Llegada</label>        
+										<div class="col-xs-6">                                 
+											<input id="started_at_date" 
+															name="started_at_date" 
+															maxlength="0"
+															type="date" 
+															class="form-control" 
+															value="{{ isset( $post->started_at ) ? $post->started_at->format('Y-m-d') : '' }}">
+										</div>
                                     
-                              <div class="col-xs-4">
-                                <input id="started_at_hour" 
-                                        name="started_at_hour"
-                                        maxlength="0"
-                                        type="text" 
-                                        class="form-control timepicker" 
-                                        value="{{ $post->started_at->format('H:i') }}" readonly>
-                              </div>
-                            </div>
+										<div class="col-xs-4">
+											<input id="started_at_hour" 
+															name="started_at_hour"
+															maxlength="0"
+															type="text" 
+															class="form-control timepicker" 
+															value="{{ isset( $post->started_at ) ? $post->started_at->format('H:i') : '' }}" readonly>
+										</div>
+									</div>
 
-                            <div class="form-group">
-                              <label class="col-xs-2 control-label">Fecha Termino</label>        
-                              <div class="col-xs-6">                                 
-                                <input id="finished_at_date" 
-                                        name="finished_at_date" 
-                                        maxlength="0"
-                                        type="date" 
-                                        class="form-control" 
-                                        value="{{ $post->finished_at->format('Y-m-d') }}" >
-                              </div>
-                                     
-                              <div class="col-xs-4">
-                                <input id="finished_at_hour" 
-                                        name="finished_at_hour"
-                                        maxlength="0"
-                                        type="text" 
-                                        class="form-control timepicker" 
-                                        value="{{ $post->finished_at->format('H:i') }}" readonly>
-                              </div>
-                            </div>
+									<div id="finished_date_div" class="form-group">
+										<label class="col-xs-2 control-label">Fecha Termino</label>        
+										<div class="col-xs-6">                                 
+											<input id="finished_at_date" 
+															name="finished_at_date" 
+															maxlength="0"
+															type="date" 
+															class="form-control" 
+															value="{{ isset( $post->finished_at ) ? $post->finished_at->format('Y-m-d') : '' }}" >
+										</div>
+														
+										<div class="col-xs-4">
+											<input id="finished_at_hour" 
+															name="finished_at_hour"
+															maxlength="0"
+															type="text" 
+															class="form-control timepicker" 
+															value="{{ isset( $post->finished_at ) ? $post->finished_at->format('H:i') : '' }}" readonly>
+										</div>
+									</div>
 
-                            <div class="form-group">
-                                <label class="col-sm-4 control-label">Empresa: 
-                                    <button data-toggle="modal" data-target="#client-modal" type="button" class="btn btn-success">{{ isset($post->client->id) ? $post->client->name : '' }}</button>
-                                </label>
-                                <label class="col-sm-4 control-label">Local: {{  isset($post->client->id) ? $post->client->title : '' }}</label>
-                            </div>
+									<div class="form-group">
+											<label class="col-sm-4 control-label">Empresa: 
+													<button data-toggle="modal" data-target="#client-modal" type="button" class="btn btn-success">{{ isset($post->client->id) ? $post->client->name : '' }}</button>
+											</label>
+											<label class="col-sm-4 control-label">Local: {{  isset($post->client->id) ? $post->client->title : '' }}</label>
+									</div>
 
-                            <div id="type_div" class="form-group {{ $errors->has('type_id') ? 'has-error' : '' }}">
-                                <label for="type_id" class="col-xs-4 control-label">Tipo de Orden</label>
-                                <div class="col-xs-8">
-                                    <select id="type_id"
-                                            name="type_id" 
-                                            class="form-control">
-                                        @foreach ($types as $type)
-                                            <option value="{{ $type->id }}"                              
-                                                {{ old('type_id', $post->type_id) == $type->id ? 'selected' : '' }} 
-                                                >{{ $type->name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
+									<div id="type_div" class="form-group {{ $errors->has('type_id') ? 'has-error' : '' }}">
+											<label for="type_id" class="col-xs-4 control-label">Tipo de Orden</label>
+											<div class="col-xs-8">
+													<select id="type_id"
+																	name="type_id" 
+																	class="form-control">
+															@foreach ($types as $type)
+																	<option value="{{ $type->id }}"                              
+																			{{ old('type_id', $post->type_id) == $type->id ? 'selected' : '' }} 
+																			>{{ $type->name }}</option>
+															@endforeach
+													</select>
+											</div>
+									</div>
 
                             <div class="form-group">
                                 <label id="other" for="type_other" class="col-xs-4 control-label">{{ isset($post->type->id) && $post->type->id == 5 ? 'N° de Presupuesto' : 'Detalle de Orden' }}</label>
@@ -765,14 +765,26 @@
             document.getElementById("order-button").addEventListener("click", function (event) {
                 window.location.hash = '#parameter';
                 this.disabled = false;
+								var flag = true;
+								document.getElementById("started_date_div").classList.remove("has-error");
+								document.getElementById("finished_date_div").classList.remove("has-error");
                 document.getElementById("type_div").classList.remove("has-error");
                 document.getElementById("problem_div").classList.remove("has-error");
                 
                 var started_at_date = document.getElementsByName("started_at_date")[0].value;
-                var started_at_hour = document.getElementsByName("started_at_hour")[0].value;
+								var started_at_hour = document.getElementsByName("started_at_hour")[0].value;
+								if( started_at_date.length == 0 || started_at_hour.length == 0 ){
+									document.getElementById("started_date_div").classList.add("has-error");
+									flag = false;
+                }
+
                 var finished_at_date = document.getElementsByName("finished_at_date")[0].value;
                 var finished_at_hour = document.getElementsByName("finished_at_hour")[0].value;
-              
+								if( finished_at_date.length == 0 || finished_at_hour.length == 0 ){
+									document.getElementById("finished_date_div").classList.add("has-error");
+									flag = false;
+                }
+
                 var type_id = document.getElementsByName("type_id")[0].value;
                 var type_other = document.getElementsByName("type_other")[0].value;
                 var equipment = document.getElementsByName("equipment")[0].value;
@@ -780,7 +792,7 @@
                 var serie = document.getElementsByName("serie")[0].value;
                 var problem_id = document.getElementsByName("problem_id")[0].value;
                 var job = document.getElementsByName("job")[0].value;
-                var flag = true;
+                
                 if( type_id.length == 0 ){
                     document.getElementById("type_div").classList.add("has-error");
                     flag = false;
@@ -951,6 +963,7 @@
               showInputs: false,
               minuteStep: 5,
               showMeridian: false,
+							defaultTime: null,
             });
 
             /*$('#started_at_date').datepicker({
