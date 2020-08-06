@@ -48,9 +48,9 @@
                             <th>Responsable</th>
                         @endrole
                         <th>Folio</th> 
-                        @role('Admin')
+                        @if(!@Auth::user()->hasRole('Writer'))
                             <th>Estado</th>
-                        @endrole
+                        @endif
                         <th>Fecha Creacion</th>
                         <th>Cliente</th>
                         <th>Local</th>
@@ -132,7 +132,7 @@
                                 <td>{{ $post->owner->name }}</td>
                             @endrole
                             <td>{{ $post->title }}</td>
-                            @role('Admin')
+                            @if(!@Auth::user()->hasRole('Writer'))
                                 <td>
                                     @switch( $post->status )
                                         @case('PENDIENTE')
@@ -146,15 +146,23 @@
                                                     {{ $post->status }}</button>
                                             @break
                                         @case('ENVIADO')
-                                            <button type="button"
-                                                    class="btn btn-xs btn-success">
-                                                    {{ $post->status }}</button>
+                                            <form method="POST" 
+                                                action="{{ route('admin.posts.updateReturn', $post) }}">
+                                                {{ csrf_field() }}
+                                                {{ method_field('PUT') }}
+                                                <button type="submit"
+                                                    onclick="return confirm('¿Estas seguro de querer devolver esta OT?')"
+                                                    class="btn btn-success"
+                                                    title="DEVOLVER">
+                                                    <i class="fa fa-fw fa-share-square-o"></i> Devolver
+                                                </button>
+                                            </form>
                                             @break
                                         @default
                                             <span>Sin estado</span>
                                     @endswitch
                                 </td>
-                            @endrole      
+                            @endif      
                             <td><span title="{{ isset( $post->started_at ) ? $post->started_at->format('d-m-Y H:i') : '' }}">{{ isset( $post->started_at ) ? $post->started_at->diffForHumans() : '' }}</span></td>
                             <td>
                                 @if( isset($post->client->id) )

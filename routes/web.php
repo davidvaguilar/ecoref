@@ -97,6 +97,9 @@ function(){
     Route::put('posts/{post}/finished', 'PostsController@updateFinished')->name('admin.posts.updateFinished');
     Route::put('posts/{post}/send', 'PostsController@updateStatus')->name('admin.posts.updateSend');
 
+    
+    Route::put('posts/{post}/return', 'PostsController@updateReturn')->name('admin.posts.updateReturn');
+
     Route::get('posts/{post}/material', 'PostsController@showMaterial')->name('admin.posts.material');
 
     Route::put('users/{user}/signature', 'UsersController@signature')->name('admin.users.signature'); //ULTIMO

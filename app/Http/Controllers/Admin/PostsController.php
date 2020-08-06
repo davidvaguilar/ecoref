@@ -204,6 +204,16 @@ class PostsController extends Controller
                 ->route('admin.posts.index')
                 ->with('flash', 'Orden de trabajo '.$post->title.' ha finalizado.');
     }
+
+    public function updateReturn( Post $post ){
+        $post->status = "PENDIENTE";
+        $post->save();
+        return redirect()
+                ->route('admin.posts.index')
+                ->with('flash', 'Orden de trabajo '.$post->title.' ha sido devuelto al Tecnico.');
+    }
+
+    
     
     public function update( Post $post, Request $request ){
         if( !$request->ajax()) return redirect('/');

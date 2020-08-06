@@ -233,7 +233,7 @@ class ClientsTableSeeder extends Seeder
         $client->name = "UNIMARC";
         $client->title = "TOCOPILLA II";
         $client->adress = "POLICARPO TORO # 215";
-        $client->city = "CALAMA";
+        $client->city = "CALAMA"; 
         $client->save();
     }
 }
