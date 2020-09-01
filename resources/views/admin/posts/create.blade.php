@@ -126,6 +126,16 @@
                             </select>
                         </div>                                             
                     </div>
+
+                    <div class="form-group">
+                        <label class="col-xs-3 control-label">Detalle de Orden</label>
+                        <div class="col-xs-9">
+                            <input id="type_other" name="type_other" 
+                                maxlength="80" 
+                                type="text" 
+                                class="form-control" required />
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary pull-left" data-dismiss="modal">Cerrar</button>

@@ -86,7 +86,8 @@ class PostsController extends Controller
             $post = Post::create([
                 'title' => $request->get('title'),  
                 'client_id' => $client_id,  
-                'user_id' => $user,                
+                'user_id' => $user,   
+                'type_other' => $request->get('type_other')      
             ]);
             /*'started_at' => Carbon::now(),
                 'finished_at' => Carbon::now(),*/
@@ -160,7 +161,7 @@ class PostsController extends Controller
 
     public function updateTitle( Post $post, Request $request ){
         $this->validate($request, [
-            'title' => 'required',
+            'title' => 'required', 
         ]);
         $post->title = $request->get('title');
         $post->save();
@@ -175,7 +176,7 @@ class PostsController extends Controller
         $pdf = PDF::loadView('pdf.order', ['post'=> $post, 'refrigerants'=> $refrigerants]);   
         $url = 'pdf/order/OT'.$post->title.'-'.$post->client->code.'-EcorefChile-'.Carbon::now()->format('d-m-Y-H-i').'.pdf';
         $pdf->save($url);
-
+ 
         $record = new Record;
         $record->post_id = $post->id;
         $record->url = $url;
