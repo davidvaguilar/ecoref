@@ -52,8 +52,8 @@
                             <th>Estado</th>
                         @endif
                         <th>Fecha Creacion</th>
-                        <th>Cliente</th>
-                        <th>Local</th>
+                        <th style="min-width:140px">Local</th>
+                        <th>Detalle OT</th>
                         <th>Tipo de Orden</th>
                         <th>Problema</th>
                         @role('Admin')<th></th>@endrole
@@ -163,17 +163,17 @@
                                     @endswitch
                                 </td>
                             @endif      
-                            <td><span title="{{ isset( $post->started_at ) ? $post->started_at->format('d-m-Y H:i') : '' }}">{{ isset( $post->started_at ) ? $post->started_at->diffForHumans() : '' }}</span></td>
                             <td>
-                                @if( isset($post->client->id) )
-                                    {{ $post->client->name }}
-                                @endif
+                                <span title="{{ isset( $post->started_at ) ? $post->started_at->format('d-m-Y H:i') : '' }}">{{ isset( $post->started_at ) ? $post->started_at->diffForHumans() : '' }}</span>
                             </td>
                             <td>
                                 @if( isset($post->client->id) )
-                                    {{ $post->client->code }} - {{ $post->client->title }}
+                                    <span title="{{ $post->client->name }}">
+                                        {{ $post->client->code .'-'. $post->client->title }}
+                                    </span>
                                 @endif
                             </td>
+                            <td>{{ $post->type_other }}</td>
                             <td>{{ isset($post->type->id) ? $post->type->name : '' }}</td>
                             <td>{{ isset($post->problem->id) ? $post->problem->name : '' }}</td>
                             @role('Admin')

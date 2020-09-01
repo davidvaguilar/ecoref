@@ -133,7 +133,7 @@
                             <input id="type_other" name="type_other" 
                                 maxlength="80" 
                                 type="text" 
-                                class="form-control" required />
+                                class="form-control" autocomplete="off" required />
                         </div>
                     </div>
                 </div>
