@@ -44,9 +44,9 @@
                         @if(!@Auth::user()->hasRole('Writer'))
                             <th style="min-width:70px">WhatsApp</th>
                         @endif
-                        @role('Admin')
+                        @if(!@Auth::user()->hasRole('Writer'))
                             <th>Responsable</th>
-                        @endrole
+                        @endif
                         <th>Folio</th> 
                         @if(!@Auth::user()->hasRole('Writer'))
                             <th>Estado</th>
@@ -128,9 +128,9 @@
                                 @endif
                                 </td>
                             @endif
-                            @role('Admin')  
+                            @if(!@Auth::user()->hasRole('Writer'))
                                 <td>{{ $post->owner->name }}</td>
-                            @endrole
+                            @endif
                             <td>{{ $post->title }}</td>
                             @if(!@Auth::user()->hasRole('Writer'))
                                 <td>
