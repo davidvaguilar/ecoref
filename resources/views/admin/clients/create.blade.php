@@ -27,7 +27,7 @@
                         <div class="col-sm-9">
                             <input id="code"
                                 name="code" 
-                                type="number"
+                                type="text"
                                 class="form-control" 
                                 placeholder="Ingrese Id" 
                                 value="{{ old('code') }}" 
