@@ -51,7 +51,8 @@
                         @if(!@Auth::user()->hasRole('Writer'))
                             <th>Estado</th>
                         @endif
-                        <th>Fecha Creacion</th>
+                        <th>Fecha Asignación</th>
+                        <th>Fecha Realización</th>
                         <th style="min-width:140px">Local</th>
                         <th>Detalle OT</th>
                         <th>Tipo de Orden</th>
@@ -162,9 +163,16 @@
                                             <span>Sin estado</span>
                                     @endswitch
                                 </td>
-                            @endif      
+                            @endif 
                             <td>
-                                <span title="{{ isset( $post->started_at ) ? $post->started_at->format('d-m-Y H:i') : '' }}">{{ isset( $post->started_at ) ? $post->started_at->diffForHumans() : '' }}</span>
+                                <span>
+                                    {{  $post->created_at->format('d/m/Y H:i') }}
+                                </span>
+                            </td>     
+                            <td>
+                                <span title="{{ isset( $post->started_at ) ? $post->started_at->format('d-m-Y H:i') : '' }}">
+                                    {{ isset( $post->started_at ) ? $post->started_at->format('d/m/Y H:i') : '' }}
+                                </span>
                             </td>
                             <td>
                                 @if( isset($post->client->id) )
