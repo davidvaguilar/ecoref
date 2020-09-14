@@ -130,7 +130,14 @@
                                 </td>
                             @endif
                             @if(!@Auth::user()->hasRole('Writer'))
-                                <td>{{ $post->owner->name }}</td>
+                                <td>
+                                    <button class="btn btn-primary btn-block" 
+                                                data-toggle="modal" data-target="#user-modal"
+                                                data-user="{{ $post->owner->id }}"
+                                                data-post="{{ $post->id }}">
+                                        {{ $post->owner->name }}
+                                    </button>                                    
+                                </td>
                             @endif
                             <td>{{ $post->title }}</td>
                             @if(!@Auth::user()->hasRole('Writer'))
@@ -214,28 +221,67 @@
     </div>
 
 
-<div class="modal fade" id="whatsapp-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="whatsapp-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document"> <!-- modal-sm -->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="exampleModalLabel">Envio de Notificación</h4>
+                </div>
+                
+                <div class="modal-body">
+                    <div id="gro_whatsapp" class="btn-group-vertical btn-block">
+                      
+                    </div>                       
+                
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary pull-left" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+<div class="modal fade" id="user-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document"> <!-- modal-sm -->
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-                <h4 class="modal-title" id="exampleModalLabel">Envio de Notificación</h4>
+                <h4 class="modal-title" id="exampleModalLabel">Cambiar Responsable</h4>
             </div>
             
-            <div class="modal-body">
-                <div id="gro_whatsapp" class="btn-group-vertical btn-block">
-                    <!--<button type="button" class="btn btn-default">Botón</button>
-                    
-                    <button type="button" class="btn btn-default">Botón</button>-->
-                </div>                       
-            
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary pull-left" data-dismiss="modal">Cerrar</button>
-              <!--  <button type="submit" class="btn btn-primary">Buscar Cliente</button> -->
-            </div>
+            <form id="user-form" method="POST" class="form-horizontal">
+                {{ csrf_field() }}
+                {{ method_field('PUT') }}
+                <div class="modal-body">
+                                        
+                    <div class="form-group">
+                        
+                        <label class="col-xs-2 control-label">Nuevo Usuario</label>
+                        <div class="col-xs-10">
+                            <select id="user_id" 
+                                    name="user" 
+                                    class="form-control" require>
+                                @foreach ($users as $user)
+                                    <option value="{{ $user->id }}">
+                                        {{ $user->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>                                             
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary pull-left" data-dismiss="modal">Cerrar</button>
+                    <button id="post_id" name="post_id" type="submit" class="btn btn-primary">Guardar cambio</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -254,7 +300,23 @@
     <script src="{{ asset('adminlte/bower_components/datatables.net/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('adminlte/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
     <script>
+
+        $('#user-modal').on('shown.bs.modal', function(e){
+            var user_id = $(e.relatedTarget).data().user;
+            var post_id = $(e.relatedTarget).data().post;
+            //alert(user_id);
+            //alert(post_id)
+            document.getElementById("post_id").value = post_id;
+            document.getElementById("user_id").value = user_id;
+            document.getElementById("user-form").action = "posts/"+post_id+"/user";
+
+            //console.log("abriendo");
+        });
+
+
         $(function () {
+
+
 
             $('#posts-table').DataTable({
             'paging'      : true,

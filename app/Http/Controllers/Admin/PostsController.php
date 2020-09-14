@@ -168,6 +168,20 @@ class PostsController extends Controller
         return back()->with('flash', 'Folio cambiado');
     }
 
+    public function updateUser($id, Request $request){
+        //dd($id);
+        $this->validate($request, [
+            'user' => 'required', 
+        ]);
+        $post = Post::findOrFail($id);
+        $post->user_id = $request->get('user');
+        $post->save();
+
+
+        return back()->with('flash', 'Usuario cambiado');
+    }
+
+
     public function updateFinished( Post $post ){
         /*$post->finished_at = Carbon::now();
         $post->save();*/

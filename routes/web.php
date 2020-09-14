@@ -89,6 +89,11 @@ function(){
     Route::delete('posts/{post}', 'PostsController@destroy')->name('admin.posts.destroy');*/
 
    // Route::post('posts/photos', 'PhotosController@store')->name('admin.posts.photos.store');
+
+   
+    Route::put('posts/{post}/user', 'PostsController@updateUser');
+
+    
     Route::post('posts/photos', 'PhotosController@store')->name('admin.posts.photos.store');
     Route::post('posts/{post}/parameter', 'ParametersController@store')->name('admin.posts.parameter.store');
     
@@ -99,9 +104,7 @@ function(){
 
     
     Route::put('posts/{post}/return', 'PostsController@updateReturn')->name('admin.posts.updateReturn');
-
     Route::get('posts/{post}/material', 'PostsController@showMaterial')->name('admin.posts.material');
-
     Route::put('users/{user}/signature', 'UsersController@signature')->name('admin.users.signature'); //ULTIMO
 
 
