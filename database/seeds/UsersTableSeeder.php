@@ -120,7 +120,7 @@ class UsersTableSeeder extends Seeder
         
         $admin = new User;
         $admin->name = 'David Villegas A.';
-        $admin->email = 'david.villegas.aguilar@gmail.cl';
+        $admin->email = 'david.villegas.aguilar@gmail.com';
         $admin->password = '123123';
         $admin->url = '/img/users/test.png';
         $admin->save();

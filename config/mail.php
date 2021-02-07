@@ -56,8 +56,8 @@ return [
     */
 
     'from' => [
-        'address' => env('MAIL_FROM_ADDRESS', 'postmaster@dyi.cl'),
-        'name' => env('MAIL_FROM_NAME', 'Administrador'),
+        'address' => env('MAIL_FROM_ADDRESS', 'postmaster@davidaguilar.cl'),
+        'name' => env('MAIL_FROM_NAME', 'Notificacion Ecoref Chile'),
     ],
 
     /*

@@ -1,15 +1,15 @@
 @extends('admin.layout')
 
 @section('header')
-    <style>
-        .nav-tabs-custom>.nav-tabs>li.active>a, .nav-tabs-custom>.nav-tabs>li.active:hover>a {
-            background-color: #3c8dbc;
-            color: #fff;
-        }
-    </style>
-    <h1>
-        OT Folio N° <button type="button" data-toggle="modal" data-target="#order-modal" class="btn btn-primary">{{ $post->title }}</button>
-    </h1>
+  <style>
+      .nav-tabs-custom>.nav-tabs>li.active>a, .nav-tabs-custom>.nav-tabs>li.active:hover>a {
+          background-color: #3c8dbc;
+          color: #fff;
+      }
+  </style>
+  <h1>
+      OT Folio N° <button type="button" data-toggle="modal" data-target="#order-modal" class="btn btn-primary">{{ $post->title }}</button>
+  </h1>
 @stop
 
 @section('content')

@@ -9,7 +9,7 @@ php artisan vendor:publish --provider="Spatie\Permission\PermissionServiceProvid
 
 CUANDO SE TRABA
 composer dump-autoload
-
+ 
 composer require barryvdh/laravel-debugbar --dev INSTALAR BARRA PARA MONITOR DESARROLLO
 
 

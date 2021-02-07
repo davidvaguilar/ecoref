@@ -1,0 +1,645 @@
+composer create-project --prefer-dist laravel/laravel ecorefchile "6.*"
+
+// PARA VER LOS LOG
+composer require rap2hpoutre/laravel-log-viewer
+
+        'providers' => [       // solo si no se ha descubierto colocar en config/app.php
+            // ...
+            Rap2hpoutre\LaravelLogViewer\LaravelLogViewerServiceProvider::class,  
+        ];
+
+Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
+
+    /* DETALLE de CONFIGURACION de LOGS   */
+php artisan vendor:publish --provider="Rap2hpoutre\LaravelLogViewer\LaravelLogViewerServiceProvider" --tag=views
+
+    /* INSTALAR BARRA PARA MONITOR DESARROLLO    */
+composer require barryvdh/laravel-debugbar --dev
+
+    /* PARA ENVIAR CORREO MAILGUN  */
+composer require guzzlehttp/guzzle
+
+    /* LIBRERIA PARA ADAPTAR IMAGENES   */
+composer require intervention/image
+
+/* SI NO se descubierto  */
+    /* en el archivo app.php  en la seccion  $providers  */
+        Intervention\Image\ImageServiceProvider::class
+        
+    /* agregar al alias */
+        'Image' => Intervention\Image\Facades\Image::class
+
+/* ARCHIVO DE CONFIGURACION Intervention Image */
+php artisan vendor:publish --provider="Intervention\Image\ImageServiceProviderLaravelRecent"
+
+
+    /* AGREGAR DOMPDF  */
+composer require barryvdh/laravel-dompdf
+
+/* AGREGAR ARCHIVO DE CONFIGURACION  */
+php artisan vendor:publish --provider="Barryvdh\DomPDF\ServiceProvider"
+
+
+
+
+    /* PARA AUTENTIFICACION */
+composer require laravel/ui "^1.*"
+php artisan ui:auth                  // sin vue
+
+    /* LARAVEL PERMISSION  */
+composer require spatie/laravel-permission
+
+        'providers' => [     // solo si no se ha descubierto colocar en config/app.php
+            // ...
+            Spatie\Permission\PermissionServiceProvider::class,
+        ];
+
+    /* ABRIR CONFIGURACION LARAVEL PERMISSION */
+php artisan vendor:publish --provider="Spatie\Permission\PermissionServiceProvider"
+
+    /* POR ULTIMO LIMINAR LARAVEL PERMISSSION   */
+php artisan optimize:clear
+# or
+php artisan config:clear
+
+composer dump-autoload  // Cuando no hay class
+
+
+CAMBIAR para cargar Foto
+
+/etc/nginx
+nano nginx.conf
+
+client_max_body_size 20m;  era 3m
+
+#default_type application/octet-stream; // LO COMENTARIZE
+
+
+I have edited my /etc/php5/fpm/php.ini to have the following lines defined as below:
+
+upload_max_filesize = 20M
+post_max_size = 25M
+
+
+/*** MODELOS A GENERAR **/
+
+php artisan make:migration create_tests_table
+
+
+php artisan make:model Resource -m
+
+php artisan make:model Person -m
+php artisan make:model Employee -m
+php artisan make:model Signature -m
+
+php artisan make:model Country -m
+php artisan make:model Region -m
+php artisan make:model City -m
+
+php artisan make:model Zone -m   
+
+php artisan make:model Enterprise -m
+php artisan make:model Branch -m
+php artisan make:model Departament -m
+
+php artisan make:model Address -m
+php artisan make:model Phone -m
+php artisan make:model Email -m
+
+php artisan make:model Category -m
+php artisan make:model Type -m
+php artisan make:model Parameter -m
+php artisan make:model Refrigerant -m
+php artisan make:model Problem -m
+
+php artisan make:model MaterialGroup -m
+
+php artisan make:model Material -m
+php artisan make:model MaterialHistory -m
+php artisan make:model Supply -m    // MaterialSupply
+
+
+php artisan make:model Vehicle -m
+php artisan make:model Mileage -m
+
+php artisan make:model Machine -m
+php artisan make:model MachineRecord -m
+php artisan make:model MachineHistory -m
+
+php artisan make:model Budget -m
+php artisan make:model BudgetDetail -m
+php artisan make:model BudgetRecord -m
+
+php artisan make:model Job -m
+php artisan make:model JobImage -m
+php artisan make:model JobRecord -m
+
+//  -- php artisan make:model JobVehicule -m
+
+/*  FACTORYS */
+
+php artisan make:factory AddressFactory
+php artisan make:factory BranchFactory
+php artisan make:factory CategoryFactory
+php artisan make:factory CityFactory
+php artisan make:factory DepartamentFactory
+
+php artisan make:factory EmailFactory
+php artisan make:factory EnterpriseFactory
+
+php artisan make:factory BudgetFactory
+php artisan make:factory JobFactory
+
+php artisan make:factory PersonFactory
+php artisan make:factory EmployeeFactory 
+
+php artisan make:factory PhoneFactory
+php artisan make:factory TypeFactory
+
+php artisan make:factory MachineFactory
+php artisan make:factory MachineHistoryFactory
+
+php artisan make:factory MaterialGroupFactory
+php artisan make:factory MaterialFactory
+php artisan make:factory MaterialHistoryFactory
+php artisan make:factory SupplyFactory   // Material
+
+php artisan make:factory VehicleFactory
+php artisan make:factory MileageFactory
+
+/* SEEDER */
+php artisan make:seeder PeopleTableSeeder
+php artisan make:seeder EmployeesTableSeeder
+
+php artisan make:seeder RolesTableSeeder
+
+php artisan make:seeder PermissionsTableSeeder
+php artisan make:seeder UsersTableSeeder
+
+php artisan make:seeder CountriesTableSeeder
+php artisan make:seeder RegionsTableSeeder
+php artisan make:seeder CitiesTableSeeder
+
+php artisan make:seeder AddressesTableSeeder
+php artisan make:seeder PhonesTableSeeder
+php artisan make:seeder EmailsTableSeeder
+
+php artisan make:seeder EnterprisesTableSeeder
+php artisan make:seeder BranchesTableSeeder
+php artisan make:seeder DepartamentsTableSeeder
+
+php artisan make:seeder MachinesTableSeeder
+php artisan make:seeder MachineHistoriesTableSeeder   
+
+php artisan make:seeder ZonesTableSeeder
+
+php artisan make:seeder CategoriesTableSeeder
+php artisan make:seeder TypesTableSeeder
+php artisan make:seeder ParametersTableSeeder
+php artisan make:seeder ProblemsTableSeeder
+php artisan make:seeder RefrigerantsTableSeeder
+
+php artisan make:seeder BudgetsTableSeeder
+php artisan make:seeder JobsTableSeeder
+
+php artisan make:seeder MaterialGroupsTableSeeder
+php artisan make:seeder MaterialHistoriesTableSeeder  
+php artisan make:seeder SuppliesTableSeeder      // Material
+
+php artisan make:seeder VehiclesTableSeeder  
+php artisan make:seeder MileagesTableSeeder  
+
+php artisan db:seed
+
+
+/* CONTROLLER  */
+php artisan make:controller Admin/HomeController --resource
+
+php artisan make:controller Admin/AddressController --resource
+php artisan make:controller Admin/PhoneController --resource
+php artisan make:controller Admin/EmailController --resource
+php artisan make:controller Api/EmailController --resource
+
+php artisan make:controller Admin/BudgetController --resource
+php artisan make:controller Admin/BudgetDetailController --resource
+php artisan make:controller Admin/BudgetRecordController --resource
+
+php artisan make:controller Admin/EnterpriseController --resource
+php artisan make:controller Api/EnterpriseController --resource
+php artisan make:controller Admin/BranchController --resource
+php artisan make:controller Api/BranchController --resource
+php artisan make:controller Admin/DepartamentController --resource
+
+php artisan make:controller Api/ParameterController --resource
+
+php artisan make:controller Admin/JobController --resource
+php artisan make:controller Api/JobController --resource
+php artisan make:controller Admin/JobImageController --resource
+php artisan make:controller Admin/JobRecordController --resource
+
+php artisan make:controller Admin/RoleController --resource
+php artisan make:controller Admin/PermissionController --resource
+php artisan make:controller Admin/UserController --resource
+
+
+php artisan make:controller TestController 
+
+php artisan make:controller Admin/MaterialGroupController  --resource
+php artisan make:controller Api/MaterialGroupController  --resource
+php artisan make:controller Admin/MaterialController --resource
+php artisan make:controller Admin/MaterialHistoryController --resource 
+php artisan make:controller Api/MaterialHistoryController --resource
+
+php artisan make:controller Admin/SupplyController --resource
+php artisan make:controller Api/SupplyController --resource 
+
+
+php artisan make:controller Admin/MachineController --resource   // REVISAR
+php artisan make:controller Api/MachineController --resource                // API
+
+php artisan make:controller Admin/MachineHistoryController --resource
+php artisan make:controller Api/MachineHistoryController --resource
+
+php artisan make:controller Admin/MachineRecordController --resource
+
+php artisan make:controller Admin/ProblemController --resource
+php artisan make:controller Api/ProblemController --resource
+
+php artisan make:controller Admin/TypeController --resource
+php artisan make:controller Api/TypeController --resource
+
+
+php artisan make:controller Admin/RefrigerantController --resource
+php artisan make:controller Api/RefrigerantController --resource
+
+php artisan make:controller Admin/VehicleController --resource
+php artisan make:controller Api/VehicleController --resource
+
+php artisan make:controller Admin/MileageController --resource
+php artisan make:controller Api/MileageController --resource
+
+php artisan make:controller Admin/ZoneController --resource
+php artisan make:controller Api/ZoneController --resource
+
+php artisan make:controller Admin/ResourceController --resource
+
+php artisan make:controller Admin/EmployeeController --resource
+php artisan make:controller Admin/PersonController --resource
+
+php artisan make:controller Admin/BudgetController --resource
+php artisan make:controller Api/BudgetController --resource
+
+php artisan make:controller Admin/BudgetDetailController --resource
+
+php artisan make:controller Api/BudgetDetailController --resource
+
+
+/* PARAA EL HELPERS  */
+
+Paso 1: Crear un archivo helpers.php dentro de la carpeta app/Http, y cargar este archivo a través del composer.json.
+Paso 2: Luego de modificar el archivo composer.json, ejecutar el comando composer dump-autoload.
+
+
+                                    / ** CUANDO SE TRABA , no usar */
+                                    composer dump-autoload
+
+/*  EN EL DESPLOY (DESPLIEGUE) */
+
+/* CONFIGURACION MYSQL  */
+
+
+sudo mysql -u root -p
+password = (SIN PASS)
+
+sudo mysql_secure_installation
+Password seguro = I5a8e11A-1984             // a todo si.
+
+
+        /** UPDATE mysql.user SET authentication_string=null WHERE User='moises'; **/
+
+ALTER USER 'root'@'localhost' IDENTIFIED WITH caching_sha2_password BY 'I5a8e11A-1984';
+ALTER USER 'moises'@'localhost' IDENTIFIED WITH caching_sha2_password BY 'I5a8e11A-1984';
+
+flush privileges;
+
+SHOW GRANTS for moises@localhost;
+
+use ecorefchile;
+
+create database ecorefchile;
+show databases;
+
+create user moises@localhost identified by 'I5a8e11A-1984';
+
+select User from mysql.user;   // ver usuarios
+
+grant all privileges on ecorefchile to moises@localhost;
+
+flush privileges;
+
+SELECT @@lc_time_names;    // VER QUE IDIOMA
+
+// CAMBIO A ESPAÑOL de MYSQL
+
+SET GLOBAL lc_time_names = 'es_ES';
+
+
+sudo cp .env.example .env
+sudo nano .env
+
+/* CONFIGURAR */
+    APP_ENV=production
+    APP_DEBUG=false
+    APP_URL=http://ecoref.davidaguilar.cl
+
+
+sudo php artisan key:generate
+
+sudo chown -R www-data storage/
+sudo chown -R www-data bootstrap/cache/
+
+sudo chown -R www-data app/   // PARA PODER GRABAR ARCHIVOS Y FOTO EN LINUX
+
+
+
+
+sudo php artisan migrate --seed
+
+/* API REST FULL  */   INVESTIGAR
+sudo php artisan passport:install
+
+
+
+/* DEPLOY  LARAVEL */
+
+sudo git clone (url) (nombre carepta)
+sudo composer install --no-dev    // sin dependencias para desarrollo
+
+// en el archivo /etc/nginx/sites-available/ecoref.davidaguilar.cl
+
+root /var/www/ecoref.davidaguilar.cl/public;
+
+try_files $url $uri/ /index.php?query_string;
+
+
+sudo nginx -t
+sudo systemctl reload nginx.service
+
+sudo cp .env.example .env
+sudo nano .env
+
+sudo php artisan key:generate
+sudo chown -R www-data storage/
+sudo chown -R www-data bootstrap/cache/
+
+
+
+/* Lest scrips HTTPS  */
+
+//INSTALDOR CERTIFICADOS LETSENCRYPT
+//en la carpeta local clonar
+
+git clone https://github.com/acmesh-official/acme.sh.git
+cd ./acme.sh
+./acme.sh --install
+
+// eliminar el instalador sudo rm -r acme.sh
+cd .acme.sh
+
+//ALIAS PARA sudo en el ARCHIVO .bashrc
+# Execute alias as sudo
+alias sudo='sudo '
+
+
+//Eliminar linea  CRONtab en usuario local 
+3 0 * * * "/home/moises/.acme.sh"/acme.sh --cron --home "/home/moises/.acme.sh" > /dev/null
+// con ctrl+k se eliminar la linea
+
+// AGREGAR EN ROOT EL CRONtab
+sudo acme.sh --install-cronjob   // advertencia
+sudo acme.sh --install-cronjob --force    // con el force si pasa y va a pasar
+ 
+EN LINUX 20.04 copiarla directo a sudo cron 
+49 0 * * * "/home/moises/.acme.sh"/acme.sh --cron --home "/home/moises/.acme.sh" > /dev/null
+
+// REVISAR CRON en sudo
+sudo crontab -e
+
+// PARA RENOVAR CERTFICADOS PRIMER PASO
+sudo acme.sh --issue -d davidaguilar.cl -w /var/www/davidaguilar.cl/ --force        // es importante el force
+sudo acme.sh --issue -d ecoref.davidaguilar.cl -w /var/www/ecoref.davidaguilar.cl/public/ --force     // para laravel
+
+
+// VER CERTIFICADOS
+sudo acme.sh --list   // si es necesario --force
+
+// crear carpeta para CERTIFICADOS
+cd /etc/nginx
+sudo mkdir certs
+cd certs/
+
+sudo mkdir davidaguilar.cl
+sudo mkdir ecoref.davidaguilar.cl
+
+// INSTALAR CERTIFICADO
+cd /etc/nginx/certs/
+
+// recordar --force    // ESTO ES PARA RENOVAR PASO 2
+sudo acme.sh --install-cert -d davidaguilar.cl --key-file /etc/nginx/certs/davidaguilar.cl/key.pem --fullchain-file /etc/nginx/certs/davidaguilar.cl/fullchain.pem --ca-file /etc/nginx/certs/davidaguilar.cl/ca.pem --reloadcmd "systemctl force-reload nginx.service" --force
+sudo acme.sh --install-cert -d ecoref.davidaguilar.cl --key-file /etc/nginx/certs/ecoref.davidaguilar.cl/key.pem --fullchain-file /etc/nginx/certs/ecoref.davidaguilar.cl/fullchain.pem --ca-file /etc/nginx/certs/ecoref.davidaguilar.cl/ca.pem --reloadcmd "systemctl force-reload nginx.service" --force
+
+//verfiicar
+
+ll /home/moises/.acme.sh/ecoref.davidaguilar.cl/
+
+ll davidaguilar.cl
+
+// GENERAR CONFIGURACION PARA SERVICIO WEB PERSONALIZADO
+https://ssl-config.mozilla.org/
+
+VERFICAR version
+sudo nginx -v
+openssl version
+
+// checar MODERNO, y colocar las versiones correspondienes ademas del HSTS
+
+// script similar a este
+server {
+    listen 80;
+    listen [::]:80;
+
+    server_name davidaguilar.cl;
+
+    return 301 https://davidaguilar.cl$request_uri;
+}
+
+server {
+    listen 443 ssl http2;
+    listen [::]:443 ssl http2;
+
+    ssl_certificate /etc/nginx/certs/davidaguilar.cl/fullchain.pem;
+    ssl_certificate_key /etc/nginx/certs/davidaguilar.cl/key.pem;
+    ssl_session_timeout 1d;
+    ssl_session_cache shared:MozSSL:10m;  # about 40000 sessions
+    ssl_session_tickets off;
+
+    # modern configuration
+    ssl_protocols TLSv1.3;
+    ssl_prefer_server_ciphers off;
+
+    # HSTS (ngx_http_headers_module is required) (63072000 seconds)
+    add_header Strict-Transport-Security "max-age=63072000" always;
+
+    # OCSP stapling
+    ssl_stapling on;
+    ssl_stapling_verify on;
+
+    # verify chain of trust of OCSP response using Root CA and Intermediate certs
+    ssl_trusted_certificate /etc/nginx/certs/davidaguilar.cl/ca.pem;
+
+
+
+
+ejemplo
+
+server {
+    listen 80;
+    listen [::]:80;
+
+    server_name ecoref.davidaguilar.cl;
+
+    return 301 https://ecoref.davidaguilar.cl$request_uri;
+}
+
+server {
+    listen 443 ssl http2;
+    listen [::]:443 ssl http2;
+
+    ssl_certificate /etc/nginx/certs/ecoref.davidaguilar.cl/fullchain.pem;
+    ssl_certificate_key /etc/nginx/certs/ecoref.davidaguilar.cl/key.pem;
+    ssl_session_timeout 1d;
+    ssl_session_cache shared:MozSSL:10m;  # about 40000 sessions
+    ssl_session_tickets off;
+
+    # modern configuration
+    ssl_protocols TLSv1.3;
+    ssl_prefer_server_ciphers off;
+
+    # HSTS (ngx_http_headers_module is required) (63072000 seconds)
+    add_header Strict-Transport-Security "max-age=63072000" always;
+
+    # OCSP stapling
+    ssl_stapling on;
+    ssl_stapling_verify on;
+
+    # verify chain of trust of OCSP response using Root CA and Intermediate certs
+    ssl_trusted_certificate /etc/nginx/certs/ecoref.davidaguilar.cl/ca.pem;
+
+
+
+
+
+
+// ABRIR SITIOS Y PEGAR LA CONFIGURACION
+sudo nano /etc/nginx/sites-available/davidaguilar.cl
+
+// TESTEAR
+nginx -t
+//reiniciar
+sudo systemctl reload nginx.service
+sudo systemctl restart php7.4-fpm.service
+
+// VOLVER A RESTAURAR SEGURIDAD
+cd /etc/nginx
+sudo nano nginx.conf
+
+
+    // copiar y agregar desspues de la linea ssl_prefer_server_ciphers off;
+
+##
+# Security settings
+##
+
+# Avoiding iFrames  from other origins
+add_header X-Frame-Options SAMEORIGIN;
+
+#Avoinding MIME Type sniffing
+add_header X-Content-Type-Options nosniffing;    // o nosniff
+
+# Avoid XSS attacks
+add_header X-XSS-Protection "1;mode=block";
+
+
+// TEST
+https://www.ssllabs.com/ssltest/
+
+
+
+/*  Swagger */ documentacion
+https://github.com/DarkaOnLine/L5-Swagger/wiki/Installation-&-Configuration
+
+composer require "darkaonline/l5-swagger:5.8.*"  // laravel 5.8
+
+php artisan vendor:publish --provider "L5Swagger\L5SwaggerServiceProvider"
+
+/*  Revisar Routas de documentacion  */
+php artisan route:list
+
+/*  Controlador */
+php artisan make:controller Api/UserController
+
+php artisan make:controller Api/RegionController --resource
+
+
+
+    /* ejemplo de funcion */
+
+    public function index()
+    {
+        return App\User::all();
+    }
+
+    /* Ruta para el ejemplo
+    Route::get('users','Api\UserController@index');
+
+    /* Ruta para verfiicar
+    http://swagger.local/api/users
+
+
+/* EJEMPLO DE SCRIPT  */
+
+
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+
+/**
+* @OA\Info(title="API Usuarios", version="1.0")
+*
+* @OA\Server(url="http://ecorefchile.test")
+*/
+class UserController extends Controller
+{
+    /**
+    * @OA\Get(
+    *     path="/api/users",
+    *     summary="Mostrar usuarios",
+    *     @OA\Response(
+    *         response=200,
+    *         description="Mostrar todos los usuarios."
+    *     ),
+    *     @OA\Response(
+    *         response="default",
+    *         description="Ha ocurrido un error."
+    *     )
+    * )
+    */
+    public function index()
+    {
+        return App\User::all();
+    }
+}
+
+
+
+    /* Actualizar documentacion
+php artisan l5-swagger:generate

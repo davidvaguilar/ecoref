@@ -9,7 +9,7 @@
             <i class="fa fa-home"></i> <span>Inicio</span>
         </a>
     </li>
-
+ 
         <li class="{{ setActiveRoute('admin.posts.index') }}">
             <a href="{{ route('admin.posts.index') }}">
                 <i class="fa fa-wrench"></i> <span>Ordenes de Trabajo</span>
