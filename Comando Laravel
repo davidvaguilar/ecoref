@@ -114,6 +114,8 @@ php artisan make:model Problem -m
 
 php artisan make:model MaterialGroup -m
 
+php artisan make:model MaterialRecord -m
+php artisan make:model SupplyRecord -m
 php artisan make:model Material -m
 php artisan make:model MaterialHistory -m
 php artisan make:model Supply -m    // MaterialSupply
@@ -158,6 +160,7 @@ php artisan make:factory TypeFactory
 
 php artisan make:factory MachineFactory
 php artisan make:factory MachineHistoryFactory
+
 
 php artisan make:factory MaterialGroupFactory
 php artisan make:factory MaterialFactory
@@ -253,6 +256,7 @@ php artisan make:controller Api/MaterialHistoryController --resource
 php artisan make:controller Admin/SupplyController --resource
 php artisan make:controller Api/SupplyController --resource 
 
+php artisan make:controller Admin/SupplyRecordController --resource
 
 php artisan make:controller Admin/MachineController --resource   // REVISAR
 php artisan make:controller Api/MachineController --resource                // API

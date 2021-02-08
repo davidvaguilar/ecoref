@@ -34,7 +34,10 @@ class PostsController extends Controller
   //      $users = User::all();
         $users = Role::where('name', 'Writer')->first()->users()->get();
      
-        $posts = Post::allowed()->orderBy('id', 'desc')->orderBy('started_at', 'desc')->get();
+        $posts = Post::allowed()
+                    ->whereYear('created_at', '=', date('Y'))
+                    ->orderBy('id', 'desc')
+                    ->orderBy('started_at', 'desc')->get();
 
         return view('admin.posts.index', compact('posts', 'clients', 'users'));
       // $id = 5;  //, ['id'=>$id]
